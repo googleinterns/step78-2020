@@ -29,4 +29,14 @@ public class Section {
         this.professor = professor;
         this.meetingTimes = meetingTimes;
     }
+
+    /**
+     * Function to return whether or not a section overlaps with another
+     * @param other
+     * @return If there's overlap between the current section and the other section
+     */
+    public boolean overlaps(Section other){
+        //TODO: This
+        return false;
+    }
 }
