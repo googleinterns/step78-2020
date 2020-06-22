@@ -16,11 +16,46 @@ package com.google.sps.data;
 
 import java.util.List;
 
+/**
+ * A course class. Better documentation to be added later.
+ */
 public class Course {
     private String name;
     private String courseID;
     private String subject;
     private boolean isRequired;
     private List<Section> sections;
+
+    public Course(String name, String courseID, String subject, boolean isRequired, List<Section> sections) {
+        this.name = name;
+        this.courseID = courseID;
+        this.subject = subject;
+        this.isRequired = isRequired;
+        this.sections = sections;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
+    public String getCourseID() {
+        return this.courseID;
+    }
+
+    public String getSubject() {
+        return this.subject;
+    }
+
+    public boolean getIsRequired() {
+        return this.isRequired;
+    }
+
+    public boolean isIsRequired() {
+        return this.isRequired;
+    }
+
+    public List<Section> getSections() {
+        return this.sections;
+    }
 
 }
