@@ -21,6 +21,14 @@ import java.util.Comparator;
  * providing methods to make ranges easier to work with (e.g. {@code overlaps}).
  */
 public final class TimeRange {
+  public static final int SUNDAY = 0;
+  public static final int MONDAY = 1;
+  public static final int TUESDAY = 2;
+  public static final int WEDNESDAY = 3;
+  public static final int THURSDAY = 4;
+  public static final int FRIDAY = 5;
+  public static final int SATURDAY = 6;
+
   public static final int START_OF_SUNDAY = getTimeInMinutes(0, 0, 0);
   public static final int END_OF_SUNDAY = getTimeInMinutes(0, 23, 59);
 
