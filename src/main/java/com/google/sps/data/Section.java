@@ -14,20 +14,26 @@
 
 package com.google.sps.data;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 public class Section {
     private String professor;
-    private TimeRange[] meetingTimes;
-    /*
-    * meeting times is an array
-    * Where the 0th index is Sunday and the 6th is Saturday
-    * [_,_,_,_,_,_,_] no meeting times
-    * [_,*,_,*,_,*,_] class MWF
-    * [_,_,*,_,*,_,_] class TTh
-    * [*,_,_,_,_,_,*] class SatSun
-    */
-    public Section(String professor, TimeRange[] meetingTimes){
+    private List<TimeRange> meetingTimes;
+    // Meeting times will be sorted in ascending order of time, 
+    // with the first lesson being first in the list
+
+    public Section(String professor, List<TimeRange> meetingTimes){
         this.professor = professor;
         this.meetingTimes = meetingTimes;
+        Collections.sort(this.meetingTimes, TimeRange.ORDER_BY_START);
+
+        for(int i = 0; i < meetingTimes.size() - 1; i++){
+          if(meetingTimes.get(i).overlaps(meetingTimes.get(i + 1))) {
+            throw new IllegalArgumentException("A section's lecture times can't overlap!");
+          }
+        }
     }
 
     /**
