@@ -29,26 +29,26 @@ public final class TimeRange {
   public static final int FRIDAY = 5;
   public static final int SATURDAY = 6;
 
-  public static final int START_OF_SUNDAY = getTimeInMinutes(0, 0, 0);
-  public static final int END_OF_SUNDAY = getTimeInMinutes(0, 23, 59);
+  public static final int START_OF_SUNDAY = getTimeInMinutes(SUNDAY, 0, 0);
+  public static final int END_OF_SUNDAY = getTimeInMinutes(SUNDAY, 23, 59);
 
-  public static final int START_OF_MONDAY = getTimeInMinutes(1, 0, 0);
-  public static final int END_OF_MONDAY = getTimeInMinutes(1, 23, 59);
+  public static final int START_OF_MONDAY = getTimeInMinutes(MONDAY, 0, 0);
+  public static final int END_OF_MONDAY = getTimeInMinutes(MONDAY, 23, 59);
 
-  public static final int START_OF_TUESDAY = getTimeInMinutes(2, 0, 0);
-  public static final int END_OF_TUESDAY = getTimeInMinutes(2, 23, 59);
+  public static final int START_OF_TUESDAY = getTimeInMinutes(TUESDAY, 0, 0);
+  public static final int END_OF_TUESDAY = getTimeInMinutes(TUESDAY, 23, 59);
 
-  public static final int START_OF_WEDNESDAY = getTimeInMinutes(3, 0, 0);
-  public static final int END_OF_WEDNESDAY = getTimeInMinutes(3, 23, 59);
+  public static final int START_OF_WEDNESDAY = getTimeInMinutes(WEDNESDAY, 0, 0);
+  public static final int END_OF_WEDNESDAY = getTimeInMinutes(WEDNESDAY, 23, 59);
 
-  public static final int START_OF_THURSDAY = getTimeInMinutes(4, 0, 0);
-  public static final int END_OF_THURSDAY = getTimeInMinutes(4, 23, 59);
+  public static final int START_OF_THURSDAY = getTimeInMinutes(THURSDAY, 0, 0);
+  public static final int END_OF_THURSDAY = getTimeInMinutes(THURSDAY, 23, 59);
 
-  public static final int START_OF_FRIDAY = getTimeInMinutes(5, 0, 0);
-  public static final int END_OF_FRIDAY = getTimeInMinutes(5, 23, 59);
+  public static final int START_OF_FRIDAY = getTimeInMinutes(FRIDAY, 0, 0);
+  public static final int END_OF_FRIDAY = getTimeInMinutes(FRIDAY, 23, 59);
 
-  public static final int START_OF_SATURDAY = getTimeInMinutes(6, 0, 0);
-  public static final int END_OF_SATURDAY = getTimeInMinutes(6, 23, 59);
+  public static final int START_OF_SATURDAY = getTimeInMinutes(SATURDAY, 0, 0);
+  public static final int END_OF_SATURDAY = getTimeInMinutes(SATURDAY, 23, 59);
 
   public static final int START_OF_WEEK = getTimeInMinutes(0, 0);
   public static final int END_OF_WEEK = getTimeInMinutes(6, 23, 59);
