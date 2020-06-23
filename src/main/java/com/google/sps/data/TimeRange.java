@@ -21,10 +21,32 @@ import java.util.Comparator;
  * providing methods to make ranges easier to work with (e.g. {@code overlaps}).
  */
 public final class TimeRange {
-  public static final int START_OF_DAY = getTimeInMinutes(0, 0);
-  public static final int END_OF_DAY = getTimeInMinutes(23, 59);
+  public static final int START_OF_SUNDAY = getTimeInMinutes(0, 0, 0);
+  public static final int END_OF_SUNDAY = getTimeInMinutes(0, 23, 59);
 
-  public static final TimeRange WHOLE_DAY = new TimeRange(0, 24 * 60);
+  public static final int START_OF_MONDAY = getTimeInMinutes(1, 0, 0);
+  public static final int END_OF_MONDAY = getTimeInMinutes(1, 23, 59);
+
+  public static final int START_OF_TUESDAY = getTimeInMinutes(2, 0, 0);
+  public static final int END_OF_TUESDAY = getTimeInMinutes(2, 23, 59);
+
+  public static final int START_OF_WEDNESDAY = getTimeInMinutes(3, 0, 0);
+  public static final int END_OF_WEDNESDAY = getTimeInMinutes(3, 23, 59);
+
+  public static final int START_OF_THURSDAY = getTimeInMinutes(4, 0, 0);
+  public static final int END_OF_THURSDAY = getTimeInMinutes(4, 23, 59);
+
+  public static final int START_OF_FRIDAY = getTimeInMinutes(5, 0, 0);
+  public static final int END_OF_FRIDAY = getTimeInMinutes(5, 23, 59);
+
+  public static final int START_OF_SATURDAY = getTimeInMinutes(6, 0, 0);
+  public static final int END_OF_SATURDAY = getTimeInMinutes(6, 23, 59);
+
+  public static final int START_OF_WEEK = getTimeInMinutes(0, 0);
+  public static final int END_OF_WEEK = getTimeInMinutes(6, 23, 59);
+
+  public static final int WHOLE_DAY_DURATION = 24 * 60;
+  public static final TimeRange WHOLE_WEEK = new TimeRange(0, 24 * 7 * 60);
 
   /**
    * A comparator for sorting ranges by their start time in ascending order.
@@ -166,6 +188,67 @@ public final class TimeRange {
     }
 
     return (hours * 60) + minutes;
+  }
+
+  public static int getTimeInMinutes(int day, int hours, int minutes){
+    if (day < 0 || day >= 7) {
+      throw new IllegalArgumentException("Day of the week must be between 0 and 6 (inclusive).");
+    }
+
+    if (hours < 0 || hours >= 24) {
+      throw new IllegalArgumentException("Hours can only be 0 through 23 (inclusive).");
+    }
+
+    if (minutes < 0 || minutes >= 60) {
+      throw new IllegalArgumentException("Minutes can only be 0 through 59 (inclusive).");
+    }
+
+    return (day * 24 * 60) + (hours * 60) + minutes;
+  }
+
+  /**
+   * Returns the day of the week in int form (0 being sunday, 6 being saturday)
+   * @param hours
+   * @param minutes
+   * @return int representing the day of the week
+   */
+  public static int getDayOfWeek(int hours, int minutes) {
+    if (hours < 0 || hours > 24 * 7) {
+      throw new IllegalArgumentException("Hours must be within a week period (between 0 and 167, inclusive).");
+    }
+
+    if (minutes < 0 || minutes >= 60) {
+      throw new IllegalArgumentException("Minutes can only be 0 through 59 (inclusive).");
+    }
+
+    return (int) Math.floorDiv(hours, 24);
+  }
+
+    /**
+   * Returns the day of the week in int form (0 being sunday, 6 being saturday)
+   * @param hours
+   * @param minutes
+   * @return int representing the day of the week
+   */
+  public static int getDayOfWeekHours(int hours) {
+    if (hours < 0 || hours > 24 * 7) {
+      throw new IllegalArgumentException("Time must be within a week period (between 0 and 167, inclusive).");
+    }
+
+    return (int) Math.floorDiv(hours, 24);
+  }
+
+  /**
+   * Returns the day of the week in int form (0 being sunday, 6 being saturday)
+   * @param minutes
+   * @return int representing the day of the week
+   */
+  public static int getDayOfWeekMinutes(int minutes) {
+    if (minutes < 0 || minutes > 24 * 7 * 60) {
+      throw new IllegalArgumentException("Time must be within a week period (between 0 and 10079, inclusive).");
+    }
+
+    return (int) Math.floorDiv(minutes, 24 * 60);
   }
 
   /**
