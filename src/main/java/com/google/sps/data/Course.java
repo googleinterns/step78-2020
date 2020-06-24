@@ -52,7 +52,7 @@ public class Course {
     return this.credits;
   }
 
-  public boolean getIsRequired() {
+  public boolean isRequired() {
     return this.isRequired;
   }
 
