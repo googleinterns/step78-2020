@@ -29,27 +29,6 @@ public final class TimeRange {
   public static final int FRIDAY = 5;
   public static final int SATURDAY = 6;
 
-  public static final int START_OF_SUNDAY = convertTimeToMinutes(SUNDAY, 0, 0);
-  public static final int END_OF_SUNDAY = convertTimeToMinutes(SUNDAY, 23, 59);
-
-  public static final int START_OF_MONDAY = convertTimeToMinutes(MONDAY, 0, 0);
-  public static final int END_OF_MONDAY = convertTimeToMinutes(MONDAY, 23, 59);
-
-  public static final int START_OF_TUESDAY = convertTimeToMinutes(TUESDAY, 0, 0);
-  public static final int END_OF_TUESDAY = convertTimeToMinutes(TUESDAY, 23, 59);
-
-  public static final int START_OF_WEDNESDAY = convertTimeToMinutes(WEDNESDAY, 0, 0);
-  public static final int END_OF_WEDNESDAY = convertTimeToMinutes(WEDNESDAY, 23, 59);
-
-  public static final int START_OF_THURSDAY = convertTimeToMinutes(THURSDAY, 0, 0);
-  public static final int END_OF_THURSDAY = convertTimeToMinutes(THURSDAY, 23, 59);
-
-  public static final int START_OF_FRIDAY = convertTimeToMinutes(FRIDAY, 0, 0);
-  public static final int END_OF_FRIDAY = convertTimeToMinutes(FRIDAY, 23, 59);
-
-  public static final int START_OF_SATURDAY = convertTimeToMinutes(SATURDAY, 0, 0);
-  public static final int END_OF_SATURDAY = convertTimeToMinutes(SATURDAY, 23, 59);
-
   public static final int START_OF_WEEK = convertTimeToMinutes(0, 0);
   public static final int END_OF_WEEK = convertTimeToMinutes(6, 23, 59);
 
@@ -232,7 +211,7 @@ public final class TimeRange {
    * @param hours The hours in the timeframe
    * @return int representing the day of the week
    */
-  public static int hoursToDayOfWeek (int hours) {
+  public static int hoursToDayOfWeek(int hours) {
     if (hours < 0 || hours > 24 * 7) {
       throw new IllegalArgumentException("Time must be within a week period (between 0 and 167, inclusive).");
     }
@@ -245,7 +224,7 @@ public final class TimeRange {
    * @param minutes
    * @return int representing the day of the week
    */
-  public static int minutesToDayOfWeek (int minutes) {
+  public static int minutesToDayOfWeek(int minutes) {
     if (minutes < 0 || minutes > 24 * 7 * 60) {
       throw new IllegalArgumentException("Time must be within a week period (between 0 and 10079, inclusive).");
     }
@@ -254,18 +233,38 @@ public final class TimeRange {
   }
 
   /**
-   * Creates a {@code TimeRange} from {@code start} (in minutes) to {@code end}. Whether or not {@code end} is
-   * included in the range will depend on {@code inclusive}. If {@code inclusive} is {@code true},
-   * then @{code end} will be in the range.
+   * Creates a TimeRange given a start time, end time, 
+   * and if the end of the event is inclusive or not.
+   * 
+   * @param startDay The day on which the event starts,
+   *                 represented by an int (0 being sunday, 6 being saturday)
+   * @param startHour The hour in the day when the event starts.
+   * @param startMinutes The minute in the hour when the event starts.
+   * @param endDay The day on which the event ends
+   * @param endHour The hour in the day when the event ends
+   * @param endMinutes The minute in the hour when the event ends
+   * @param inclusive Whether or not the event end time is inclusive or not
+   * @return a TimeRange given start time and end time
    */
-  public static TimeRange fromStartEnd(int start, int end, boolean inclusive) {
+  public static TimeRange fromStartEnd(int startDay, int startHour, int startMinutes, 
+      int endDay, int endHour, int endMinutes, boolean inclusive) {
+    int start = convertTimeToMinutes(startDay, startHour, startMinutes);
+    int end = convertTimeToMinutes(endDay, endHour, endMinutes);
     return inclusive ? new TimeRange(start, end - start + 1) : new TimeRange(start, end - start);
   }
 
   /**
-   * Create a {@code TimeRange} starting at {@code start} (in minutes) with a duration equal to {@code duration}.
+   * Creates a TimeRange from the start time (described in date, hours, and minutes) of duration
+   * in minutes specified by duration.
+   * 
+   * @param day the day on which the event starts, 
+   *            represented by an int (0 being sunday, 6 being saturday)
+   * @param hour The hour in the day when the event starts
+   * @param minutes The minute in the hour when the event starts
+   * @param durationMinutes the duration, in minutes of the event
+   * @return a TimeRange given start time and duration
    */
-  public static TimeRange fromStartDuration(int start, int duration) {
-    return new TimeRange(start, duration);
+  public static TimeRange fromStartDuration(int day, int hour, int minutes, int durationMinutes) {
+    return new TimeRange(convertTimeToMinutes(day, hour, minutes), durationMinutes);
   }
 }
