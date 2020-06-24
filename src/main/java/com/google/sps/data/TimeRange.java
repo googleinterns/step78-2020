@@ -186,6 +186,12 @@ public final class TimeRange {
     return a.start == b.start && a.duration == b.duration;
   }
 
+  /**
+   * Returns the time in minutes given a day, for use when creating new timeRanges.
+   * @param hours an int representing the time (in hours) during the day
+   * @param minutes an int representing the time (in minutes) during the hour
+   * @return time in minutes during a week
+   */
   public static int getTimeInMinutes(int hours, int minutes) {
     if (hours < 0 || hours >= 24) {
       throw new IllegalArgumentException("Hours can only be 0 through 23 (inclusive).");
@@ -198,6 +204,13 @@ public final class TimeRange {
     return (hours * 60) + minutes;
   }
 
+  /**
+   * Returns the time in minutes given a day, for use when creating new timeRanges.
+   * @param day an int representing the day (0 being sunday, 6 being saturday)
+   * @param hours an int representing the time (in hours) during the day
+   * @param minutes an int representing the time (in minutes) during the hour
+   * @return time in minutes during a week
+   */
   public static int getTimeInMinutes(int day, int hours, int minutes){
     if (day < 0 || day >= 7) {
       throw new IllegalArgumentException("Day of the week must be between 0 and 6 (inclusive).");
@@ -260,7 +273,7 @@ public final class TimeRange {
   }
 
   /**
-   * Creates a {@code TimeRange} from {@code start} to {@code end}. Whether or not {@code end} is
+   * Creates a {@code TimeRange} from {@code start} (in minutes) to {@code end}. Whether or not {@code end} is
    * included in the range will depend on {@code inclusive}. If {@code inclusive} is {@code true},
    * then @{code end} will be in the range.
    */
@@ -269,7 +282,7 @@ public final class TimeRange {
   }
 
   /**
-   * Create a {@code TimeRange} starting at {@code start} with a duration equal to {@code duration}.
+   * Create a {@code TimeRange} starting at {@code start} (in minutes) with a duration equal to {@code duration}.
    */
   public static TimeRange fromStartDuration(int start, int duration) {
     return new TimeRange(start, duration);
