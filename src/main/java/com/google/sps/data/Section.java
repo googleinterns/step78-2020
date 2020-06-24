@@ -19,9 +19,9 @@ import java.util.List;
 
 public class Section {
     private String professor;
-    private List<TimeRange> meetingTimes;
     // Meeting times will be sorted in ascending order of time, 
     // with the first lesson being first in the list
+    private List<TimeRange> meetingTimes;
 
     public Section(String professor, List<TimeRange> meetingTimes){
         this.professor = professor;
