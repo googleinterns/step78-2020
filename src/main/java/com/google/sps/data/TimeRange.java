@@ -29,29 +29,29 @@ public final class TimeRange {
   public static final int FRIDAY = 5;
   public static final int SATURDAY = 6;
 
-  public static final int START_OF_SUNDAY = getTimeInMinutes(SUNDAY, 0, 0);
-  public static final int END_OF_SUNDAY = getTimeInMinutes(SUNDAY, 23, 59);
+  public static final int START_OF_SUNDAY = convertTimeToMinutes(SUNDAY, 0, 0);
+  public static final int END_OF_SUNDAY = convertTimeToMinutes(SUNDAY, 23, 59);
 
-  public static final int START_OF_MONDAY = getTimeInMinutes(MONDAY, 0, 0);
-  public static final int END_OF_MONDAY = getTimeInMinutes(MONDAY, 23, 59);
+  public static final int START_OF_MONDAY = convertTimeToMinutes(MONDAY, 0, 0);
+  public static final int END_OF_MONDAY = convertTimeToMinutes(MONDAY, 23, 59);
 
-  public static final int START_OF_TUESDAY = getTimeInMinutes(TUESDAY, 0, 0);
-  public static final int END_OF_TUESDAY = getTimeInMinutes(TUESDAY, 23, 59);
+  public static final int START_OF_TUESDAY = convertTimeToMinutes(TUESDAY, 0, 0);
+  public static final int END_OF_TUESDAY = convertTimeToMinutes(TUESDAY, 23, 59);
 
-  public static final int START_OF_WEDNESDAY = getTimeInMinutes(WEDNESDAY, 0, 0);
-  public static final int END_OF_WEDNESDAY = getTimeInMinutes(WEDNESDAY, 23, 59);
+  public static final int START_OF_WEDNESDAY = convertTimeToMinutes(WEDNESDAY, 0, 0);
+  public static final int END_OF_WEDNESDAY = convertTimeToMinutes(WEDNESDAY, 23, 59);
 
-  public static final int START_OF_THURSDAY = getTimeInMinutes(THURSDAY, 0, 0);
-  public static final int END_OF_THURSDAY = getTimeInMinutes(THURSDAY, 23, 59);
+  public static final int START_OF_THURSDAY = convertTimeToMinutes(THURSDAY, 0, 0);
+  public static final int END_OF_THURSDAY = convertTimeToMinutes(THURSDAY, 23, 59);
 
-  public static final int START_OF_FRIDAY = getTimeInMinutes(FRIDAY, 0, 0);
-  public static final int END_OF_FRIDAY = getTimeInMinutes(FRIDAY, 23, 59);
+  public static final int START_OF_FRIDAY = convertTimeToMinutes(FRIDAY, 0, 0);
+  public static final int END_OF_FRIDAY = convertTimeToMinutes(FRIDAY, 23, 59);
 
-  public static final int START_OF_SATURDAY = getTimeInMinutes(SATURDAY, 0, 0);
-  public static final int END_OF_SATURDAY = getTimeInMinutes(SATURDAY, 23, 59);
+  public static final int START_OF_SATURDAY = convertTimeToMinutes(SATURDAY, 0, 0);
+  public static final int END_OF_SATURDAY = convertTimeToMinutes(SATURDAY, 23, 59);
 
-  public static final int START_OF_WEEK = getTimeInMinutes(0, 0);
-  public static final int END_OF_WEEK = getTimeInMinutes(6, 23, 59);
+  public static final int START_OF_WEEK = convertTimeToMinutes(0, 0);
+  public static final int END_OF_WEEK = convertTimeToMinutes(6, 23, 59);
 
   public static final int WHOLE_DAY_DURATION = 24 * 60;
   public static final TimeRange WHOLE_WEEK = new TimeRange(0, 24 * 7 * 60);
@@ -192,7 +192,7 @@ public final class TimeRange {
    * @param minutes an int representing the time (in minutes) during the hour
    * @return time in minutes during a week
    */
-  public static int getTimeInMinutes(int hours, int minutes) {
+  public static int convertTimeToMinutes(int hours, int minutes) {
     if (hours < 0 || hours >= 24) {
       throw new IllegalArgumentException("Hours can only be 0 through 23 (inclusive).");
     }
@@ -211,7 +211,7 @@ public final class TimeRange {
    * @param minutes an int representing the time (in minutes) during the hour
    * @return time in minutes during a week
    */
-  public static int getTimeInMinutes(int day, int hours, int minutes){
+  public static int convertTimeToMinutes(int day, int hours, int minutes) {
     if (day < 0 || day >= 7) {
       throw new IllegalArgumentException("Day of the week must be between 0 and 6 (inclusive).");
     }
@@ -227,31 +227,12 @@ public final class TimeRange {
     return (day * 24 * 60) + (hours * 60) + minutes;
   }
 
-  /**
-   * Returns the day of the week in int form (0 being sunday, 6 being saturday)
-   * @param hours
-   * @param minutes
-   * @return int representing the day of the week
-   */
-  public static int getDayOfWeek(int hours, int minutes) {
-    if (hours < 0 || hours > 24 * 7) {
-      throw new IllegalArgumentException("Hours must be within a week period (between 0 and 167, inclusive).");
-    }
-
-    if (minutes < 0 || minutes >= 60) {
-      throw new IllegalArgumentException("Minutes can only be 0 through 59 (inclusive).");
-    }
-
-    return (int) Math.floorDiv(hours, 24);
-  }
-
     /**
-   * Returns the day of the week in int form (0 being sunday, 6 being saturday)
-   * @param hours
-   * @param minutes
+   * Returns the day of the week in int form (0 being sunday, 6 being saturday).
+   * @param hours The hours in the timeframe
    * @return int representing the day of the week
    */
-  public static int getDayOfWeekHours(int hours) {
+  public static int hoursToDayOfWeek (int hours) {
     if (hours < 0 || hours > 24 * 7) {
       throw new IllegalArgumentException("Time must be within a week period (between 0 and 167, inclusive).");
     }
@@ -264,7 +245,7 @@ public final class TimeRange {
    * @param minutes
    * @return int representing the day of the week
    */
-  public static int getDayOfWeekMinutes(int minutes) {
+  public static int minutesToDayOfWeek (int minutes) {
     if (minutes < 0 || minutes > 24 * 7 * 60) {
       throw new IllegalArgumentException("Time must be within a week period (between 0 and 10079, inclusive).");
     }
