@@ -18,30 +18,31 @@ import java.util.Collections;
 import java.util.List;
 
 public class Section {
-    private String professor;
-    // Meeting times will be sorted in ascending order of time, 
-    // with the first lesson being first in the list
-    private List<TimeRange> meetingTimes;
+  private String professor;
+  // Meeting times will be sorted in ascending order of time,
+  // with the first lesson being first in the list
+  private List<TimeRange> meetingTimes;
 
-    public Section(String professor, List<TimeRange> meetingTimes){
-        this.professor = professor;
-        this.meetingTimes = meetingTimes;
-        Collections.sort(this.meetingTimes, TimeRange.ORDER_BY_START);
+  public Section(String professor, List<TimeRange> meetingTimes) {
+    this.professor = professor;
+    this.meetingTimes = meetingTimes;
+    Collections.sort(this.meetingTimes, TimeRange.ORDER_BY_START);
 
-        for(int i = 0; i < meetingTimes.size() - 1; i++){
-          if(meetingTimes.get(i).overlaps(meetingTimes.get(i + 1))) {
-            throw new IllegalArgumentException("A section's lecture times can't overlap!");
-          }
-        }
+    for (int i = 0; i < meetingTimes.size() - 1; i++) {
+      if (meetingTimes.get(i).overlaps(meetingTimes.get(i + 1))) {
+        throw new IllegalArgumentException("A section's lecture times can't overlap!");
+      }
     }
+  }
 
-    /**
-     * Function to return whether or not a section overlaps with another
-     * @param other
-     * @return If there's overlap between the current section and the other section
-     */
-    public boolean overlaps(Section other){
-        //TODO: This
-        return false;
-    }
+  /**
+   * Function to return whether or not a section overlaps with another
+   * 
+   * @param other
+   * @return If there's overlap between the current section and the other section
+   */
+  public boolean overlaps(Section other) {
+    // TODO: This
+    return false;
+  }
 }
