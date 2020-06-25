@@ -67,7 +67,8 @@ public final class SchedulerTest {
     Course course1 = new Course("Intro to Evil", "EVIL100", 
         "Wrongdoing", 1, true, Arrays.asList(section));
     
-    Collection<Schedule> actual = scheduler.generateSchedules(Arrays.asList(course1), 1, 2);
+    Collection<Schedule> actual = scheduler.generateSchedules(
+        Arrays.asList(course1), new Invariants(1, 2));
     Schedule expected = new Schedule(Arrays.asList(course1));
     Assert.assertEquals(Arrays.asList(expected), actual);
   }
@@ -78,7 +79,8 @@ public final class SchedulerTest {
     Course course1 = new Course("Intro to Evil", "EVIL100", 
         "Wrongdoing", 1, true, Arrays.asList(section));
     
-    Collection<Schedule> actual = scheduler.generateSchedules(Arrays.asList(course1), 3, 5);
+    Collection<Schedule> actual = scheduler.generateSchedules(Arrays.asList(course1), 
+        new Invariants(3, 5));
     Assert.assertEquals(Collections.emptyList(), actual);
   }
 
