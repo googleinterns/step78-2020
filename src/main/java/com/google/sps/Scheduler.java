@@ -22,12 +22,13 @@ public final class Scheduler {
    * @return A list of valid schedules.
    */
   public List<Schedule> generateSchedules(List<Course> courses, Invariants invariants) {
-
-    Collections.sort(courses, Course.REQUIRED_TO_FRONT);
+    ArrayList<Course> betterCourses = new ArrayList<>(courses);
+    Collections.sort(betterCourses, Course.REQUIRED_TO_FRONT);
     Set<List<Course>> schedulesSet = new HashSet<List<Course>>();
 
-    generateSchedulesHelper(courses, Arrays.asList(), invariants, schedulesSet);
+    generateSchedulesHelper(betterCourses, new ArrayList<>(), invariants, schedulesSet);
 
+    System.out.println(schedulesSet);
     List<Schedule> schedules = new ArrayList<>();
     for (List<Course> schedule : schedulesSet) {
       schedules.add(new Schedule(schedule));
