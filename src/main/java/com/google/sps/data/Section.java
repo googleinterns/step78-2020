@@ -15,6 +15,7 @@
 package com.google.sps.data;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class Section {
@@ -35,14 +36,37 @@ public class Section {
     }
   }
 
+  public List<TimeRange> getMeetingTimes() {
+    return this.meetingTimes;
+  }
+
   /**
-   * Function to return whether or not a section overlaps with another
+   * Function to return whether or not a section overlaps with another.
    * 
-   * @param other
+   * @param other The other section.
    * @return If there's overlap between the current section and the other section
    */
   public boolean overlaps(Section other) {
-    // TODO: This
+    LinkedList<TimeRange> thisTimes = new LinkedList<>(this.meetingTimes);
+    LinkedList<TimeRange> otherTimes = new LinkedList<>(other.getMeetingTimes());
+
+    TimeRange thisCurr = thisTimes.removeFirst();
+    TimeRange otherCurr = otherTimes.removeFirst();
+
+    while (!thisTimes.isEmpty() && !otherTimes.isEmpty()) {
+      if (thisCurr.overlaps(otherCurr)) {
+        return false;
+      } else if (thisCurr.end() > otherCurr.end()) {
+        thisCurr = thisTimes.removeFirst();
+      } else {
+        otherCurr = otherTimes.removeFirst();
+      }
+    }
+
+    // This bit of redundant logic is to account for the single element list case.
+    if (thisCurr.overlaps(otherCurr)) {
+      return true;
+    }
     return false;
   }
 }
