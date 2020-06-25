@@ -14,9 +14,11 @@
 
 package com.google.sps;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 
 import com.google.sps.data.*;
 
@@ -29,15 +31,6 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public final class SchedulerTest {
 
-  //Some times and durations for setting up sections.
-  private static final int TIME_0800AM = TimeRange.getTimeInMinutes(8, 0);
-  private static final int TIME_0830AM = TimeRange.getTimeInMinutes(8, 30);
-  private static final int TIME_0900AM = TimeRange.getTimeInMinutes(9, 0);
-  private static final int TIME_0930AM = TimeRange.getTimeInMinutes(9, 30);
-  private static final int TIME_1000AM = TimeRange.getTimeInMinutes(10, 0);
-  private static final int TIME_1100AM = TimeRange.getTimeInMinutes(11, 00);
-  private static final int TIME_0100PM = TimeRange.getTimeInMinutes(13, 0);
-
   private static final int DURATION_30_MINUTES = 30;
   private static final int DURATION_60_MINUTES = 60;
   private static final int DURATION_90_MINUTES = 90;
@@ -48,20 +41,25 @@ public final class SchedulerTest {
   private Scheduler scheduler;
   
   @Before
-  public void setUp(){
+  public void setUp() {
     scheduler = new Scheduler();
   }
 
-  //TODO: All tests will have to be changed to account for new timerange/section structuree
+  /**
+   * Returns a list of times on monday, wednesday, and friday. Used for generic testing.
+   */
+  public List<TimeRange> monWedFri(int hour, int minute, int durationMinutes) {
+    TimeRange mon = TimeRange.fromStartDuration(TimeRange.MONDAY, hour, minute, durationMinutes);
+    TimeRange wed = TimeRange.fromStartDuration(TimeRange.WEDNESDAY, hour, minute, durationMinutes);
+    TimeRange fri = TimeRange.fromStartDuration(TimeRange.FRIDAY, hour, minute, durationMinutes);
+    return Arrays.asList(mon, wed, fri);
+  }
+
   @Test
   public void singleCourseValidSchedule() {
-    TimeRange[] times = new TimeRange[7];
-    for (int i = 1; i < 6; i += 2) {
-      times[i] = TimeRange.fromStartDuration(TIME_1000AM, DURATION_60_MINUTES);
-    }
-
-    Section section = new Section("Dr. Eggman", times);
-    Course course1 = new Course("Intro to Evil", "EVIL100", "Sonic", true, Arrays.asList(section));
+    Section section = new Section("Dr. Eggman", monWedFri(10, 30, DURATION_90_MINUTES));
+    Course course1 = new Course("Intro to Evil", "EVIL100", 
+        "Wrongdoing", 1, true, Arrays.asList(section));
     
     Collection<Schedule> actual = scheduler.generateSchedules(Arrays.asList(course1), 1, 2);
     Schedule expected = new Schedule(Arrays.asList(course1));
@@ -70,14 +68,23 @@ public final class SchedulerTest {
 
   @Test
   public void notEnoughCreditsNoSchedules() {
-    TimeRange[] times = new TimeRange[7];
-    for (int i = 1; i < 6; i += 2) {
-      times[i] = TimeRange.fromStartDuration(TIME_1000AM, DURATION_60_MINUTES);
-    }
-
-    Section section = new Section("Dr. Eggman", times);
-    Course course1 = new Course("Intro to Evil", "EVIL100", "Sonic", true, Arrays.asList(section));
+    Section section = new Section("Dr. Eggman", monWedFri(10, 30, DURATION_90_MINUTES));
+    Course course1 = new Course("Intro to Evil", "EVIL100", 
+        "Wrongdoing", 1, true, Arrays.asList(section));
+    
     Collection<Schedule> actual = scheduler.generateSchedules(Arrays.asList(course1), 3, 5);
     Assert.assertEquals(Collections.emptyList(), actual);
+  }
+
+  @Test
+  public void twoCoursesValidSchedule() {
+    //TODO: This
+  }
+
+  @Test
+  public void noCourseOverlap() {
+    /*//TODO min credits = 1, max = 2, 
+             2 courses that overlap, should only return 2 schedules w single course
+    */
   }
 }
