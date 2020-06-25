@@ -28,7 +28,7 @@ public final class Scheduler {
 
     generateSchedulesHelper(betterCourses, new ArrayList<>(), invariants, schedulesSet);
 
-    System.out.println(schedulesSet);
+    System.out.println(courses);
     List<Schedule> schedules = new ArrayList<>();
     for (List<Course> schedule : schedulesSet) {
       schedules.add(new Schedule(schedule));
@@ -105,9 +105,9 @@ public final class Scheduler {
   private boolean sectionsOverlap(Section toCheck, List<Section> sections) {
     for (Section section : sections) {
       if (toCheck.overlaps(section)) {
-        return false;
+        return true;
       }
     }
-    return true;
+    return false;
   }
 }
