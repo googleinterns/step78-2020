@@ -46,13 +46,22 @@ public final class SchedulerTest {
   }
 
   /**
-   * Returns a list of times on monday, wednesday, and friday. Used for generic testing.
+   * Returns a list of times on monday, wednesday, and friday, to be used in section constructors.
    */
   public List<TimeRange> monWedFri(int hour, int minute, int durationMinutes) {
     TimeRange mon = TimeRange.fromStartDuration(TimeRange.MONDAY, hour, minute, durationMinutes);
     TimeRange wed = TimeRange.fromStartDuration(TimeRange.WEDNESDAY, hour, minute, durationMinutes);
     TimeRange fri = TimeRange.fromStartDuration(TimeRange.FRIDAY, hour, minute, durationMinutes);
     return Arrays.asList(mon, wed, fri);
+  }
+
+  /**
+   * Returns a list of times on Tuesday and Thursday, to be used in section constructors.
+   */
+  public List<TimeRange> tuesThurs(int hour, int minute, int durationMinutes) {
+    TimeRange tues = TimeRange.fromStartDuration(TimeRange.TUESDAY, hour, minute, durationMinutes);
+    TimeRange thurs = TimeRange.fromStartDuration(TimeRange.THURSDAY, hour, minute, durationMinutes);
+    return Arrays.asList(tues, thurs);
   }
 
   @Test
