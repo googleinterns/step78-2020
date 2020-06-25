@@ -14,14 +14,11 @@
 
 package com.google.sps;
 
-import java.util.ArrayList;
+import com.google.sps.data.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.sps.data.*;
-
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
