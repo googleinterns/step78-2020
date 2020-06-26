@@ -73,4 +73,23 @@ public class Course {
   public List<Section> getSections() {
     return this.sections;
   }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == this) {
+      return true;
+    }
+
+    if (!(other instanceof Course)) {
+      return false;
+    }
+
+    Course otherCourse = (Course) other;
+    return otherCourse.name.equals(this.name) 
+        && otherCourse.courseID.equals(this.courseID)
+        && otherCourse.subject.equals(this.subject) 
+        && Math.abs(otherCourse.credits - this.credits) < 0.01
+        && otherCourse.isRequired == this.isRequired 
+        && otherCourse.sections.equals(this.sections);
+  }
 }
