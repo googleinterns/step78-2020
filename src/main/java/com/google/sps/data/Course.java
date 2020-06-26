@@ -16,6 +16,7 @@ package com.google.sps.data;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A course class. Better documentation to be added later.
@@ -92,4 +93,10 @@ public class Course {
         && otherCourse.isRequired == this.isRequired 
         && otherCourse.sections.equals(this.sections);
   }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, courseID, subject, credits, isRequired, sections);
+  }
+  
 }
