@@ -56,7 +56,7 @@ public class Section {
     while (!thisTimes.isEmpty() && !otherTimes.isEmpty()) {
       if (thisCurr.overlaps(otherCurr)) {
         return false;
-      } else if (thisCurr.end() > otherCurr.end()) {
+      } else if (thisCurr.end() < otherCurr.end()) {
         thisCurr = thisTimes.removeFirst();
       } else {
         otherCurr = otherTimes.removeFirst();
