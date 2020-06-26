@@ -25,7 +25,7 @@ public class Schedule {
       Schedule otherSchedule = (Schedule) other;
       HashSet<Course> otherCourses = new HashSet<>(otherSchedule.courses);
       HashSet<Course> thisCourses = new HashSet<>(this.courses);
-      return other.weight == this.weight && otherCourses.equals(thisCourses);
+      return otherSchedule.weight == this.weight && otherCourses.equals(thisCourses);
     }
     //Todo: Add comparator functions based on weight
     //Todo: Add recalculate weight function/set weight function
