@@ -40,6 +40,10 @@ public class Section {
     return this.meetingTimes;
   }
 
+  public String getProfessor() {
+    return this.professor;
+  }
+
   /**
    * Function to return whether or not a section overlaps with another.
    * 
@@ -68,5 +72,19 @@ public class Section {
       return true;
     }
     return false;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == this) {
+      return true;
+    } else {
+      return other instanceof Section && equals(this, (Section) other);
+    }
+  }
+
+  private boolean equals(Section a, Section b) {
+    return a.professor.equals(b.professor) 
+            && a.meetingTimes.equals(b.meetingTimes);
   }
 }
