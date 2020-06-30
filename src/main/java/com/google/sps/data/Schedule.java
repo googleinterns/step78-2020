@@ -5,13 +5,13 @@ import java.util.HashSet;
 import java.util.Objects;
 
 public class Schedule {
-    private Collection<Course> courses;
-    private long weight;
+  private Collection<Course> courses;
+  private long weight;
 
-    public Schedule(Collection<Course> courses){
-        this.courses = courses;
-        this.weight = -1;
-    }
+  public Schedule(Collection<Course> courses) {
+    this.courses = courses;
+    this.weight = -1;
+  }
 
   @Override
   public int hashCode() {
@@ -33,7 +33,7 @@ public class Schedule {
     HashSet<Course> thisCourses = new HashSet<>(this.courses);
     return otherSchedule.weight == this.weight && otherCourses.equals(thisCourses);
   }
-  
-    //Todo: Add comparator functions based on weight
-    //Todo: Add recalculate weight function/set weight function
+
+  // Todo: Add comparator functions based on weight
+  // Todo: Add recalculate weight function/set weight function
 }
