@@ -16,6 +16,7 @@ package com.google.sps.data;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 public class Section {
     private String professor;
@@ -34,6 +35,13 @@ public class Section {
           }
         }
     }
+
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(professor, meetingTimes);
+    }
+
 
     /**
      * Function to return whether or not a section overlaps with another
