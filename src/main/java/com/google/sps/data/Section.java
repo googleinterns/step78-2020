@@ -37,10 +37,10 @@ public class Section {
     }
 
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(professor, meetingTimes);
-  }
+    @Override
+    public int hashCode() {
+        return Objects.hash(professor, meetingTimes);
+    }
 
 
     /**
