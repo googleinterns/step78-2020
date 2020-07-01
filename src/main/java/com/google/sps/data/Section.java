@@ -52,4 +52,9 @@ public class Section {
         //TODO: This
         return false;
     }
+
+    // Getter for meetingTimes
+    public List<TimeRange> getMeetingTimes() {
+      return this.meetingTimes;
+    }
 }

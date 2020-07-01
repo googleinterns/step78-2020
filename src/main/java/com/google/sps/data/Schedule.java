@@ -17,6 +17,11 @@ public class Schedule {
     return Objects.hash(courses, weight);
   }
 
+  // Getter for schedule courses
+  public Collection<Course> getCourses() {
+    return this.courses;
+  }
+
     //Todo: Add comparator functions based on weight
     //Todo: Add recalculate weight function/set weight function
 }
