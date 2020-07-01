@@ -36,6 +36,21 @@ public class Section {
         }
     }
 
+    @Override
+    public boolean equals(Object other) {
+      if (other == this) {
+        return true;
+      }
+
+      if (!(other instanceof Section)) {
+        return false;
+      }
+
+      Section otherSection = (Section) other;
+
+      return otherSection.professor.equals(this.professor)
+              && otherSection.meetingTimes.equals(this.meetingTimes);
+    }
 
     @Override
     public int hashCode() {
