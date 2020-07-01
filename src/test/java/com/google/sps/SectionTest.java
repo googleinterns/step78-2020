@@ -101,4 +101,10 @@ public final class SectionTest {
     Assert.assertTrue(s1.overlaps(s2));
     Assert.assertTrue(s2.overlaps(s1));
   }
+
+  @Test(expected = IllegalArgumentException.class)
+  public void overlappingRangesNotAllowed() {
+    List<TimeRange> overlaps = Arrays.asList(MONDAY_10AM, MONDAY_1030AM);
+    Section shouldFail = new Section ("Prof", overlaps);
+  }
 }
