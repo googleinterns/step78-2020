@@ -20,7 +20,7 @@ public final class SectionTest {
   private static final TimeRange MONDAY_1PM = 
       TimeRange.fromStartDuration(TimeRange.MONDAY, 13, 0, 60);
   private static final TimeRange TUESDAY_10AM = 
-      TimeRange.fromStartDuration(TimeRange.MONDAY, 10, 0, 60);
+      TimeRange.fromStartDuration(TimeRange.TUESDAY, 10, 0, 60);
 
   @Test
   public void singleTimeOverlap() {
