@@ -51,6 +51,20 @@ public final class SectionTest {
   }
 
   @Test
+  public void multipleElementsMidOverlaps() {
+    List<TimeRange> s1Times = Arrays.asList(MONDAY_10AM, MONDAY_1PM, TUESDAY_10AM);
+    List<TimeRange> s2Times = Arrays.asList(
+        TimeRange.fromStartDuration(TimeRange.MONDAY, 11, 30, 30),
+        TimeRange.fromStartDuration(TimeRange.MONDAY, 13, 30, 60),
+        TimeRange.fromStartDuration(TimeRange.SATURDAY, 15, 30, 60));
+
+    Section s1 = new Section("Prof", s1Times);
+    Section s2 = new Section("Other Prof", s2Times);
+    Assert.assertTrue(s1.overlaps(s2));
+    Assert.assertTrue(s2.overlaps(s1));
+  }
+
+  @Test
   public void overnightOverlaps() {
     Section s1 = new Section("Prof", Arrays.asList(
         TimeRange.fromStartDuration(TimeRange.WEDNESDAY, 23, 30, 60)));
