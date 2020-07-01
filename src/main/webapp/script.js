@@ -12,9 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * Adds a random greeting to the page.
- */
-function userAuthorization() {
-  window.location.href = "/auth";
+// fetch the secondary calendar with the schedule (just one right now, will be multiple later)
+function fetchUserCalendar() {
+  fetch('/handleSchedules').then(response => response.json()).then((cal) => {
+      var calId = cal.id;
+      displayCalendar(calId);
+  });
+}
+
+// display the secondary calendar 
+function displayCalendar(calId) {
+  const url = "https://calendar.google.com/calendar/embed?src=" + calId;
+  document.getElementById("calendar").src = url;
 }

@@ -70,7 +70,7 @@
     <dependency>
       <groupId>com.google.apis</groupId>
       <artifactId>google-api-services-calendar</artifactId>
-      <version>v3-rev305-1.23.0</version>
+      <version>v3-rev20200610-1.30.9</version>
     </dependency>
 
     <dependency>

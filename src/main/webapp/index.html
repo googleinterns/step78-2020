@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
+    <title>Schedules</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
@@ -10,8 +10,8 @@
     <div id="content">
       <h1>Schedules</h1>
       <p>Click here to see your schedules:</p>
-      <button onclick="userAuthorization()">Schedules</button>
-      <div id="greeting-container"></div>
+      <button onclick="fetchUserCalendar()">Schedules</button>
+      <iframe id="calendar" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
     </div>
   </body>
 </html>

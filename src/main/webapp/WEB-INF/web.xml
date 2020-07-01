@@ -25,10 +25,20 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     <url-pattern>/auth/*</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>handleSchedules</servlet-name>
+    <servlet-class>com.google.sps.server.HandleSchedules</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>handleSchedules</servlet-name>
+    <url-pattern>/handleSchedules/*</url-pattern>
+  </servlet-mapping>
+
   <security-constraint>
     <web-resource-collection>
-      <web-resource-name>auth</web-resource-name>
-      <url-pattern>/auth/*</url-pattern>
+      <web-resource-name>any</web-resource-name>
+      <url-pattern>/*</url-pattern>
     </web-resource-collection>
     <auth-constraint>
       <role-name>*</role-name>
