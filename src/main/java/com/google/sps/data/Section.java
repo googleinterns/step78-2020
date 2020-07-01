@@ -74,6 +74,8 @@ public class Section {
 
     TimeRange thisCurr = thisTimes.removeFirst();
     TimeRange otherCurr = otherTimes.removeFirst();
+    TimeRange thisFirst = thisCurr;
+    TimeRange otherFirst = otherCurr;
 
     while (!thisTimes.isEmpty() || !otherTimes.isEmpty()) {
       if (thisCurr.overlaps(otherCurr)) {
@@ -93,13 +95,32 @@ public class Section {
       }
     }
 
-    //TODO: Add logic to account for overnight sat-sun classes.
-
-    // This bit of redundant logic is to account for the single element list case.
+    // Accounts for the single element list case.
     if (thisCurr.overlaps(otherCurr)) {
       return true;
     }
 
+    if (thisCurr.end() > TimeRange.END_OF_WEEK && saturdayOverlapsSunday(thisCurr, otherFirst)) {
+      return true;
+    }
+
+    if (otherCurr.end() > TimeRange.END_OF_WEEK && saturdayOverlapsSunday(otherCurr, thisFirst)) {
+      return true;
+    }
+
     return false;
+  }
+
+  /**
+   * A helper function that checks if a TimeRange that starts on Saturday but ends on Sunday 
+   * overlaps with a TimeRange earlier in the week.
+   * 
+   * @param satEvent the event that starts on Sat but ends on Sunday
+   * @param earliestEvent the event earlier in the week.
+   * 
+   * @return a boolean representing if the two events overlap.
+   */
+  private boolean saturdayOverlapsSunday(TimeRange satEvent, TimeRange earliestEvent) {
+    return earliestEvent.contains(satEvent.end() - TimeRange.END_OF_WEEK);
   }
 }
