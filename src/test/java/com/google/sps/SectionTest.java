@@ -1,10 +1,9 @@
 package com.google.sps;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.google.sps.data.Section;
 import com.google.sps.data.TimeRange;
+import java.util.Arrays;
+import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
