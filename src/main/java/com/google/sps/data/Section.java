@@ -15,6 +15,7 @@
 package com.google.sps.data;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
@@ -57,6 +58,10 @@ public class Section {
     return Objects.hash(professor, meetingTimes);
   }
 
+  public List<TimeRange> getMeetingTimes() {
+    return this.meetingTimes;
+  }
+
   /**
    * Function to return whether or not a section overlaps with another.
    * 
@@ -64,7 +69,37 @@ public class Section {
    * @return If there's overlap between the current section and the other section
    */
   public boolean overlaps(Section other) {
-    // TODO: This
+    LinkedList<TimeRange> thisTimes = new LinkedList<>(this.meetingTimes);
+    LinkedList<TimeRange> otherTimes = new LinkedList<>(other.getMeetingTimes());
+
+    TimeRange thisCurr = thisTimes.removeFirst();
+    TimeRange otherCurr = otherTimes.removeFirst();
+
+    while (!thisTimes.isEmpty() || !otherTimes.isEmpty()) {
+      if (thisCurr.overlaps(otherCurr)) {
+        return true;
+      } else if (thisCurr.end() < otherCurr.end()) {
+        if (!thisTimes.isEmpty()) {
+          thisCurr = thisTimes.removeFirst();
+        } else {
+          otherCurr = otherTimes.removeFirst();
+        }
+      } else {
+        if (!otherTimes.isEmpty()) {
+          otherCurr = otherTimes.removeFirst();
+        } else {
+          thisCurr = thisTimes.removeFirst();
+        }
+      }
+    }
+
+    //TODO: Add logic to account for overnight sat-sun classes.
+
+    // This bit of redundant logic is to account for the single element list case.
+    if (thisCurr.overlaps(otherCurr)) {
+      return true;
+    }
+
     return false;
   }
 }
