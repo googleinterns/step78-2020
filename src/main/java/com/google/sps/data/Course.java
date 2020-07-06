@@ -14,6 +14,7 @@
 
 package com.google.sps.data;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -36,6 +37,19 @@ public class Course {
     this.isRequired = isRequired;
     this.sections = sections;
   }
+
+  public static final Comparator<Course> REQUIRED_TO_FRONT = new Comparator<Course>() {
+    @Override
+    public int compare(Course x, Course y) {
+      if (x.isRequired() && y.isRequired()) {
+        return 0;
+      } else if (x.isRequired()) {
+        return 1;
+      } else {
+        return -1;
+      }
+    }
+  };
 
   public String getName() {
     return this.name;
