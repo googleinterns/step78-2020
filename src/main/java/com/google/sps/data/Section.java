@@ -14,6 +14,7 @@
 
 package com.google.sps.data;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
@@ -69,35 +70,26 @@ public class Section {
    * @return If there's overlap between the current section and the other section
    */
   public boolean overlaps(Section other) {
-    LinkedList<TimeRange> thisTimes = new LinkedList<>(this.meetingTimes);
-    LinkedList<TimeRange> otherTimes = new LinkedList<>(other.getMeetingTimes());
+    // A section with no meeting times can't overlap with another section.
+    if (this.meetingTimes.isEmpty() || other.meetingTimes.isEmpty()) {
+      return false;
+    }
 
-    TimeRange thisCurr = thisTimes.removeFirst();
-    TimeRange otherCurr = otherTimes.removeFirst();
-    TimeRange thisFirst = thisCurr;
-    TimeRange otherFirst = otherCurr;
+    ArrayList<TimeRange> combinedTimes = new ArrayList<>(this.meetingTimes);
+    combinedTimes.addAll(other.meetingTimes);
 
-    while (!thisTimes.isEmpty() || !otherTimes.isEmpty()) {
-      if (thisCurr.overlaps(otherCurr)) {
+    Collections.sort(combinedTimes, TimeRange.ORDER_BY_START);
+    int timeCount = combinedTimes.size();
+
+    for (int i = 0; i < timeCount - 1; i++) {
+      if (combinedTimes.get(i).overlaps(combinedTimes.get(i + 1))) {
         return true;
-      } else if (thisCurr.end() < otherCurr.end()) {
-        if (!thisTimes.isEmpty()) {
-          thisCurr = thisTimes.removeFirst();
-        } else {
-          otherCurr = otherTimes.removeFirst();
-        }
-      } else {
-        if (!otherTimes.isEmpty()) {
-          otherCurr = otherTimes.removeFirst();
-        } else {
-          thisCurr = thisTimes.removeFirst();
-        }
       }
     }
 
-    return (thisCurr.overlaps(otherCurr))
-      || (thisCurr.end() > TimeRange.END_OF_WEEK && saturdayOverlapsSunday(thisCurr, otherFirst)) 
-      || (otherCurr.end() > TimeRange.END_OF_WEEK && saturdayOverlapsSunday(otherCurr, thisFirst));
+    TimeRange lastEvent = combinedTimes.get(timeCount - 1);
+    return (lastEvent.end() > TimeRange.END_OF_WEEK) 
+      && saturdayOverlapsSunday(lastEvent, combinedTimes.get(0));
   }
 
   /**
