@@ -22,6 +22,9 @@ public final class SectionTest {
   private static final TimeRange TUESDAY_10AM = 
       TimeRange.fromStartDuration(TimeRange.TUESDAY, 10, 0, 60);
 
+  private static final int DURATION_30_MIN = 30;
+  private static final int DURATION_60_MIN = 60;
+
   @Test
   public void singleTimeOverlap() {
     Section s1 = new Section("Prof", Arrays.asList(MONDAY_10AM));
@@ -54,9 +57,9 @@ public final class SectionTest {
   public void multipleElementsMidOverlaps() {
     List<TimeRange> s1Times = Arrays.asList(MONDAY_10AM, MONDAY_1PM, TUESDAY_10AM);
     List<TimeRange> s2Times = Arrays.asList(
-        TimeRange.fromStartDuration(TimeRange.MONDAY, 11, 30, 30),
-        TimeRange.fromStartDuration(TimeRange.MONDAY, 13, 30, 60),
-        TimeRange.fromStartDuration(TimeRange.SATURDAY, 15, 30, 60));
+        TimeRange.fromStartDuration(TimeRange.MONDAY, 11, 30, DURATION_30_MIN),
+        TimeRange.fromStartDuration(TimeRange.MONDAY, 13, 30, DURATION_60_MIN),
+        TimeRange.fromStartDuration(TimeRange.SATURDAY, 15, 30, DURATION_60_MIN));
 
     Section s1 = new Section("Prof", s1Times);
     Section s2 = new Section("Other Prof", s2Times);
@@ -67,9 +70,9 @@ public final class SectionTest {
   @Test
   public void overnightOverlaps() {
     Section s1 = new Section("Prof", Arrays.asList(
-        TimeRange.fromStartDuration(TimeRange.WEDNESDAY, 23, 30, 60)));
+        TimeRange.fromStartDuration(TimeRange.WEDNESDAY, 23, 30, DURATION_60_MIN)));
     Section s2 = new Section("Other Prof", Arrays.asList(
-        TimeRange.fromStartDuration(TimeRange.THURSDAY, 0, 0, 60)));
+        TimeRange.fromStartDuration(TimeRange.THURSDAY, 0, 0, DURATION_60_MIN)));
 
     Assert.assertTrue(s1.overlaps(s2));
     Assert.assertTrue(s2.overlaps(s1));
@@ -78,9 +81,9 @@ public final class SectionTest {
   @Test
   public void satSunOvernightOverlaps() {
     Section s1 = new Section("Prof", Arrays.asList(
-        TimeRange.fromStartDuration(TimeRange.SATURDAY, 23, 30, 60)));
+        TimeRange.fromStartDuration(TimeRange.SATURDAY, 23, 30, DURATION_60_MIN)));
     Section s2 = new Section("Other Prof", Arrays.asList(
-        TimeRange.fromStartDuration(TimeRange.SUNDAY, 0, 0, 60)));
+        TimeRange.fromStartDuration(TimeRange.SUNDAY, 0, 0, DURATION_60_MIN)));
 
     Assert.assertTrue(s1.overlaps(s2));
     Assert.assertTrue(s2.overlaps(s1));
@@ -90,13 +93,13 @@ public final class SectionTest {
   public void satSunOvernightOverlapsMultiple() {
     Section s1 = new Section("Prof", Arrays.asList(
         MONDAY_10AM, 
-        TimeRange.fromStartDuration(TimeRange.SATURDAY, 23, 30, 60)));
+        TimeRange.fromStartDuration(TimeRange.SATURDAY, 23, 30, DURATION_60_MIN)));
 
 
     //When sorting, the list will become Sunday then Monday.
     Section s2 = new Section("Other Prof", Arrays.asList(
         MONDAY_1PM,
-        TimeRange.fromStartDuration(TimeRange.SUNDAY, 0, 0, 60)));
+        TimeRange.fromStartDuration(TimeRange.SUNDAY, 0, 0, DURATION_60_MIN)));
 
     Assert.assertTrue(s1.overlaps(s2));
     Assert.assertTrue(s2.overlaps(s1));
