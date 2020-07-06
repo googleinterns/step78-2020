@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 
-public class restrictTimesCriteria implements Preference {
+public class RestrictTimesCriteria implements Preference {
 
-  public restrictTimesCriteria(List<TimeRange> userNoClassTimes) {
+  public RestrictTimesCriteria(List<TimeRange> userNoClassTimes) {
     this.userNoClassTimes = userNoClassTimes;
   }
 

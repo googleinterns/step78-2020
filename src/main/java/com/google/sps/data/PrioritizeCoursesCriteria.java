@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 
-public class prioritizeCoursesCriteria implements Preference {
+public class PrioritizeCoursesCriteria implements Preference {
 
-  public void prioritizeCoursesCriteria(List<Course> courseList) {
+  public PrioritizeCoursesCriteria(List<Course> courseList) {
     this.courseList = courseList;
   }
 

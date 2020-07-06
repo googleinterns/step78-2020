@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 
-public class numOfCoursesInSubjectCriteria implements Preference {
+public class SubjectCoursesCriteria implements Preference {
 
-  public void numOfCoursesInSubjectCriteria(String preferredSubject) {
+  public SubjectCoursesCriteria(String preferredSubject) {
     this.preferredSubject = preferredSubject;
   }
 

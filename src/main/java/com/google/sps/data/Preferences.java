@@ -12,7 +12,7 @@ public class Preferences {
     // Criteria sorted in order of user preference
     private List<Preference> criteriaPreferences;
 
-    public void Preferences(List<Preference> criteriaPreferences){
+    public Preferences(List<Preference> criteriaPreferences) {
       this.criteriaPreferences = criteriaPreferences;
     }
 
@@ -27,9 +27,9 @@ public class Preferences {
           while(index < criteriaPreferences.size()) {
             Preference idxCriteria = criteriaPreferences.get(index);
             if(idxCriteria.preferenceScore(a) > idxCriteria.preferenceScore(b)) {
-              return 1;
-            } else if(idxCriteria.preferenceScore(a) < idxCriteria.preferenceScore(b)) {
               return -1;
+            } else if(idxCriteria.preferenceScore(a) < idxCriteria.preferenceScore(b)) {
+              return 1;
             } else {
               index++;
             }
