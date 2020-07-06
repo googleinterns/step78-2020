@@ -198,9 +198,9 @@ public final class SchedulerTest {
   @Test
   public void requiredSectionsOverlapButWorks() {
     Section section1 = new Section("Mario", monWedFri(10, 0, DURATION_60_MINUTES));
-    Section section2 = new Section("Mario", monWedFri(15, 30, DURATION_30_MINUTES));
+    Section section2 = new Section("Mario", monWedFri(15, 30, DURATION_60_MINUTES));
     Section section3 = new Section("Sonic", monWedFri(10, 30, DURATION_60_MINUTES));
-    Section section4 = new Section("Sonic", tuesThurs(13, 30, DURATION_30_MINUTES));
+    Section section4 = new Section("Sonic", monWedFri(16, 00, DURATION_60_MINUTES));
 
     Course course1 = new Course("Jumping High", "HERO1983",
         "Heroism", 1, true, Arrays.asList(section1, section2));
