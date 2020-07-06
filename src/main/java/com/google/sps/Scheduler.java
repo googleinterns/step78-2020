@@ -1,7 +1,6 @@
 package com.google.sps;
 
 import com.google.sps.data.*;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -43,18 +42,18 @@ public final class Scheduler {
    * Recursively iterates through a list of courses and adds schedules to the
    * given set.
    * 
-   * @param courses    The list of courses to iterate through
-   * @param schedule   The current schedule to be added/operated on
-   * @param invariants The invariants that constrain the valid schedules
-   * @param schedules  The set of schedules that is being generated/added to.
+   * @param courses     The list of courses to iterate through
+   * @param courseList  The current course list to be added/operated on
+   * @param invariants  The invariants that constrain the valid schedules
+   * @param courseLists The set of course lists that is being generated/added to.
    */
-  private void generateSchedulesHelper(List<Course> courses, List<Course> schedule, 
-      Invariants invariants, Set<List<Course>> schedules) {
+  private void generateSchedulesHelper(List<Course> courses, List<Course> courseList, 
+      Invariants invariants, Set<List<Course>> courseLists) {
 
     // This means that we have a valid schedule, and should add it to the list.
-    float currCredits = totalCredits(schedule);
+    float currCredits = totalCredits(courseList);
     if (currCredits >= invariants.getMinCredits() && currCredits <= invariants.getMaxCredits()) {
-      schedules.add(schedule);
+      courseLists.add(courseList);
     }
 
     // We've reached the end of the list or have a full schedule, we are finished.
@@ -64,7 +63,7 @@ public final class Scheduler {
 
     Course course = courses.remove(0);
     List<Section> courseSections = course.getSections();
-    List<Section> scheduleSections = schedule.stream()
+    List<Section> scheduleSections = courseList.stream()
         .map(c -> c.getSections().get(0))
         .collect(Collectors.toList());
 
@@ -75,18 +74,21 @@ public final class Scheduler {
      */
     // TODO: Implement logic for required courses having no valid schedules
     for (Section section : courseSections) {
-      if (!sectionsOverlap(section, scheduleSections)
-          && currCredits + course.getCredits() <= invariants.getMaxCredits()) {
-        List<Course> newSched = new ArrayList<>(schedule);
-        newSched.add(new Course(course.getName(), course.getCourseID(), course.getSubject(),
+      boolean doesNotOverlapSchedule = !sectionsOverlap(section, scheduleSections);
+      boolean doesNotExceedCreditLimit = 
+          currCredits + course.getCredits() <= invariants.getMaxCredits();
+      
+      if (doesNotOverlapSchedule && doesNotExceedCreditLimit) {
+        List<Course> newCourseList = new ArrayList<>(courseList);
+        newCourseList.add(new Course(course.getName(), course.getCourseID(), course.getSubject(),
             course.getCredits(), course.isRequired(), Arrays.asList(section)));
-        generateSchedulesHelper(new ArrayList<>(courses), newSched, invariants, schedules);
+        generateSchedulesHelper(new ArrayList<>(courses), newCourseList, invariants, courseLists);
       }
     }
 
     //If a course is not required, continue permuting with it *not* added to the schedule
     if (!course.isRequired()) {
-      generateSchedulesHelper(new ArrayList<>(courses), schedule, invariants, schedules);
+      generateSchedulesHelper(new ArrayList<>(courses), courseList, invariants, courseLists);
     }
   }
 
