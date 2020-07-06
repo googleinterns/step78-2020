@@ -112,7 +112,7 @@ public final class SchedulerTest {
     /*min credits = 1, max = 2, 
       2 courses that overlap, should only return 2 schedules w single course
     */
-    Section section1 = new Section("Mario", monWedFri(10, 0, DURATION_60_MINUTES));
+    Section section1 = new Section("Mario", monWedFri(10, 0, DURATION_60_MINUTES)); 
     Section section2 = new Section("Sonic", monWedFri(10, 30, DURATION_60_MINUTES));
 
     Course course1 = new Course("Jumping High", "HERO1983", 
@@ -121,12 +121,108 @@ public final class SchedulerTest {
         "Heroism", 1, false, Arrays.asList(section2));
       
     HashSet<Schedule> actual = new HashSet<>(
-          scheduler.generateSchedules(Arrays.asList(course1, course2), new Invariants(1, 2)));
+        scheduler.generateSchedules(Arrays.asList(course1, course2), new Invariants(1, 2)));
         
     Schedule schedule1 = new Schedule(Arrays.asList(course1));
     Schedule schedule2 = new Schedule(Arrays.asList(course2));
     HashSet<Schedule> expected = new HashSet<>(Arrays.asList(schedule1, schedule2));
 
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void requiredCourseMustBeIncluded() {
+    Section section1 = new Section("Mario", monWedFri(10, 0, DURATION_60_MINUTES));
+    Section section2 = new Section("Sonic", tuesThurs(10, 30, DURATION_60_MINUTES));
+    Section section3 = new Section("Megaman", tuesThurs(15, 0, DURATION_1_HOUR));
+   
+    Course course1 = new Course("Jumping High", "HERO1983", 
+        "Heroism", 1, true, Arrays.asList(section1));
+    Course course2 = new Course("Running Fast", "HERO1991",
+        "Heroism", 1, false, Arrays.asList(section2));
+    Course course3 = new Course("Shooting Lemons", "HERO1987",
+        "Heroism", 1, false, Arrays.asList(section3));
+
+    HashSet<Schedule> actual = new HashSet<>(scheduler.generateSchedules(
+        Arrays.asList(course2, course1, course3), new Invariants(2, 3)));
+    
+    Schedule schedule1 = new Schedule(Arrays.asList(course1, course2));
+    Schedule schedule2 = new Schedule(Arrays.asList(course1, course3));
+    Schedule schedule3 = new Schedule(Arrays.asList(course1, course2, course3));
+
+    HashSet<Schedule> expected = new HashSet<>(Arrays.asList(schedule1, schedule2, schedule3));
+
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void requiredCoursesOverlapReturnsEmpty() {
+    Section section1 = new Section("Mario", monWedFri(10, 0, DURATION_60_MINUTES));
+    Section section2 = new Section("Sonic", monWedFri(10, 30, DURATION_60_MINUTES));
+    Section section = new Section("Dr. Eggman", tuesThurs(13, 30, DURATION_30_MINUTES));
+
+
+    Course course1 = new Course("Jumping High", "HERO1983", 
+        "Heroism", 1, true, Arrays.asList(section1));
+    Course course2 = new Course("Running Fast", "HERO1991",
+        "Heroism", 1, true, Arrays.asList(section2));
+    Course course3 = new Course("Intro to Evil", "EVIL100", 
+        "Wrongdoing", 1, false, Arrays.asList(section));
+
+    List<Schedule> actual = 
+        scheduler.generateSchedules(Arrays.asList(course1, course2, course3), new Invariants(1, 2));
+      
+    Assert.assertEquals(Collections.emptyList(), actual);
+  }
+
+  @Test
+  public void allRequiredCoursesOnlyTwoOverlap() {
+    Section section1 = new Section("Mario", monWedFri(10, 0, DURATION_60_MINUTES));
+    Section section2 = new Section("Sonic", monWedFri(10, 30, DURATION_60_MINUTES));
+    Section section = new Section("Dr. Eggman", tuesThurs(13, 30, DURATION_30_MINUTES));
+
+
+    Course course1 = new Course("Jumping High", "HERO1983", 
+        "Heroism", 1, true, Arrays.asList(section1));
+    Course course2 = new Course("Running Fast", "HERO1991",
+        "Heroism", 1, true, Arrays.asList(section2));
+    Course course3 = new Course("Intro to Evil", "EVIL100", 
+        "Wrongdoing", 1, true, Arrays.asList(section));
+
+    List<Schedule> actual = 
+        scheduler.generateSchedules(Arrays.asList(course1, course3, course2), new Invariants(1, 2));
+      
+    Assert.assertEquals(Collections.emptyList(), actual);
+  }
+
+  @Test
+  public void requiredSectionsOverlapButWorks() {
+    Section section1 = new Section("Mario", monWedFri(10, 0, DURATION_60_MINUTES));
+    Section section2 = new Section("Mario", monWedFri(15, 30, DURATION_30_MINUTES));
+    Section section3 = new Section("Sonic", monWedFri(10, 30, DURATION_60_MINUTES));
+    Section section4 = new Section("Sonic", tuesThurs(13, 30, DURATION_30_MINUTES));
+
+    Course course1 = new Course("Jumping High", "HERO1983",
+        "Heroism", 1, true, Arrays.asList(section1, section2));
+    Course course2 = new Course("Running Fast", "Hero1991",
+        "Heroism", 1, true, Arrays.asList(section3, section4));
+
+    HashSet<Schedule> actual = new HashSet<>(scheduler.generateSchedules(
+        Arrays.asList(course1, course2), new Invariants(1, 3)));
+
+    Course expected1 = new Course("Jumping High", "HERO1983",
+        "Heroism", 1, true, Arrays.asList(section1));
+    Course expected2 = new Course("Jumping High", "HERO1983",
+        "Heroism", 1, true, Arrays.asList(section2));
+    Course expected3 = new Course("Running Fast", "Hero1991",
+        "Heroism", 1, true, Arrays.asList(section3));
+    Course expected4 = new Course("Running Fast", "Hero1991",
+        "Heroism", 1, true, Arrays.asList(section4));
+
+    Schedule schedule1 = new Schedule(Arrays.asList(expected1, expected4));
+    Schedule schedule2 = new Schedule(Arrays.asList(expected2, expected3));
+
+    HashSet<Schedule> expected = new HashSet<>(Arrays.asList(schedule1, schedule2));
     Assert.assertEquals(expected, actual);
   }
 }
