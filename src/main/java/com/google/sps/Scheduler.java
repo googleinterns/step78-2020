@@ -95,9 +95,9 @@ public final class Scheduler {
   /**
    * Returns the total number of credits in a given list of courses.
    */
-  private float totalCredits(List<Course> schedule) {
+  private float totalCredits(List<Course> courseList) {
     float total = 0;
-    for (Course course : schedule) {
+    for (Course course : courseList) {
       total += course.getCredits();
     }
     return total;
