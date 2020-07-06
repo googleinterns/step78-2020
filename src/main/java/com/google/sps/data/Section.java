@@ -95,20 +95,9 @@ public class Section {
       }
     }
 
-    // Accounts for the single element list case.
-    if (thisCurr.overlaps(otherCurr)) {
-      return true;
-    }
-
-    if (thisCurr.end() > TimeRange.END_OF_WEEK && saturdayOverlapsSunday(thisCurr, otherFirst)) {
-      return true;
-    }
-
-    if (otherCurr.end() > TimeRange.END_OF_WEEK && saturdayOverlapsSunday(otherCurr, thisFirst)) {
-      return true;
-    }
-
-    return false;
+    return (thisCurr.overlaps(otherCurr))
+      || (thisCurr.end() > TimeRange.END_OF_WEEK && saturdayOverlapsSunday(thisCurr, otherFirst)) 
+      || (otherCurr.end() > TimeRange.END_OF_WEEK && saturdayOverlapsSunday(otherCurr, thisFirst));
   }
 
   /**
