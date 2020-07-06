@@ -34,7 +34,7 @@ public final class Scheduler {
       }
     }
 
-    // Generate all possible valid Schedules that include all required courses.
+    // Generate all possible valid Schedules that include only required courses.
     float reqCredits = totalCredits(requiredCourses);
     Set<List<Course>> requiredSet = new HashSet<>();
 
