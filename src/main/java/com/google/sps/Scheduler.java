@@ -69,7 +69,7 @@ public final class Scheduler {
 
     // This means that we have a valid schedule, and should add it to the list.
     float currCredits = totalCredits(courseList);
-    if (currCredits >= invariants.getMinCredits() && currCredits <= invariants.getMaxCredits()) {
+    if (invariants.meetsCreditRequirement(currCredits)) {
       courseLists.add(courseList);
     }
 
