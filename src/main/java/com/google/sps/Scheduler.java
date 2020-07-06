@@ -23,12 +23,29 @@ public final class Scheduler {
    * @return A list of valid schedules.
    */
   public List<Schedule> generateSchedules(List<Course> courses, Invariants invariants) {
-    ArrayList<Course> orderedCourses = new ArrayList<>(courses);
-    Collections.sort(orderedCourses, Course.REQUIRED_TO_FRONT);
+    List<Course> requiredCourses = new ArrayList<>();
+    List<Course> nonRequiredCourses = new ArrayList<>();
 
+    for (Course course: courses) {
+      if (course.isRequired()) {
+        requiredCourses.add(course);
+      } else {
+        nonRequiredCourses.add(course);
+      }
+    }
+
+    // Generate all possible valid Schedules that include all required courses.
+    float reqCredits = totalCredits(requiredCourses);
+    Set<List<Course>> requiredSet = new HashSet<>();
+
+    generateSchedulesHelper(requiredCourses, new ArrayList<>(), 
+        new Invariants(reqCredits, reqCredits), requiredSet);
+    
+    // Using those Schedules as a building block, generate all valid schedules
     Set<List<Course>> scheduleSet = new HashSet<>();
-
-    generateSchedulesHelper(orderedCourses, new ArrayList<>(), invariants, scheduleSet);
+    for (List<Course> validCourseList : requiredSet) {
+      generateSchedulesHelper(nonRequiredCourses, validCourseList, invariants, scheduleSet);
+    }
 
     List<Schedule> schedules = new ArrayList<>();
     for (List<Course> courseList: scheduleSet) {
