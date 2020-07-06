@@ -16,4 +16,8 @@ public class Invariants {
   public float getMaxCredits() {
     return this.maxCredits;
   }
+
+  public boolean meetsCreditRequirement(float credits) {
+    return credits >= minCredits && credits <= maxCredits;
+  }
 }
