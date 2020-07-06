@@ -18,6 +18,7 @@ import com.google.sps.data.*;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
@@ -85,14 +86,47 @@ public final class SchedulerTest {
   }
 
   @Test
-  public void twoCoursesValidSchedule() {
-    //TODO: This
+  public void twoCoursesValidSchedules() {
+    Section section1 = new Section("Mario", monWedFri(10, 0, DURATION_60_MINUTES));
+    Section section2 = new Section("Sonic", tuesThurs(10, 30, DURATION_60_MINUTES));
+
+    Course course1 = new Course("Jumping High", "HERO1983", 
+        "Heroism", 1, false, Arrays.asList(section1));
+    Course course2 = new Course("Running Fast", "HERO1991",
+        "Heroism", 1, false, Arrays.asList(section2));
+      
+    HashSet<Schedule> actual = new HashSet<>(
+          scheduler.generateSchedules(Arrays.asList(course1, course2), new Invariants(1, 2)));
+        
+    Schedule schedule1 = new Schedule(Arrays.asList(course1));
+    Schedule schedule2 = new Schedule(Arrays.asList(course2));
+    Schedule schedule3 = new Schedule(Arrays.asList(course1, course2));
+
+    HashSet<Schedule> expected = new HashSet<>(Arrays.asList(schedule1, schedule2, schedule3));
+
+    Assert.assertEquals(expected, actual);
   }
 
   @Test
   public void noCourseOverlap() {
-    /*//TODO min credits = 1, max = 2, 
-             2 courses that overlap, should only return 2 schedules w single course
+    /*min credits = 1, max = 2, 
+      2 courses that overlap, should only return 2 schedules w single course
     */
+    Section section1 = new Section("Mario", monWedFri(10, 0, DURATION_60_MINUTES));
+    Section section2 = new Section("Sonic", monWedFri(10, 30, DURATION_60_MINUTES));
+
+    Course course1 = new Course("Jumping High", "HERO1983", 
+        "Heroism", 1, false, Arrays.asList(section1));
+    Course course2 = new Course("Running Fast", "HERO1991",
+        "Heroism", 1, false, Arrays.asList(section2));
+      
+    HashSet<Schedule> actual = new HashSet<>(
+          scheduler.generateSchedules(Arrays.asList(course1, course2), new Invariants(1, 2)));
+        
+    Schedule schedule1 = new Schedule(Arrays.asList(course1));
+    Schedule schedule2 = new Schedule(Arrays.asList(course2));
+    HashSet<Schedule> expected = new HashSet<>(Arrays.asList(schedule1, schedule2));
+
+    Assert.assertEquals(expected, actual);
   }
 }
