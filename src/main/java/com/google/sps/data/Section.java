@@ -81,27 +81,14 @@ public class Section {
     Collections.sort(combinedTimes, TimeRange.ORDER_BY_START);
     int timeCount = combinedTimes.size();
 
-    for (int i = 0; i < timeCount - 1; i++) {
-      if (combinedTimes.get(i).overlaps(combinedTimes.get(i + 1))) {
+    for (int i = 0; i < timeCount; i++) {
+      TimeRange current = combinedTimes.get(i);
+      TimeRange next = combinedTimes.get((i + 1) % timeCount);
+      if (current.overlaps(next)) {
         return true;
       }
     }
 
-    TimeRange lastEvent = combinedTimes.get(timeCount - 1);
-    return (lastEvent.end() > TimeRange.END_OF_WEEK) 
-      && saturdayOverlapsSunday(lastEvent, combinedTimes.get(0));
-  }
-
-  /**
-   * A helper function that checks if a TimeRange that starts on Saturday but ends on Sunday 
-   * overlaps with a TimeRange earlier in the week.
-   * 
-   * @param satEvent the event that starts on Sat but ends on Sunday
-   * @param earliestEvent the event earlier in the week.
-   * 
-   * @return a boolean representing if the two events overlap.
-   */
-  private boolean saturdayOverlapsSunday(TimeRange satEvent, TimeRange earliestEvent) {
-    return earliestEvent.contains(satEvent.end() - TimeRange.END_OF_WEEK);
+    return false;
   }
 }
