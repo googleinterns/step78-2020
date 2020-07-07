@@ -57,10 +57,6 @@ public class Section {
         return Objects.hash(professor, meetingTimes);
     }
 
-    public List<TimeRange> getMeetingTimes() {
-      return this.meetingTimes;
-    }
-
 
     /**
      * Function to return whether or not a section overlaps with another
