@@ -36,6 +36,15 @@ public final class RankTest {
   private static final int DURATION_2_HOUR = 120;
   private static final int DURATION_3_HOUR = 180;
 
+  private final Schedule schedule1 = createSchedule1();
+  private final Schedule schedule2 = createSchedule2();
+  private final Schedule schedule3 = createSchedule3();
+  private final Schedule schedule4 = createSchedule4();
+
+  private final List<TimeRange> userNoClassTimes = monWedFri(7, 00, DURATION_3_HOUR);
+  private final List<Course> courseList = createCoursesPriority();
+  private final String preferredSubject = "Computer Science";
+
   /**
    * Returns a list of times on monday, wednesday, and friday, to be used in section constructors.
    */
@@ -58,7 +67,7 @@ public final class RankTest {
   /**
    * Returns a list of courses in the order of priority that they should be considered
    */
-  List<Course> createCoursesPriority() {
+  public List<Course> createCoursesPriority() {
     Section section1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
     Course course1 = new Course("Operating System", "15410", 
         "Computer Science", 15, true, Arrays.asList(section1));
@@ -80,7 +89,7 @@ public final class RankTest {
 
 
   // Creates Schedule 1
-  Schedule createSchedule1() {
+  public Schedule createSchedule1() {
     Section section1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
     Course course1 = new Course("Operating System", "15410", 
         "Computer Science", 15, true, Arrays.asList(section1));
@@ -93,7 +102,7 @@ public final class RankTest {
   }
 
   // Creates Schedule 2
-  Schedule createSchedule2() {
+  public Schedule createSchedule2() {
     Section section2 = new Section("Professor B", tuesThurs(10, 30, DURATION_90_MINUTES));
     Course course2 = new Course("Compilers", "15411", 
         "Computer Science", 15, true, Arrays.asList(section2));
@@ -106,7 +115,7 @@ public final class RankTest {
   }
 
   // Creates Schedule 3
-  Schedule createSchedule3() {
+  public Schedule createSchedule3() {
     Section section1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
     Course course1 = new Course("Operating System", "15410", 
         "Computer Science", 15, true, Arrays.asList(section1));
@@ -119,7 +128,7 @@ public final class RankTest {
   }
 
   // Creates Schedule 4
-  Schedule createSchedule4() {
+  public Schedule createSchedule4() {
     Section section1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
     Course course1 = new Course("Operating System", "15410", 
         "Computer Science", 15, true, Arrays.asList(section1));
@@ -137,9 +146,6 @@ public final class RankTest {
     // Empty preference list
     Preferences preferenceList = new Preferences(Arrays.asList());
 
-    Schedule schedule1 = createSchedule1();
-    Schedule schedule2 = createSchedule2();
-
     List<Schedule> schedules = Arrays.asList(schedule1, schedule2);
     preferenceList.sortSchedules(schedules);
 
@@ -151,13 +157,8 @@ public final class RankTest {
 
   @Test
   public void restrictTimesPreference() {
-    List<TimeRange> userNoClassTimes = monWedFri(7, 00, DURATION_3_HOUR);
     RestrictTimesCriteria restrictCriteria = new RestrictTimesCriteria(userNoClassTimes);
-
     Preferences preferenceList = new Preferences(Arrays.asList(restrictCriteria));
-
-    Schedule schedule1 = createSchedule1();
-    Schedule schedule2 = createSchedule2();
 
     List<Schedule> schedules = Arrays.asList(schedule1, schedule2);
     preferenceList.sortSchedules(schedules);
@@ -169,13 +170,8 @@ public final class RankTest {
 
   @Test
   public void subjectCoursesPreference() {
-    String preferredSubject = "Computer Science";
     SubjectCoursesCriteria subjectCourses = new SubjectCoursesCriteria(preferredSubject);
-
     Preferences preferenceList = new Preferences(Arrays.asList(subjectCourses));
-
-    Schedule schedule1 = createSchedule1();
-    Schedule schedule3 = createSchedule3();
 
     List<Schedule> schedules = Arrays.asList(schedule1, schedule3);
     preferenceList.sortSchedules(schedules);
@@ -187,14 +183,8 @@ public final class RankTest {
 
   @Test
   public void prioritizeCoursesPreference() {
-    List<Course> courseList = createCoursesPriority();
     PrioritizeCoursesCriteria coursePriority = new PrioritizeCoursesCriteria(courseList);
-
     Preferences preferenceList = new Preferences(Arrays.asList(coursePriority));
-    
-    Schedule schedule1 = createSchedule1(); // Priority score of 5 (4 + 1)
-    Schedule schedule2 = createSchedule2(); // Priority score of 5 (3 + 2)
-    Schedule schedule3 = createSchedule3(); // Priority score of 7 (4 + 3)
 
     List<Schedule> schedules = Arrays.asList(schedule1, schedule2, schedule3);
     preferenceList.sortSchedules(schedules);
@@ -206,19 +196,10 @@ public final class RankTest {
 
   @Test
   public void mixedPreferencesNoTie() {
-    List<Course> courseList = createCoursesPriority();
-    List<TimeRange> userNoClassTimes = monWedFri(7, 00, DURATION_3_HOUR);
-    String preferredSubject = "Computer Science";
-
-    PrioritizeCoursesCriteria coursePriority = new PrioritizeCoursesCriteria(courseList); // Criteria #1
-    RestrictTimesCriteria restrictCriteria = new RestrictTimesCriteria(userNoClassTimes); // Criteria #2
-    SubjectCoursesCriteria subjectCourses = new SubjectCoursesCriteria(preferredSubject); // Criteria #3
-
+    PrioritizeCoursesCriteria coursePriority = new PrioritizeCoursesCriteria(courseList);
+    RestrictTimesCriteria restrictCriteria = new RestrictTimesCriteria(userNoClassTimes);
+    SubjectCoursesCriteria subjectCourses = new SubjectCoursesCriteria(preferredSubject);
     Preferences preferenceList = new Preferences(Arrays.asList(coursePriority, restrictCriteria, subjectCourses));
-
-    Schedule schedule2 = createSchedule2();
-    Schedule schedule3 = createSchedule3();
-    
 
     List<Schedule> schedules = Arrays.asList(schedule2, schedule3);
     preferenceList.sortSchedules(schedules);
@@ -230,18 +211,10 @@ public final class RankTest {
 
   @Test
   public void mixedPreferencesSingleTie() {
-    List<Course> courseList = createCoursesPriority();
-    List<TimeRange> userNoClassTimes = monWedFri(7, 00, DURATION_3_HOUR);
-    String preferredSubject = "Computer Science";
-
-    PrioritizeCoursesCriteria coursePriority = new PrioritizeCoursesCriteria(courseList); // Criteria #1
-    RestrictTimesCriteria restrictCriteria = new RestrictTimesCriteria(userNoClassTimes); // Criteria #2
-    SubjectCoursesCriteria subjectCourses = new SubjectCoursesCriteria(preferredSubject); // Criteria #3
-
+    PrioritizeCoursesCriteria coursePriority = new PrioritizeCoursesCriteria(courseList);
+    RestrictTimesCriteria restrictCriteria = new RestrictTimesCriteria(userNoClassTimes);
+    SubjectCoursesCriteria subjectCourses = new SubjectCoursesCriteria(preferredSubject);
     Preferences preferenceList = new Preferences(Arrays.asList(coursePriority, restrictCriteria, subjectCourses));
-
-    Schedule schedule1 = createSchedule1();
-    Schedule schedule2 = createSchedule2();
     
     // coursePriority becomes a tie => sort by restrictCriteria
     List<Schedule> schedules = Arrays.asList(schedule1, schedule2);
@@ -254,17 +227,10 @@ public final class RankTest {
 
   @Test
   public void mixedPreferencesDoubleTie() {
-    List<Course> courseList = createCoursesPriority();
-    List<TimeRange> userNoClassTimes = monWedFri(7, 00, DURATION_3_HOUR);
-    String preferredSubject = "Computer Science";
-
-    RestrictTimesCriteria restrictCriteria = new RestrictTimesCriteria(userNoClassTimes); // Criteria #1
-    SubjectCoursesCriteria subjectCourses = new SubjectCoursesCriteria(preferredSubject); // Criteria #2
-    PrioritizeCoursesCriteria coursePriority = new PrioritizeCoursesCriteria(courseList); // Criteria #3
-   
+    RestrictTimesCriteria restrictCriteria = new RestrictTimesCriteria(userNoClassTimes);
+    SubjectCoursesCriteria subjectCourses = new SubjectCoursesCriteria(preferredSubject);
+    PrioritizeCoursesCriteria coursePriority = new PrioritizeCoursesCriteria(courseList);
     Preferences preferenceList = new Preferences(Arrays.asList(restrictCriteria, subjectCourses, coursePriority));
-    Schedule schedule3 = createSchedule3();
-    Schedule schedule4 = createSchedule4();
 
     // restrictCriteria becomes a tie => subjectCourses becomes a tie => sort by coursePriority
     List<Schedule> schedules = Arrays.asList(schedule3, schedule4);
