@@ -39,13 +39,13 @@ class AddSchedule {
    */
   public static void addSchedule(Schedule schedule, com.google.api.services.calendar.Calendar client, String calendarId) throws IOException {
     try {
-      //get current date, so can add the courses to the appropriate days of the current month 
+      // get current date, so can add the courses to the appropriate days of the current month 
       java.util.Calendar calendar = java.util.Calendar.getInstance();
-      int nextSun = calculateDateOfNextSunday(calendar);
+      int nextSun = getDateOfNextSunday(calendar);
       int month = getCurrentMonth(calendar);
       int year = getCurrentYear(calendar);
 
-      //for each course in the schedule, add an event to the calendar
+      // for each course in the schedule, add an event to the calendar
       Iterator<Course> courseIterator = schedule.getCourses().iterator();
       while (courseIterator.hasNext()) {
         Course currentCourse = courseIterator.next();
@@ -69,7 +69,7 @@ class AddSchedule {
    * 
    * @return an int representing the date of next Sunday
    */
-  public static int calculateDateOfNextSunday(java.util.Calendar calendar) {
+  public static int getDateOfNextSunday(java.util.Calendar calendar) {
     int currentDay = calendar.get(java.util.Calendar.DAY_OF_MONTH);
     int currentDayOfWeek = calendar.get(java.util.Calendar.DAY_OF_WEEK);
     int nextSun = currentDay + 8 - currentDayOfWeek;
@@ -109,7 +109,8 @@ class AddSchedule {
    * 
    * @return a String formatted for DateTime, to be used in creating a calendar event 
    */
-  public static String calculateDateTime(int timeInMin, int month, int year, int nextSun) {
+  public static String 
+     DateTime(int timeInMin, int month, int year, int nextSun) {
     int dayOfWeek = (int) Math.floorDiv(timeInMin, 24 * 60);
     int dayInHours = dayOfWeek * 24;
     int hour = (int) Math.floor((timeInMin / 60) - dayInHours);
