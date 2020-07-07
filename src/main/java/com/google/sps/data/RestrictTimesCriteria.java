@@ -7,12 +7,11 @@ import java.util.Arrays;
 import java.util.ArrayList;
 
 public class RestrictTimesCriteria implements Preference {
-
+  public List<TimeRange> userNoClassTimes;
+  
   public RestrictTimesCriteria(List<TimeRange> userNoClassTimes) {
     this.userNoClassTimes = userNoClassTimes;
   }
-
-  public List<TimeRange> userNoClassTimes;
 
   /**
    * Implements the preference score of the schedule, based on the criteria

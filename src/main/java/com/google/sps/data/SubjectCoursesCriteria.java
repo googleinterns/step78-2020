@@ -7,12 +7,11 @@ import java.util.Arrays;
 import java.util.ArrayList;
 
 public class SubjectCoursesCriteria implements Preference {
+  public String preferredSubject;
 
   public SubjectCoursesCriteria(String preferredSubject) {
     this.preferredSubject = preferredSubject;
   }
-
-  public String preferredSubject;
 
   /**
    * Implements the preference score of the schedule, based on the criteria

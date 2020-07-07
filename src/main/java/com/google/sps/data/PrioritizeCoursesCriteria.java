@@ -7,12 +7,11 @@ import java.util.Arrays;
 import java.util.ArrayList;
 
 public class PrioritizeCoursesCriteria implements Preference {
-
+  List<Course> courseList;
+  
   public PrioritizeCoursesCriteria(List<Course> courseList) {
     this.courseList = courseList;
   }
-
-  List<Course> courseList;
   
   /**
    * Implements the preference score of the schedule, based on the criteria
