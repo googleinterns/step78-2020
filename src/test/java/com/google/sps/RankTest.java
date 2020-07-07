@@ -16,6 +16,7 @@ package com.google.sps;
 
 import com.google.sps.data.*;
 import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
@@ -34,12 +35,6 @@ public final class RankTest {
   private static final int DURATION_1_HOUR = 60;
   private static final int DURATION_2_HOUR = 120;
   private static final int DURATION_3_HOUR = 180;
-  
-
-  private Preferences preferences;
-  private Preference restrictTimes;
-  private Preference numOfSubjectCourses;
-  private Preference coursePriority;
 
   /**
    * Returns a list of times on monday, wednesday, and friday, to be used in section constructors.
@@ -60,134 +55,223 @@ public final class RankTest {
     return Arrays.asList(tues, thurs);
   }
 
+  /**
+   * Returns a list of courses in the order of priority that they should be considered
+   */
+  List<Course> createCoursesPriority() {
+    Section section1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
+    Course course1 = new Course("Operating System", "15410", 
+        "Computer Science", 15, true, Arrays.asList(section1));
+    
+    Section section2 = new Section("Professor B", tuesThurs(10, 30, DURATION_90_MINUTES));
+    Course course2 = new Course("Compilers", "15411", 
+        "Computer Science", 15, true, Arrays.asList(section2));
+
+    Section section3 = new Section("Professor C", tuesThurs(12, 00, DURATION_90_MINUTES));
+    Course course3 = new Course("Algorithms", "15210", 
+        "Computer Science", 15, true, Arrays.asList(section3));
+
+    Section section4 = new Section("Professor D", tuesThurs(13, 30, DURATION_90_MINUTES));
+    Course course4 = new Course("Experimental Physics", "33104", 
+        "Physics", 33, true, Arrays.asList(section4));
+
+    return Arrays.asList(course1, course2, course3, course4);
+  }
+
+
+  // Creates Schedule 1
+  Schedule createSchedule1() {
+    Section section1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
+    Course course1 = new Course("Operating System", "15410", 
+        "Computer Science", 15, true, Arrays.asList(section1));
+
+    Section section4 = new Section("Professor D", tuesThurs(13, 30, DURATION_90_MINUTES));
+    Course course4 = new Course("Experimental Physics", "33104", 
+        "Physics", 33, true, Arrays.asList(section4));
+
+    return new Schedule(Arrays.asList(course1, course4));
+  }
+
+  // Creates Schedule 2
+  Schedule createSchedule2() {
+    Section section2 = new Section("Professor B", tuesThurs(10, 30, DURATION_90_MINUTES));
+    Course course2 = new Course("Compilers", "15411", 
+        "Computer Science", 15, true, Arrays.asList(section2));
+
+    Section section3 = new Section("Professor C", tuesThurs(12, 00, DURATION_90_MINUTES));
+    Course course3 = new Course("Algorithms", "15210", 
+        "Computer Science", 15, true, Arrays.asList(section3));
+
+    return new Schedule(Arrays.asList(course2, course3));
+  }
+
+  // Creates Schedule 3
+  Schedule createSchedule3() {
+    Section section1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
+    Course course1 = new Course("Operating System", "15410", 
+        "Computer Science", 15, true, Arrays.asList(section1));
+    
+    Section section2 = new Section("Professor B", tuesThurs(10, 30, DURATION_90_MINUTES));
+    Course course2 = new Course("Compilers", "15411", 
+        "Computer Science", 15, true, Arrays.asList(section2));
+
+    return new Schedule(Arrays.asList(course1, course2));
+  }
+
+  // Creates Schedule 4
+  Schedule createSchedule4() {
+    Section section1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
+    Course course1 = new Course("Operating System", "15410", 
+        "Computer Science", 15, true, Arrays.asList(section1));
+    
+    Section section3 = new Section("Professor C", tuesThurs(12, 00, DURATION_90_MINUTES));
+    Course course3 = new Course("Algorithms", "15210", 
+        "Computer Science", 15, true, Arrays.asList(section3));
+
+    return new Schedule(Arrays.asList(course1, course3));
+  }
+
 
   @Test
   public void emptyPreferenceList() {
     // Empty preference list
     Preferences preferenceList = new Preferences(Arrays.asList());
 
-    Section section1 = new Section("Dr. Foo", monWedFri(10, 30, DURATION_90_MINUTES));
-    Course course1 = new Course("Operating Systems", "15410", 
-        "Computer Science", 15, true, Arrays.asList(section1));
-    Schedule schedule1 = new Schedule(Arrays.asList(course1));
-    
-    Section section2 = new Section("Dr. Bar", monWedFri(9, 00, DURATION_90_MINUTES));
-    Course course2 = new Course("Algorithms", "15210", 
-        "Computer Science", 15, true, Arrays.asList(section2));
-    Schedule schedule2 = new Schedule(Arrays.asList(course2));
+    Schedule schedule1 = createSchedule1();
+    Schedule schedule2 = createSchedule2();
 
     List<Schedule> schedules = Arrays.asList(schedule1, schedule2);
     preferenceList.sortSchedules(schedules);
 
-    // Schedules remain in the same order, since there are no preferences to sort them
-    Assert.assertEquals(schedules.get(0), schedule1);
-    Assert.assertEquals(schedules.get(1), schedule2);
+    // Schedules remain in the same order; there are no preferences to sort them
+    List<Schedule> actual = schedules;
+    List<Schedule> expected = Arrays.asList(schedule1, schedule2);
+    Assert.assertEquals(expected, actual);
   }
 
   @Test
   public void restrictTimesPreference() {
     List<TimeRange> userNoClassTimes = monWedFri(7, 00, DURATION_3_HOUR);
-    System.out.println("hehe");
-    userNoClassTimes.addAll(monWedFri(16, 00, DURATION_3_HOUR));
-    System.out.println("ha");
-    // Arrays.asList(TimeRange.fromStartEnd(1, 7, 0, 1, 10, 0, false), 
-    //                                                  TimeRange.fromStartEnd(1, 4, 0, 1, 7, 0, true));
     RestrictTimesCriteria restrictCriteria = new RestrictTimesCriteria(userNoClassTimes);
 
     Preferences preferenceList = new Preferences(Arrays.asList(restrictCriteria));
 
-    Section section1 = new Section("Dr. Foo", monWedFri(10, 30, DURATION_90_MINUTES));
-    Course course1 = new Course("Compilers", "15411", 
-        "Computer Science", 15, true, Arrays.asList(section1));
-    
-    Section section2 = new Section("Dr. Bar", monWedFri(9, 00, DURATION_90_MINUTES));
-    Course course2 = new Course("Algorithms", "15210", 
-        "Computer Science", 15, true, Arrays.asList(section2));
-
-    Schedule schedule1 = new Schedule(Arrays.asList(course1));
-    Schedule schedule2 = new Schedule(Arrays.asList(course2));
+    Schedule schedule1 = createSchedule1();
+    Schedule schedule2 = createSchedule2();
 
     List<Schedule> schedules = Arrays.asList(schedule1, schedule2);
     preferenceList.sortSchedules(schedules);
 
-    Assert.assertEquals(schedules.get(0), schedule1);
-    Assert.assertEquals(schedules.get(1), schedule2);
+    List<Schedule> actual = schedules;
+    List<Schedule> expected = Arrays.asList(schedule2, schedule1);
+    Assert.assertEquals(expected, actual);
   }
 
   @Test
   public void subjectCoursesPreference() {
     String preferredSubject = "Computer Science";
-    SubjectCoursesCriteria numOfSubjectCourses = new SubjectCoursesCriteria(preferredSubject);
+    SubjectCoursesCriteria subjectCourses = new SubjectCoursesCriteria(preferredSubject);
 
-    Preferences preferenceList = new Preferences(Arrays.asList(numOfSubjectCourses));
+    Preferences preferenceList = new Preferences(Arrays.asList(subjectCourses));
 
-    Section section1 = new Section("Dr. Foo", monWedFri(10, 30, DURATION_90_MINUTES));
-    Course course1 = new Course("Compilers", "15411", 
-        "Computer Science", 15, true, Arrays.asList(section1));
+    Schedule schedule1 = createSchedule1();
+    Schedule schedule3 = createSchedule3();
 
-    Section section2 = new Section("Dr. Hello", tuesThurs(12, 00, DURATION_90_MINUTES));
-    Course course2 = new Course("Experimental Physics", "33104", 
-        "Physics", 33, true, Arrays.asList(section2));
-    
-    Section section3 = new Section("Dr. Bar", monWedFri(9, 00, DURATION_90_MINUTES));
-    Course course3 = new Course("Algorithms", "15210", 
-        "Computer Science", 15, true, Arrays.asList(section3));
-    
-    Schedule schedule1 = new Schedule(Arrays.asList(course1, course2));
-    Schedule schedule2 = new Schedule(Arrays.asList(course1, course2, course3));
-
-    List<Schedule> schedules = Arrays.asList(schedule1, schedule2);
+    List<Schedule> schedules = Arrays.asList(schedule1, schedule3);
     preferenceList.sortSchedules(schedules);
 
-    Assert.assertEquals(schedules.get(0), schedule2);
-    Assert.assertEquals(schedules.get(1), schedule1);
+    List<Schedule> actual = schedules;
+    List<Schedule> expected = Arrays.asList(schedule3, schedule1);
+    Assert.assertEquals(expected, actual);
   }
 
   @Test
   public void prioritizeCoursesPreference() {
     List<Course> courseList = createCoursesPriority();
-    PrioritizeCoursesCriteria numOfSubjectCourses = new PrioritizeCoursesCriteria(courseList);
+    PrioritizeCoursesCriteria coursePriority = new PrioritizeCoursesCriteria(courseList);
 
-    Preferences preferenceList = new Preferences(Arrays.asList(numOfSubjectCourses));
-
-    Section section1 = new Section("Dr. Foo", monWedFri(10, 30, DURATION_90_MINUTES));
-    Course course1 = new Course("Compilers", "15411", 
-        "Computer Science", 15, true, Arrays.asList(section1));
-
-    Section section2 = new Section("Dr. Hello", tuesThurs(12, 00, DURATION_90_MINUTES));
-    Course course2 = new Course("Experimental Physics", "33104", 
-        "Physics", 33, true, Arrays.asList(section2));
+    Preferences preferenceList = new Preferences(Arrays.asList(coursePriority));
     
-    Section section3 = new Section("Dr. Bar", monWedFri(9, 00, DURATION_90_MINUTES));
-    Course course3 = new Course("Algorithms", "15210", 
-        "Computer Science", 15, true, Arrays.asList(section3));
-    
-    Schedule schedule1 = new Schedule(Arrays.asList(course2, course3));  // Priority score of 3 (2 + 1)
-    Schedule schedule2 = new Schedule(Arrays.asList(course1, course2));  // Priority score of 5 (3 + 2)
+    Schedule schedule1 = createSchedule1(); // Priority score of 5 (4 + 1)
+    Schedule schedule2 = createSchedule2(); // Priority score of 5 (3 + 2)
+    Schedule schedule3 = createSchedule3(); // Priority score of 7 (4 + 3)
 
+    List<Schedule> schedules = Arrays.asList(schedule1, schedule2, schedule3);
+    preferenceList.sortSchedules(schedules);
+
+    List<Schedule> actual = schedules;
+    List<Schedule> expected = Arrays.asList(schedule3, schedule1, schedule2);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void mixedPreferencesNoTie() {
+    List<Course> courseList = createCoursesPriority();
+    List<TimeRange> userNoClassTimes = monWedFri(7, 00, DURATION_3_HOUR);
+    String preferredSubject = "Computer Science";
+
+    PrioritizeCoursesCriteria coursePriority = new PrioritizeCoursesCriteria(courseList); // Criteria #1
+    RestrictTimesCriteria restrictCriteria = new RestrictTimesCriteria(userNoClassTimes); // Criteria #2
+    SubjectCoursesCriteria subjectCourses = new SubjectCoursesCriteria(preferredSubject); // Criteria #3
+
+    Preferences preferenceList = new Preferences(Arrays.asList(coursePriority, restrictCriteria, subjectCourses));
+
+    Schedule schedule2 = createSchedule2();
+    Schedule schedule3 = createSchedule3();
+    
+
+    List<Schedule> schedules = Arrays.asList(schedule2, schedule3);
+    preferenceList.sortSchedules(schedules);
+
+    List<Schedule> actual = schedules;
+    List<Schedule> expected = Arrays.asList(schedule3, schedule2);
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void mixedPreferencesSingleTie() {
+    List<Course> courseList = createCoursesPriority();
+    List<TimeRange> userNoClassTimes = monWedFri(7, 00, DURATION_3_HOUR);
+    String preferredSubject = "Computer Science";
+
+    PrioritizeCoursesCriteria coursePriority = new PrioritizeCoursesCriteria(courseList); // Criteria #1
+    RestrictTimesCriteria restrictCriteria = new RestrictTimesCriteria(userNoClassTimes); // Criteria #2
+    SubjectCoursesCriteria subjectCourses = new SubjectCoursesCriteria(preferredSubject); // Criteria #3
+
+    Preferences preferenceList = new Preferences(Arrays.asList(coursePriority, restrictCriteria, subjectCourses));
+
+    Schedule schedule1 = createSchedule1();
+    Schedule schedule2 = createSchedule2();
+    
+    // coursePriority becomes a tie => sort by restrictCriteria
     List<Schedule> schedules = Arrays.asList(schedule1, schedule2);
     preferenceList.sortSchedules(schedules);
 
-    Assert.assertEquals(schedules.get(0), schedule2);
-    Assert.assertEquals(schedules.get(1), schedule1);
+    List<Schedule> actual = schedules;
+    List<Schedule> expected = Arrays.asList(schedule2, schedule1);
+    Assert.assertEquals(expected, actual);
   }
 
-  List<Course> createCoursesPriority() {
-    Section section1 = new Section("Dr. Foo", monWedFri(10, 30, DURATION_90_MINUTES));
-    Course course1 = new Course("Compilers", "15411", 
-        "Computer Science", 15, true, Arrays.asList(section1));
-    
-    Section section2 = new Section("Dr. Bar", monWedFri(9, 00, DURATION_90_MINUTES));
-    Course course2 = new Course("Algorithms", "15210", 
-        "Computer Science", 15, true, Arrays.asList(section2));
+  @Test
+  public void mixedPreferencesDoubleTie() {
+    List<Course> courseList = createCoursesPriority();
+    List<TimeRange> userNoClassTimes = monWedFri(7, 00, DURATION_3_HOUR);
+    String preferredSubject = "Computer Science";
 
-    Section section3 = new Section("Dr. Hello", tuesThurs(12, 00, DURATION_90_MINUTES));
-    Course course3 = new Course("Experimental Physics", "33104", 
-        "Physics", 33, true, Arrays.asList(section3));
+    RestrictTimesCriteria restrictCriteria = new RestrictTimesCriteria(userNoClassTimes); // Criteria #1
+    SubjectCoursesCriteria subjectCourses = new SubjectCoursesCriteria(preferredSubject); // Criteria #2
+    PrioritizeCoursesCriteria coursePriority = new PrioritizeCoursesCriteria(courseList); // Criteria #3
+   
+    Preferences preferenceList = new Preferences(Arrays.asList(restrictCriteria, subjectCourses, coursePriority));
+    Schedule schedule3 = createSchedule3();
+    Schedule schedule4 = createSchedule4();
 
-    return Arrays.asList(course1, course2, course3);
+    // restrictCriteria becomes a tie => subjectCourses becomes a tie => sort by coursePriority
+    List<Schedule> schedules = Arrays.asList(schedule3, schedule4);
+    preferenceList.sortSchedules(schedules);
+
+    List<Schedule> actual = schedules;
+    List<Schedule> expected = Arrays.asList(schedule3, schedule4);
+    Assert.assertEquals(expected, actual);
   }
-
-  // TODO: Add tests that combine multiple criteria preferences together
-    
 }
