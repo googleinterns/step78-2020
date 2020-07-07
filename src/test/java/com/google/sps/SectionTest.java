@@ -3,6 +3,7 @@ package com.google.sps;
 import com.google.sps.data.Section;
 import com.google.sps.data.TimeRange;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import org.junit.Assert;
 import org.junit.Before;
@@ -103,6 +104,22 @@ public final class SectionTest {
 
     Assert.assertTrue(s1.overlaps(s2));
     Assert.assertTrue(s2.overlaps(s1));
+  }
+
+  @Test
+  public void oneEmptyList() {
+    Section nonEmpty = new Section("Prof", Arrays.asList(MONDAY_10AM));
+    Section empty = new Section("prof", Collections.emptyList());
+    Assert.assertFalse(nonEmpty.overlaps(empty));
+    Assert.assertFalse(empty.overlaps(nonEmpty));
+  }
+
+  @Test
+  public void bothEmpty() {
+    Section s1 = new Section("prof", Collections.emptyList());
+    Section s2 = new Section("prof", Collections.emptyList());
+    Assert.assertFalse(s1.overlaps(s2));
+    Assert.assertFalse(s2.overlaps(s1));
   }
 
   @Test(expected = IllegalArgumentException.class)
