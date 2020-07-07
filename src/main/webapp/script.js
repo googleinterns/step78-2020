@@ -13,11 +13,39 @@
 // limitations under the License.
 
 // fetch the secondary calendar with the schedule (just one right now, will be multiple later)
+var i = 0; 
+var idArray;
 function fetchUserCalendar() {
-  fetch('/handleSchedules').then(response => response.json()).then((cal) => {
-      var calId = cal.id;
-      displayCalendar(calId);
+  document.getElementById("loading").style.display = "block";
+  fetch('/handleSchedules').then(response => response.json()).then((calIds) => {
+    idArray = calIds;
+    displayCalendar(calIds[0]);
+    showButtons();
   });
+}
+
+// hide / show the appropriate elements on the page 
+function showButtons() {
+  document.getElementById("schedules").style.display = "none";
+  document.getElementById("previous").style.display = "inline-block";
+  document.getElementById("next").style.display = "inline-block";
+  document.getElementById("loading").style.display = "none";
+}
+
+// display the next calendar schedule
+function displayNextCalendar() {
+  if (i < idArray.length - 1) {
+    i++;
+    displayCalendar(idArray[i]);
+  }
+}
+
+// display the previous calendar schedule
+function displayPreviousCalendar() {
+  if (i > 0) {
+    i--;
+    displayCalendar(idArray[i]);
+  }
 }
 
 // display the secondary calendar 

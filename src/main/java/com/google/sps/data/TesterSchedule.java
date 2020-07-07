@@ -42,20 +42,44 @@ public final class TesterSchedule {
   /**
    * Returns a list of times on Tuesday and Thursday, to be used in section constructors.
    */
-  public List<TimeRange> tuesThurs(int hour, int minute, int durationMinutes) {
+  public static List<TimeRange> tuesThurs(int hour, int minute, int durationMinutes) {
     TimeRange tues = TimeRange.fromStartDuration(TimeRange.TUESDAY, hour, minute, durationMinutes);
     TimeRange thurs = TimeRange.fromStartDuration(TimeRange.THURSDAY, hour, minute, durationMinutes);
     return Arrays.asList(tues, thurs);
   }
 
-  public static Schedule singleCourseSchedule() {
+  public static Schedule scheduleOne() {
     List<TimeRange> times = monWedFri(10, 30, DURATION_90_MINUTES);
-    Section section = new Section("Dr. Eggman", times);
-    Course course1 = new Course("Intro to Evil", "EVIL100", 
-        "Wrongdoing", 1, true, Arrays.asList(section));
+    Section section = new Section("Ms. Akins", times);
+    Course course1 = new Course("Philosophical Inquiry", "PHIL1001", 
+        "Philosophy", 4, true, Arrays.asList(section));
+
+    List<TimeRange> times2 = tuesThurs(16, 10, DURATION_2_HOUR);
+    Section section2 = new Section("Prof. Zimmerman", times2);
+    Course course2 = new Course("Calc III", "MATH246", 
+        "Mathematics", 2, true, Arrays.asList(section2));
     
     Collection<Course> courses = new ArrayList<>();
     courses.add(course1);
+    courses.add(course2);
+    Schedule schedule = new Schedule(courses);
+    return schedule;
+  }
+
+  public static Schedule scheduleTwo() {
+    List<TimeRange> times = monWedFri(12, 00, DURATION_30_MINUTES);
+    Section section = new Section("Dr. Eggman", times);
+    Course course1 = new Course("Intro to Evil", "EVIL100", 
+        "Wrongdoing", 1, true, Arrays.asList(section));
+
+    List<TimeRange> times2 = tuesThurs(14, 20, DURATION_1_HOUR);
+    Section section2 = new Section("Prof. Johnson", times2);
+    Course course2 = new Course("Intro to Psych", "PSYCH256", 
+        "Psychology", 3, true, Arrays.asList(section2));
+    
+    Collection<Course> courses = new ArrayList<>();
+    courses.add(course1);
+    courses.add(course2);
     Schedule schedule = new Schedule(courses);
     return schedule;
   }
