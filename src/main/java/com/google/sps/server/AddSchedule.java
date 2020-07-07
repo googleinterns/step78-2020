@@ -114,27 +114,12 @@ class AddSchedule {
     int dayInHours = dayOfWeek * 24;
     int hour = (int) Math.floor((timeInMin / 60) - dayInHours);
     int minute = (int) (60 * (((timeInMin / 60.0) - dayInHours) - hour));
-
     int day = dayOfWeek + nextSun;
-    String dayString = "0" + Integer.toString(day);
-    if (day > 9) {
-      dayString = Integer.toString(day);
-    }
-
-    String monthString = "0" + Integer.toString(month);
-    if (month > 9) {
-      monthString = Integer.toString(month);
-    }
-
-    String hourString = "0" + Integer.toString(hour);
-    if (hour > 9) {
-      hourString = Integer.toString(hour);
-    }
-
-    String minuteString = "0" + Integer.toString(minute);
-    if (minute > 9) {
-      minuteString = Integer.toString(minute);
-    }
+     
+    String dayString = day > 9 ? Integer.toString(day) : "0" + Integer.toString(day);
+    String monthString = month > 9 ? Integer.toString(month) : "0" + Integer.toString(month);
+    String hourString = hour > 9 ? Integer.toString(hour) : "0" + Integer.toString(hour);     
+    String minuteString = minute > 9 ? Integer.toString(minute) : "0" + Integer.toString(minute);
 
     String dateTime = year + "-" + monthString + "-" + dayString + "T" + hourString + ":" + minuteString + ":00";
     return dateTime;
