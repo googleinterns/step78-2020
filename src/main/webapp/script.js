@@ -30,6 +30,7 @@ function showButtons() {
   document.getElementById("previous").style.display = "inline-block";
   document.getElementById("next").style.display = "inline-block";
   document.getElementById("loading").style.display = "none";
+  document.getElementById("chosenCal").style.display = "block";
 }
 
 // display the next calendar schedule
@@ -52,4 +53,15 @@ function displayPreviousCalendar() {
 function displayCalendar(calId) {
   const url = "https://calendar.google.com/calendar/embed?src=" + calId;
   document.getElementById("calendar").src = url;
+}
+
+// delete all secondary calendars created, except for the chosen one 
+function deleteUnchosenCalendars() {
+  for (var j = 0; j < idArray.length; j++) {
+    if (j != i) {
+      fetch("/deleteCalendar?calId=" + idArray[j], {method: 'POST'});
+      idArray.splice(j,1);
+    }
+  }
+  displayCalendar(idArray[0]);
 }
