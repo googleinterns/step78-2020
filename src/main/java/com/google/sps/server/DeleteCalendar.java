@@ -16,13 +16,14 @@ package com.google.sps.server;
 
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
 import com.google.api.services.calendar.Calendar;
 
 /**
- * Deletes a secondary calendar 
+ * Deletes secondary calendar 
  */
 @WebServlet("/deleteCalendar")
 public class DeleteCalendar extends HttpServlet {
