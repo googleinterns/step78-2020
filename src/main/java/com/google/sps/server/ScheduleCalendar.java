@@ -31,22 +31,51 @@ import java.io.IOException;
 
 import com.google.sps.data.*;
 
-class AddSchedule {
+public class ScheduleCalendar {
+  private String calendarId;
+  private com.google.api.services.calendar.Calendar client;
+
    /**
+   * Creates a new secondary calendar to put a class schedule on.
+   * 
+   * @param client the user's Google calendar
+   */
+  public ScheduleCalendar(com.google.api.services.calendar.Calendar client) throws IOException {
+    try {
+      this.client = client;
+
+      // Get the timezone of the user's primary calendar
+      CalendarListEntry calendarListEntry = client.calendarList().get("primary").execute();
+      String calendarTimeZone = calendarListEntry.getTimeZone();
+
+      // Create a new calendar
+      com.google.api.services.calendar.model.Calendar newCalendar = new com.google.api.services.calendar.model.Calendar();
+      newCalendar.setSummary("class schedule");
+      newCalendar.setTimeZone(calendarTimeZone);
+
+      // Insert the new calendar
+      com.google.api.services.calendar.model.Calendar createdCalendar = client.calendars().insert(newCalendar).execute();
+      this.calendarId = createdCalendar.getId(); 
+    } catch (IOException e) {
+      System.out.println("Couldn't create secondary calendar");
+    }
+  }
+
+  /**
    * Puts schedule onto secondary calendar
    * 
-   * @param client the user's Google calendar 
+   * @param schedule the schedule to add to the calendar 
    * @param calendarId the id of the secondary calendar to put the schedule on
    */
-  public static void addSchedule(Schedule schedule, com.google.api.services.calendar.Calendar client, String calendarId) throws IOException {
+  public void addSchedule(Schedule schedule) throws IOException {
     try {
-      //get current date, so can add the courses to the appropriate days of the current month 
+      // get current date, so can add the courses to the appropriate days of the current month 
       java.util.Calendar calendar = java.util.Calendar.getInstance();
-      int nextSun = calculateDateOfNextSunday(calendar);
+      int nextSun = getDateOfNextSunday(calendar);
       int month = getCurrentMonth(calendar);
       int year = getCurrentYear(calendar);
 
-      //for each course in the schedule, add an event to the calendar
+      // for each course in the schedule, add an event to the calendar
       Iterator<Course> courseIterator = schedule.getCourses().iterator();
       while (courseIterator.hasNext()) {
         Course currentCourse = courseIterator.next();
@@ -54,12 +83,21 @@ class AddSchedule {
         for (int i = 0; i < sectionTimes.size(); i++) {
           String startTime = calculateStartTime(sectionTimes.get(i), month, year, nextSun);
           String endTime = calculateEndTime(sectionTimes.get(i), month, year, nextSun);
-          addEvent(currentCourse, client, calendarId, startTime, endTime);
+          addEvent(currentCourse, startTime, endTime);
         }
-      }       
+      } 
     } catch (IOException e) {
-      System.out.println("Couldn't iterate through the courses in the schedule.");
-    }
+      System.out.println("Couldn't add schedule");
+    }   
+  }
+
+   /**
+   * To access the secondar calendar's id
+   *
+   * @return a String representing the id 
+   */
+  public String getCalendarId() {
+    return this.calendarId;
   }
 
    /**
@@ -67,10 +105,9 @@ class AddSchedule {
    * to know when to start the schedule. 
    *
    * @param calendar an instance of Calendar, so can know the current date
-   * 
    * @return an int representing the date of next Sunday
    */
-  public static int calculateDateOfNextSunday(java.util.Calendar calendar) {
+  public static int getDateOfNextSunday(java.util.Calendar calendar) {
     int currentDay = calendar.get(java.util.Calendar.DAY_OF_MONTH);
     int currentDayOfWeek = calendar.get(java.util.Calendar.DAY_OF_WEEK);
     int nextSun = currentDay + 8 - currentDayOfWeek;
@@ -81,7 +118,6 @@ class AddSchedule {
    * Helper function to know the current month. 
    *
    * @param calendar an instance of Calendar, so can know the current date
-   * 
    * @return an int representing the month, adjusted for DateTime's formatting
    */
   public static int getCurrentMonth(java.util.Calendar calendar) {
@@ -92,7 +128,6 @@ class AddSchedule {
    * Helper function to know the current year. 
    *
    * @param calendar an instance of Calendar, so can know the current date
-   * 
    * @return an int representing the current year
    */
   public static int getCurrentYear(java.util.Calendar calendar) {
@@ -115,27 +150,12 @@ class AddSchedule {
     int dayInHours = dayOfWeek * 24;
     int hour = (int) Math.floor((timeInMin / 60) - dayInHours);
     int minute = (int) (60 * (((timeInMin / 60.0) - dayInHours) - hour));
-
     int day = dayOfWeek + nextSun;
-    String dayString = "0" + Integer.toString(day);
-    if (day > 9) {
-      dayString = Integer.toString(day);
-    }
-
-    String monthString = "0" + Integer.toString(month);
-    if (month > 9) {
-      monthString = Integer.toString(month);
-    }
-
-    String hourString = "0" + Integer.toString(hour);
-    if (hour > 9) {
-      hourString = Integer.toString(hour);
-    }
-
-    String minuteString = "0" + Integer.toString(minute);
-    if (minute > 9) {
-      minuteString = Integer.toString(minute);
-    }
+     
+    String dayString = day > 9 ? Integer.toString(day) : "0" + Integer.toString(day);
+    String monthString = month > 9 ? Integer.toString(month) : "0" + Integer.toString(month);
+    String hourString = hour > 9 ? Integer.toString(hour) : "0" + Integer.toString(hour);     
+    String minuteString = minute > 9 ? Integer.toString(minute) : "0" + Integer.toString(minute);
 
     String dateTime = year + "-" + monthString + "-" + dayString + "T" + hourString + ":" + minuteString + ":00";
     return dateTime;
@@ -178,28 +198,16 @@ class AddSchedule {
    * Helper function to add a course in the schedule to the calendar, as an event. 
    *
    * @param course the course being added 
-   * @param client the user's Google calendar
    * @param calendarId the id of the secondary calendar to add the course to
    * @param startTime the start time of the course
    * @param endTime the end time of the course
    */
-  public static void addEvent(Course course, com.google.api.services.calendar.Calendar client, String calendarId, String startTime, String endTime) throws IOException {
-    try {
-      /* Get an event from the primary calendar to get the timezone offset from the 
-       event (to use for properly adjusting the start and end times to the correct timezone) */
-      Events events = client.events().list("primary").execute();
-      List<Event> items = events.getItems();
-      String existingDateTime = items.get(0).getStart().getDateTime().toString();
-      String[] dateTimeParts = existingDateTime.split("-");
-      if (dateTimeParts.length == 4) {
-        String offset = dateTimeParts[3];
-        startTime = startTime + "-" + offset;
-        endTime = endTime + "-" + offset;
-      }
 
-      com.google.api.services.calendar.model.Calendar currentCalendar = client.calendars().get(calendarId).execute();
+  public void addEvent(Course course, String startTime, String endTime) throws IOException {
+    try {  
+      com.google.api.services.calendar.model.Calendar currentCalendar = this.client.calendars().get(this.calendarId).execute();
 
-      CalendarListEntry calendarListEntry = client.calendarList().get("primary").execute();
+      CalendarListEntry calendarListEntry = this.client.calendarList().get("primary").execute();
       String calendarTimeZone = calendarListEntry.getTimeZone();
 
       String courseName = course.getName();
@@ -222,9 +230,9 @@ class AddSchedule {
       String[] recurrence = new String[] {"RRULE:FREQ=WEEKLY;COUNT=4"};
       event.setRecurrence(Arrays.asList(recurrence));
 
-      event = client.events().insert(calendarId, event).execute();
+      event = this.client.events().insert(this.calendarId, event).execute();
     } catch (IOException e) {
-      System.out.println("Couldn't add course as a calendar event");
+      System.out.println("Couldn't add schedule to calendar");
     }
   }
 }

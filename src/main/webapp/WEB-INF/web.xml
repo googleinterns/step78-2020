@@ -27,7 +27,7 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 
   <servlet>
     <servlet-name>handleSchedules</servlet-name>
-    <servlet-class>com.google.sps.server.HandleSchedules</servlet-class>
+    <servlet-class>com.google.sps.server.ScheduleDisplayHandler</servlet-class>
   </servlet>
 
   <servlet-mapping>
