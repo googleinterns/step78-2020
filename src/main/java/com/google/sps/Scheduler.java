@@ -43,8 +43,8 @@ public final class Scheduler {
     
     // Using those Schedules as a building block, generate all valid schedules
     Set<List<Course>> scheduleSet = new HashSet<>();
-    for (List<Course> validCourseList : requiredSet) {
-      generateSchedulesHelper(nonRequiredCourses, validCourseList, invariants, scheduleSet);
+    for (List<Course> requiredCourseList : requiredSet) {
+      generateSchedulesHelper(nonRequiredCourses, requiredCourseList, invariants, scheduleSet);
     }
 
     List<Schedule> schedules = new ArrayList<>();
@@ -64,23 +64,23 @@ public final class Scheduler {
    * @param invariants  The invariants that constrain the valid schedules
    * @param courseLists The set of course lists that is being generated/added to.
    */
-  private void generateSchedulesHelper(List<Course> courses, List<Course> courseList, 
-      Invariants invariants, Set<List<Course>> courseLists) {
+  private void generateSchedulesHelper(List<Course> availableCourses, List<Course> currentCourseList,
+      Invariants invariants, Set<List<Course>> generatedCourseLists) {
 
     // This means that we have a valid schedule, and should add it to the list.
-    float currCredits = totalCredits(courseList);
+    float currCredits = totalCredits(currentCourseList);
     if (invariants.meetsCreditRequirement(currCredits)) {
-      courseLists.add(courseList);
+      generatedCourseLists.add(currentCourseList);
     }
 
     // We've reached the end of the list or have a full schedule, we are finished.
-    if (courses.isEmpty() || currCredits >= invariants.getMaxCredits()) {
+    if (availableCourses.isEmpty() || currCredits >= invariants.getMaxCredits()) {
       return;
     }
 
-    Course course = courses.remove(0);
+    Course course = availableCourses.remove(0);
     List<Section> courseSections = course.getSections();
-    List<Section> scheduleSections = courseList.stream()
+    List<Section> scheduleSections = currentCourseList.stream()
         .map(c -> c.getSections().get(0))
         .collect(Collectors.toList());
 
@@ -96,16 +96,18 @@ public final class Scheduler {
           currCredits + course.getCredits() <= invariants.getMaxCredits();
       
       if (doesNotOverlapSchedule && doesNotExceedCreditLimit) {
-        List<Course> newCourseList = new ArrayList<>(courseList);
+        List<Course> newCourseList = new ArrayList<>(currentCourseList);
         newCourseList.add(new Course(course.getName(), course.getCourseID(), course.getSubject(),
             course.getCredits(), course.isRequired(), Arrays.asList(section)));
-        generateSchedulesHelper(new ArrayList<>(courses), newCourseList, invariants, courseLists);
+        generateSchedulesHelper(
+            new ArrayList<>(availableCourses), newCourseList, invariants, generatedCourseLists);
       }
     }
 
     //If a course is not required, continue permuting with it *not* added to the schedule
     if (!course.isRequired()) {
-      generateSchedulesHelper(new ArrayList<>(courses), courseList, invariants, courseLists);
+      generateSchedulesHelper(
+          new ArrayList<>(availableCourses), currentCourseList, invariants, generatedCourseLists);
     }
   }
 
