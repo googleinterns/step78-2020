@@ -205,6 +205,18 @@ public class ScheduleCalendar {
 
   public void addEvent(Course course, String startTime, String endTime) throws IOException {
     try {  
+      /* Get an event from the primary calendar to get the timezone offset from the 
+       event (to use for properly adjusting the start and end times to the correct timezone) */
+      Events events = this.client.events().list("primary").execute();
+      List<Event> items = events.getItems();
+      String existingDateTime = items.get(0).getStart().getDateTime().toString();
+      String[] dateTimeParts = existingDateTime.split("-");
+      if (dateTimeParts.length == 4) {
+        String offset = dateTimeParts[3];
+        startTime = startTime + "-" + offset;
+        endTime = endTime + "-" + offset;
+      }
+
       com.google.api.services.calendar.model.Calendar currentCalendar = this.client.calendars().get(this.calendarId).execute();
 
       CalendarListEntry calendarListEntry = this.client.calendarList().get("primary").execute();
