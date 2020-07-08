@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Collection;
 import java.util.Iterator;
 
+import com.google.api.services.calendar.Calendar;
 import com.google.gson.Gson;
 import com.google.sps.data.*;
 
@@ -32,12 +33,12 @@ import com.google.sps.data.*;
  * Exports the ordered schedules to secondary calendars on the user's Google calendar    
  */
 @WebServlet("/handleSchedules")
-public class HandleSchedules extends HttpServlet {
+public class ScheduleDisplayHandler extends HttpServlet {
   
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     try {
-      com.google.api.services.calendar.Calendar client = Utils.loadCalendarClient();
+      Calendar client = Utils.loadCalendarClient();
 
       // Get the ordered schedules
       // Temporary hard-coded schedule, will be retrieved from Rank.java later on 
@@ -50,8 +51,9 @@ public class HandleSchedules extends HttpServlet {
       //for each schedule, create new secondary calendary and put schedule on it
       Iterator<Schedule> iterator = schedules.iterator();
       while (iterator.hasNext()) {
-        calendarId = CreateCalendar.createCalendar(client);
-        AddSchedule.addSchedule(iterator.next(), client, calendarId);
+        ScheduleCalendar cal = new ScheduleCalendar(client);
+        cal.addSchedule(iterator.next());
+        calendarId = cal.getCalendarId();
       }
 
       //only displaying one calendar schedule right now, will later display all calendars / schedules

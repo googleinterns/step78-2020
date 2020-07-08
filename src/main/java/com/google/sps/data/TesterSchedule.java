@@ -23,10 +23,7 @@ import java.util.ArrayList;
 
 public final class TesterSchedule {
 
-  private static final int DURATION_30_MINUTES = 30;
-  private static final int DURATION_60_MINUTES = 60;
   private static final int DURATION_90_MINUTES = 90;
-  private static final int DURATION_1_HOUR = 60;
   private static final int DURATION_2_HOUR = 120;
 
   /**
