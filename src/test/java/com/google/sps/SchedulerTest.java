@@ -161,7 +161,6 @@ public final class SchedulerTest {
     Section section2 = new Section("Sonic", monWedFri(10, 30, DURATION_60_MINUTES));
     Section section = new Section("Dr. Eggman", tuesThurs(13, 30, DURATION_30_MINUTES));
 
-
     Course course1 = new Course("Jumping High", "HERO1983", 
         "Heroism", 1, true, Arrays.asList(section1));
     Course course2 = new Course("Running Fast", "HERO1991",
@@ -180,7 +179,6 @@ public final class SchedulerTest {
     Section section1 = new Section("Mario", monWedFri(10, 0, DURATION_60_MINUTES));
     Section section2 = new Section("Sonic", monWedFri(10, 30, DURATION_60_MINUTES));
     Section section = new Section("Dr. Eggman", tuesThurs(13, 30, DURATION_30_MINUTES));
-
 
     Course course1 = new Course("Jumping High", "HERO1983", 
         "Heroism", 1, true, Arrays.asList(section1));
