@@ -9,9 +9,14 @@
   <body>
     <div id="content">
       <h1>Schedules</h1>
+      <div id="schedules">
       <p>Click here to see your schedules:</p>
       <button onclick="fetchUserCalendar()">Schedules</button>
+      </div>
+      <p id="loading">loading . . .</p>
       <iframe id="calendar" style="border: 0" width="800" height="600" frameborder="0" scrolling="no"></iframe>
+      <button id="previous" onclick="displayPreviousCalendar()">Previous</button>
+      <button id="next" onclick="displayNextCalendar()">Next</button>
     </div>
   </body>
 </html>

@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.Arrays;
 import java.io.IOException;
 
 import com.google.sps.data.*;
@@ -171,6 +172,7 @@ public class ScheduleCalendar {
    * @return a string representing the start time
    */
   public static String calculateStartTime(TimeRange timerange, int month, int year, int nextSun) {
+    // user will input their semester / quarter start date
     int startTimeInMin = timerange.start();
     String startTime = calculateDateTime(startTimeInMin, month, year, nextSun);
     return startTime;
@@ -200,8 +202,21 @@ public class ScheduleCalendar {
    * @param startTime the start time of the course
    * @param endTime the end time of the course
    */
+
   public void addEvent(Course course, String startTime, String endTime) throws IOException {
     try {  
+      /* Get an event from the primary calendar to get the timezone offset from the 
+       event (to use for properly adjusting the start and end times to the correct timezone) */
+      Events events = this.client.events().list("primary").execute();
+      List<Event> items = events.getItems();
+      String existingDateTime = items.get(0).getStart().getDateTime().toString();
+      String[] dateTimeParts = existingDateTime.split("-");
+      if (dateTimeParts.length == 4) {
+        String offset = dateTimeParts[3];
+        startTime = startTime + "-" + offset;
+        endTime = endTime + "-" + offset;
+      }
+
       com.google.api.services.calendar.model.Calendar currentCalendar = this.client.calendars().get(this.calendarId).execute();
 
       CalendarListEntry calendarListEntry = this.client.calendarList().get("primary").execute();
@@ -222,6 +237,10 @@ public class ScheduleCalendar {
           .setDateTime(endDateTime)
           .setTimeZone(calendarTimeZone);
       event.setEnd(end);
+
+      // will recur as long as their semester / quarter 
+      String[] recurrence = new String[] {"RRULE:FREQ=WEEKLY;COUNT=4"};
+      event.setRecurrence(Arrays.asList(recurrence));
 
       event = this.client.events().insert(this.calendarId, event).execute();
     } catch (IOException e) {

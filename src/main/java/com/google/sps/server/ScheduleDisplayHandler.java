@@ -41,27 +41,26 @@ public class ScheduleDisplayHandler extends HttpServlet {
       Calendar client = Utils.loadCalendarClient();
 
       // Get the ordered schedules
-      // Temporary hard-coded schedule, will be retrieved from Rank.java later on 
-      Schedule schedule = TesterSchedule.singleCourseSchedule();
+      // Temporary hard-coded schedules, will be retrieved from Rank.java later on 
+      Schedule schedule = TesterSchedule.scheduleOne();
+      Schedule schedule2 = TesterSchedule.scheduleTwo();
       Collection<Schedule> schedules = new ArrayList<>();
       schedules.add(schedule);
+      schedules.add(schedule2);
 
-      String calendarId = null;
+      List<String> calIds = new ArrayList<>();
 
       //for each schedule, create new secondary calendary and put schedule on it
       Iterator<Schedule> iterator = schedules.iterator();
       while (iterator.hasNext()) {
         ScheduleCalendar cal = new ScheduleCalendar(client);
         cal.addSchedule(iterator.next());
-        calendarId = cal.getCalendarId();
+        calIds.add(cal.getCalendarId());
       }
-
-      //only displaying one calendar schedule right now, will later display all calendars / schedules
-      com.google.api.services.calendar.model.Calendar newCalendar = client.calendars().get(calendarId).execute();
 
       Gson gson = new Gson();
       response.setContentType("application/json");
-      response.getWriter().println(gson.toJson(newCalendar));
+      response.getWriter().println(gson.toJson(calIds));
     } catch (IOException e) {
       System.out.println("Couldn't iterate through the given schedules.");
     }
