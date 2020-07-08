@@ -74,7 +74,7 @@ public final class Scheduler {
     }
 
     // We've reached the end of the list or have a full schedule, we are finished.
-    if (availableCourses.isEmpty() || currCredits >= invariants.getMaxCredits()) {
+    if (availableCourses.isEmpty() || currCredits > invariants.getMaxCredits()) {
       return;
     }
 
