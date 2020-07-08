@@ -37,14 +37,16 @@ public class PrioritizeCoursesCriteria implements Preference {
     return coursePrioritySum;
   }
 
-  // Returns a list of course names, given a list of courses
+  /**
+   * Returns a list of course names, given a list of courses
+   */
   public List<String> getCourseListNames(List<Course> courses) {
     List<String> names = new ArrayList<String>();
 
     for (Course course : courses) {
       names.add(course.getName());
     }
-    
+
     return names;
   }
 }

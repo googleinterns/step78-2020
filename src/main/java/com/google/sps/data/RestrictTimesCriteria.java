@@ -27,7 +27,6 @@ public class RestrictTimesCriteria implements Preference {
     for (TimeRange event : userNoClassTimes) {
       for (TimeRange course : courseTimes) {
         if (event.overlaps(course)) {
-          //float timeDiff = (float) calculateDifference(event, course);
           float timeDiff = (float) event.calculateMinutesOverlap(course);
           minutesPenalty -= timeDiff;
         }
@@ -37,14 +36,16 @@ public class RestrictTimesCriteria implements Preference {
     return minutesPenalty;
   }
 
-  // Returns a list of TimeRanges from a collection of courses
+  /**
+   * Returns a list of TimeRanges from a collection of courses
+   */
   List<TimeRange> getCourseTimes(Collection<Course> courses) {
     List<TimeRange> times = new ArrayList<TimeRange>();
 
     for(Course course : courses) {
       times.addAll(course.getSections().get(0).getMeetingTimes());
     }
-    
+
     return times;
   }
 }
