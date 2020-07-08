@@ -14,17 +14,14 @@
 
 package com.google.sps.data;
 
+import java.util.Arrays;
 import java.util.Objects;
 
 /**
  * A class representing a course that has been added to a schedule.
  */
-public class ScheduledCourse {
-  private String name;
-  private String courseID;
-  private String subject;
-  private float credits;
-  private boolean isRequired;
+public class ScheduledCourse extends Course {
+
   private Section section;
 
   /**
@@ -38,60 +35,26 @@ public class ScheduledCourse {
    */
   public ScheduledCourse(String name, String courseID, String subject, float credits, 
       boolean isRequired, Section section) {
-    this.name = name;
-    this.courseID = courseID;
-    this.subject = subject;
-    this.credits = credits;
-    this.isRequired = isRequired;
+    super(name, courseID, subject, credits, isRequired, Arrays.asList(section));
     this.section = section;
-  }
-
-  public String getName() {
-    return this.name;
-  }
-
-  public String getCourseID() {
-    return this.courseID;
-  }
-
-  public String getSubject() {
-    return this.subject;
-  }
-
-  public float getCredits() {
-    return this.credits;
-  }
-
-  public boolean isRequired() {
-    return this.isRequired;
-  }
-
-  public Section getSection() {
-    return this.section;
   }
 
   @Override
   public boolean equals(Object other) {
-    if (other == this) {
-      return true;
+    if (other instanceof ScheduledCourse) {
+      return super.equals(other) && this.section.equals(((ScheduledCourse) other).getSection());
     }
 
-    if (!(other instanceof ScheduledCourse)) {
-      return false;
-    }
-
-    ScheduledCourse otherCourse = (ScheduledCourse) other;
-    return otherCourse.name.equals(this.name) 
-        && otherCourse.courseID.equals(this.courseID)
-        && otherCourse.subject.equals(this.subject) 
-        && Math.abs(otherCourse.credits - this.credits) < 0.01
-        && otherCourse.isRequired == this.isRequired 
-        && otherCourse.section.equals(this.section);
+    return false;
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, courseID, subject, credits, isRequired, section);
+    return super.hashCode();
+  }
+
+  public Section getSection() {
+    return this.section;
   }
 
 }
