@@ -20,11 +20,13 @@ public class SubjectCoursesCriteria implements Preference {
   public float preferenceScore(Schedule schedule) {
     int preferredSubjectCount = 0;
     List<Course> courses = (List) schedule.getCourses();
+
     for (Course course : courses) {
       if (preferredSubject.equals(course.getSubject())) {
         preferredSubjectCount++;
       }
     }
+    
     return preferredSubjectCount;
   }
 }

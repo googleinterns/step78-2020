@@ -267,4 +267,14 @@ public final class TimeRange {
   public static TimeRange fromStartDuration(int day, int hour, int minutes, int durationMinutes) {
     return new TimeRange(convertTimeToMinutes(day, hour, minutes), durationMinutes);
   }
+
+  /**
+   * Calculates the overlapping minutes between two TimeRange, if any, otherwise returns 0.
+   */
+  public int calculateMinutesOverlap(TimeRange other) {
+    int start = Math.max(this.start(), other.start());
+    int end = Math.min(this.end(), other.end());
+    int difference = end - start;
+    return difference < 0 ? 0 : difference;
+  }
 }

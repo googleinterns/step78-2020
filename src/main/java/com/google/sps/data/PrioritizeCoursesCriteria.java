@@ -5,12 +5,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class PrioritizeCoursesCriteria implements Preference {
   List<Course> courseList;
+  HashMap<Course, Integer> courseScores = new HashMap<Course, Integer>();
   
-  public PrioritizeCoursesCriteria(List<Course> courseList) {
+  public PrioritizeCoursesCriteria(List<Course> courseList, HashMap<Course, Integer> courseScores) {
     this.courseList = courseList;
+    this.courseScores = courseScores;
   }
   
   /**
@@ -18,24 +21,30 @@ public class PrioritizeCoursesCriteria implements Preference {
    * that prioritizes the order of courses that the user would like to take
    */
   public float preferenceScore(Schedule schedule) {
-    List<String> courseListNames = getCourseListNames(courseList);
+    // Instantiate the HashMap, courseScores
+    for (int i = 0; i < courseList.size(); i++) {
+      courseScores.put(courseList.get(i), courseList.size()-i);
+    }
+
     int coursePrioritySum = 0;
-    List<Course> courses = (List) schedule.getCourses();
+    Collection<Course> courses = schedule.getCourses();
     
     for (Course course : courses) {
-      String courseName = course.getName();
-      int priorityIndex = courseListNames.size() - courseListNames.indexOf(courseName);
+      int priorityIndex = courseScores.get(course);
       coursePrioritySum += priorityIndex;
     }
+
     return coursePrioritySum;
   }
 
   // Returns a list of course names, given a list of courses
   public List<String> getCourseListNames(List<Course> courses) {
     List<String> names = new ArrayList<String>();
+
     for (Course course : courses) {
       names.add(course.getName());
     }
+    
     return names;
   }
 }
