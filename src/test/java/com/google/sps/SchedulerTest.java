@@ -112,11 +112,7 @@ public final class SchedulerTest {
     /*min credits = 1, max = 2, 
       2 courses that overlap, should only return 2 schedules w single course
     */
-<<<<<<< HEAD
     Section section1 = new Section("Mario", monWedFri(10, 0, DURATION_60_MINUTES)); 
-=======
-    Section section1 = new Section("Mario", monWedFri(10, 0, DURATION_60_MINUTES));
->>>>>>> Add basic tests for scheduler
     Section section2 = new Section("Sonic", monWedFri(10, 30, DURATION_60_MINUTES));
 
     Course course1 = new Course("Jumping High", "HERO1983", 
@@ -125,18 +121,14 @@ public final class SchedulerTest {
         "Heroism", 1, false, Arrays.asList(section2));
       
     HashSet<Schedule> actual = new HashSet<>(
-<<<<<<< HEAD
         scheduler.generateSchedules(Arrays.asList(course1, course2), new Invariants(1, 2)));
-=======
-          scheduler.generateSchedules(Arrays.asList(course1, course2), new Invariants(1, 2)));
->>>>>>> Add basic tests for scheduler
+
         
     Schedule schedule1 = new Schedule(Arrays.asList(course1));
     Schedule schedule2 = new Schedule(Arrays.asList(course2));
     HashSet<Schedule> expected = new HashSet<>(Arrays.asList(schedule1, schedule2));
 
     Assert.assertEquals(expected, actual);
-<<<<<<< HEAD
   }
 
   @Test
@@ -231,7 +223,5 @@ public final class SchedulerTest {
 
     HashSet<Schedule> expected = new HashSet<>(Arrays.asList(schedule1, schedule2));
     Assert.assertEquals(expected, actual);
-=======
->>>>>>> Add basic tests for scheduler
   }
 }
