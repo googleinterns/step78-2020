@@ -30,8 +30,8 @@ public class DeleteCalendar extends HttpServlet {
   
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      com.google.api.services.calendar.Calendar client = Utils.loadCalendarClient();
-      String calendarId = request.getParameter("calId");
-      client.calendars().delete(calendarId).execute();
+    Calendar client = Utils.loadCalendarClient();
+    String calendarId = request.getParameter("calId");
+    client.calendars().delete(calendarId).execute();
   }
 }

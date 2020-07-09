@@ -13,7 +13,7 @@
 // limitations under the License.
 
 // fetch the secondary calendar with the schedule (just one right now, will be multiple later)
-var i = 0; 
+var currCalendarIndex = 0; 
 var idArray;
 function fetchUserCalendar() {
   document.getElementById("loading").style.display = "block";
@@ -35,17 +35,17 @@ function showButtons() {
 
 // display the next calendar schedule
 function displayNextCalendar() {
-  if (i < idArray.length - 1) {
-    i++;
-    displayCalendar(idArray[i]);
+  if (currCalendarIndex < idArray.length - 1) {
+    currCalendarIndex++;
+    displayCalendar(idArray[currCalendarIndex]);
   }
 }
 
 // display the previous calendar schedule
 function displayPreviousCalendar() {
-  if (i > 0) {
-    i--;
-    displayCalendar(idArray[i]);
+  if (currCalendarIndex > 0) {
+    currCalendarIndex--;
+    displayCalendar(idArray[currCalendarIndex]);
   }
 }
 
@@ -58,7 +58,7 @@ function displayCalendar(calId) {
 // delete all secondary calendars created, except for the chosen one 
 function deleteUnchosenCalendars() {
   for (var j = 0; j < idArray.length; j++) {
-    if (j != i) {
+    if (j != currCalendarIndex) {
       fetch("/deleteCalendar?calId=" + idArray[j], {method: 'POST'});
       idArray.splice(j,1);
     }
