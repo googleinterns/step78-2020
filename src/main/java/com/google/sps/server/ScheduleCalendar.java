@@ -73,8 +73,8 @@ public class ScheduleCalendar {
       int year = CalendarUtils.getCurrentYear(calendar);
 
       // for each course in the schedule, add an event to the calendar
-      for (Course currentCourse : schedule.getCourses()) {
-        List<TimeRange> sectionTimes = currentCourse.getSections().get(0).getMeetingTimes();
+      for (ScheduledCourse currentCourse : schedule.getCourses()) {
+        List<TimeRange> sectionTimes = currentCourse.getSection().getMeetingTimes();
         for (int i = 0; i < sectionTimes.size(); i++) {
           String startTime = CalendarUtils.calculateStartTime(sectionTimes.get(i), month, year, nextSun);
           String endTime = CalendarUtils.calculateEndTime(sectionTimes.get(i), month, year, nextSun);

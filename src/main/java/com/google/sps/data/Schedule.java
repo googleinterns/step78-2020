@@ -34,7 +34,7 @@ public class Schedule {
     return otherSchedule.weight == this.weight && otherCourses.equals(thisCourses);
   }
 
-  public Collection<Course> getCourses() {
+  public Collection<ScheduledCourse> getCourses() {
     return this.courses;
   }
 
