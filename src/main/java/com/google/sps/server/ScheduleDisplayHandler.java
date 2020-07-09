@@ -23,7 +23,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Collection;
-import java.util.Iterator;
 
 import com.google.api.services.calendar.Calendar;
 import com.google.gson.Gson;
@@ -51,10 +50,9 @@ public class ScheduleDisplayHandler extends HttpServlet {
       List<String> calIds = new ArrayList<>();
 
       //for each schedule, create new secondary calendary and put schedule on it
-      Iterator<Schedule> iterator = schedules.iterator();
-      while (iterator.hasNext()) {
+      for (Schedule currentSchedule: schedules) {
         ScheduleCalendar cal = new ScheduleCalendar(client);
-        cal.addSchedule(iterator.next());
+        cal.addSchedule(currentSchedule);
         calIds.add(cal.getCalendarId());
       }
 
