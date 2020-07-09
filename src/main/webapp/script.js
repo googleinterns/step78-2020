@@ -62,6 +62,7 @@ function deleteUnchosenCalendars() {
       .forEach(id => deleteCalendar(id));
 
   const chosenCalendarId = idArray[currCalendarIndex];
+  currCalendarIndex = 0;
   idArray = [chosenCalendarId];
 
   displayCalendar(chosenCalendarId);
