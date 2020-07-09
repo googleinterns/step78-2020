@@ -50,7 +50,7 @@ public class ScheduleDisplayHandler extends HttpServlet {
       List<String> calIds = new ArrayList<>();
 
       //for each schedule, create new secondary calendary and put schedule on it
-      for (Schedule currentSchedule: schedules) {
+      for (Schedule currentSchedule : schedules) {
         ScheduleCalendar cal = new ScheduleCalendar(client);
         cal.addSchedule(currentSchedule);
         calIds.add(cal.getCalendarId());
