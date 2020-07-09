@@ -8,6 +8,6 @@
   margin-top: 20px;
 }
 
-#previous, #next, #loading {
+#previous, #next, #loading, #chosenCal {
   display: none;
 }

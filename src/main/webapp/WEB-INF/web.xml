@@ -35,6 +35,16 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
     <url-pattern>/handleSchedules/*</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>deleteCalendar</servlet-name>
+    <servlet-class>com.google.sps.server.DeleteCalendar</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>deleteCalendar</servlet-name>
+    <url-pattern>/deleteCalendar/*</url-pattern>
+  </servlet-mapping>
+
   <security-constraint>
     <web-resource-collection>
       <web-resource-name>any</web-resource-name>
