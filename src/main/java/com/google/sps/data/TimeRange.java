@@ -21,10 +21,19 @@ import java.util.Comparator;
  * providing methods to make ranges easier to work with (e.g. {@code overlaps}).
  */
 public final class TimeRange {
-  public static final int START_OF_DAY = getTimeInMinutes(0, 0);
-  public static final int END_OF_DAY = getTimeInMinutes(23, 59);
+  public static final int SUNDAY = 0;
+  public static final int MONDAY = 1;
+  public static final int TUESDAY = 2;
+  public static final int WEDNESDAY = 3;
+  public static final int THURSDAY = 4;
+  public static final int FRIDAY = 5;
+  public static final int SATURDAY = 6;
 
-  public static final TimeRange WHOLE_DAY = new TimeRange(0, 24 * 60);
+  public static final int START_OF_WEEK = convertTimeToMinutes(0, 0);
+  public static final int END_OF_WEEK = convertTimeToMinutes(6, 23, 59);
+
+  public static final int WHOLE_DAY_DURATION = 24 * 60;
+  public static final TimeRange WHOLE_WEEK = new TimeRange(0, 24 * 7 * 60);
 
   /**
    * A comparator for sorting ranges by their start time in ascending order.
@@ -140,6 +149,10 @@ public final class TimeRange {
     if (range.duration <= 0) {
       return false;
     }
+    
+    if (range.end() > END_OF_WEEK) {
+      return point >= range.start || point < range.end() % END_OF_WEEK;
+    }
 
     // If the point comes before the start of the range, the range cannot contain it.
     if (point < range.start) {
@@ -156,7 +169,13 @@ public final class TimeRange {
     return a.start == b.start && a.duration == b.duration;
   }
 
-  public static int getTimeInMinutes(int hours, int minutes) {
+  /**
+   * Returns the time in minutes given a day, for use when creating new timeRanges.
+   * @param hours an int representing the time (in hours) during the day
+   * @param minutes an int representing the time (in minutes) during the hour
+   * @return time in minutes during a week
+   */
+  public static int convertTimeToMinutes(int hours, int minutes) {
     if (hours < 0 || hours >= 24) {
       throw new IllegalArgumentException("Hours can only be 0 through 23 (inclusive).");
     }
@@ -169,18 +188,103 @@ public final class TimeRange {
   }
 
   /**
-   * Creates a {@code TimeRange} from {@code start} to {@code end}. Whether or not {@code end} is
-   * included in the range will depend on {@code inclusive}. If {@code inclusive} is {@code true},
-   * then @{code end} will be in the range.
+   * Returns the time in minutes given a day, for use when creating new timeRanges.
+   * @param day an int representing the day (0 being sunday, 6 being saturday)
+   * @param hours an int representing the time (in hours) during the day
+   * @param minutes an int representing the time (in minutes) during the hour
+   * @return time in minutes during a week
    */
-  public static TimeRange fromStartEnd(int start, int end, boolean inclusive) {
+  public static int convertTimeToMinutes(int day, int hours, int minutes) {
+    if (day < 0 || day >= 7) {
+      throw new IllegalArgumentException("Day of the week must be between 0 and 6 (inclusive).");
+    }
+
+    if (hours < 0 || hours >= 24) {
+      throw new IllegalArgumentException("Hours can only be 0 through 23 (inclusive).");
+    }
+
+    if (minutes < 0 || minutes >= 60) {
+      throw new IllegalArgumentException("Minutes can only be 0 through 59 (inclusive).");
+    }
+
+    return (day * 24 * 60) + (hours * 60) + minutes;
+  }
+
+    /**
+   * Returns the day of the week in int form (0 being sunday, 6 being saturday).
+   * @param hours The hours in the timeframe
+   * @return int representing the day of the week
+   */
+  public static int hoursToDayOfWeek(int hours) {
+    if (hours < 0 || hours > 24 * 7) {
+      throw new IllegalArgumentException("Time must be within a week period (between 0 and 167, inclusive).");
+    }
+
+    return (int) Math.floorDiv(hours, 24);
+  }
+
+  /**
+   * Returns the day of the week in int form (0 being sunday, 6 being saturday)
+   * @param minutes
+   * @return int representing the day of the week
+   */
+  public static int minutesToDayOfWeek(int minutes) {
+    if (minutes < 0 || minutes > 24 * 7 * 60) {
+      throw new IllegalArgumentException("Time must be within a week period (between 0 and 10079, inclusive).");
+    }
+
+    return (int) Math.floorDiv(minutes, 24 * 60);
+  }
+
+  /**
+   * Creates a TimeRange given a start time, end time, 
+   * and if the end of the event is inclusive or not.
+   * 
+   * @param startDay The day on which the event starts,
+   *                 represented by an int (0 being sunday, 6 being saturday)
+   * @param startHour The hour in the day when the event starts.
+   * @param startMinutes The minute in the hour when the event starts.
+   * @param endDay The day on which the event ends
+   * @param endHour The hour in the day when the event ends
+   * @param endMinutes The minute in the hour when the event ends
+   * @param inclusive Whether or not the event end time is inclusive or not
+   * @return a TimeRange given start time and end time
+   */
+  public static TimeRange fromStartEnd(int startDay, int startHour, int startMinutes, 
+      int endDay, int endHour, int endMinutes, boolean inclusive) {
+    int start = convertTimeToMinutes(startDay, startHour, startMinutes);
+    int end = convertTimeToMinutes(endDay, endHour, endMinutes);
     return inclusive ? new TimeRange(start, end - start + 1) : new TimeRange(start, end - start);
   }
 
   /**
-   * Create a {@code TimeRange} starting at {@code start} with a duration equal to {@code duration}.
+   * Creates a TimeRange from the start time (described in date, hours, and minutes) of duration
+   * in minutes specified by duration.
+   * 
+   * @param day the day on which the event starts, 
+   *            represented by an int (0 being sunday, 6 being saturday)
+   * @param hour The hour in the day when the event starts
+   * @param minutes The minute in the hour when the event starts
+   * @param durationMinutes the duration, in minutes of the event
+   * @return a TimeRange given start time and duration
    */
-  public static TimeRange fromStartDuration(int start, int duration) {
-    return new TimeRange(start, duration);
+  public static TimeRange fromStartDuration(int day, int hour, int minutes, int durationMinutes) {
+    return new TimeRange(convertTimeToMinutes(day, hour, minutes), durationMinutes);
+  }
+
+  /**
+   * Calculates the overlapping minutes between two TimeRange, if any, otherwise returns 0.
+   */
+  public int calculateMinutesOverlap(TimeRange other) {
+    // edge case for TimeRanges that start from Saturday and end on Sunday
+    if(this.start() > (this.end() % WHOLE_WEEK.duration()) && 
+    (this.end() % WHOLE_WEEK.duration()) > other.start()) {
+      return (this.end() % WHOLE_WEEK.duration()) - other.start();
+    }
+    
+    int start = Math.max(this.start(), other.start());
+    int end = Math.min(this.end(), other.end());
+    int difference = end - start;
+    return difference < 0 ? 0 : difference;
   }
 }

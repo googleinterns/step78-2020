@@ -15,47 +15,74 @@
 package com.google.sps.data;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A course class. Better documentation to be added later.
  */
 public class Course {
-    private String name;
-    private String courseID;
-    private String subject;
-    private boolean isRequired;
-    private List<Section> sections;
+  private String name;
+  private String courseID;
+  private String subject;
+  private float credits;
+  private boolean isRequired;
+  private List<Section> sections;
 
-    public Course(String name, String courseID, String subject, boolean isRequired, List<Section> sections) {
-        this.name = name;
-        this.courseID = courseID;
-        this.subject = subject;
-        this.isRequired = isRequired;
-        this.sections = sections;
+  public Course(String name, String courseID, String subject, float credits, boolean isRequired, List<Section> sections) {
+    this.name = name;
+    this.courseID = courseID;
+    this.subject = subject;
+    this.credits = credits;
+    this.isRequired = isRequired;
+    this.sections = sections;
+  }
+
+  public String getName() {
+    return this.name;
+  }
+
+  public String getCourseID() {
+    return this.courseID;
+  }
+
+  public String getSubject() {
+    return this.subject;
+  }
+
+  public float getCredits() {
+    return this.credits;
+  }
+
+  public boolean isRequired() {
+    return this.isRequired;
+  }
+
+  public List<Section> getSections() {
+    return this.sections;
+  }
+
+  @Override
+  public boolean equals(Object other) {
+    if (other == this) {
+      return true;
     }
 
-    public String getName() {
-        return this.name;
+    if (!(other instanceof Course)) {
+      return false;
     }
 
-    public String getCourseID() {
-        return this.courseID;
-    }
+    Course otherCourse = (Course) other;
+    return otherCourse.name.equals(this.name) 
+        && otherCourse.courseID.equals(this.courseID)
+        && otherCourse.subject.equals(this.subject) 
+        && Math.abs(otherCourse.credits - this.credits) < 0.01
+        && otherCourse.isRequired == this.isRequired 
+        && otherCourse.sections.equals(this.sections);
+  }
 
-    public String getSubject() {
-        return this.subject;
-    }
-
-    public boolean getIsRequired() {
-        return this.isRequired;
-    }
-
-    public boolean isIsRequired() {
-        return this.isRequired;
-    }
-
-    public List<Section> getSections() {
-        return this.sections;
-    }
+  @Override
+  public int hashCode() {
+    return Objects.hash(name, courseID, subject, credits, isRequired, sections);
+  }
 
 }
