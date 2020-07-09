@@ -15,12 +15,8 @@ public class Schedule {
 
   @Override
   public int hashCode() {
-    return Objects.hash(courses, weight);
-  }
-
-  // Getter for schedule courses
-  public Collection<ScheduledCourse> getCourses() {
-    return this.courses;
+    HashSet<Course> courseSet = new HashSet<>(courses);
+    return Objects.hash(courseSet, weight);
   }
 
   @Override
@@ -37,6 +33,10 @@ public class Schedule {
     HashSet<ScheduledCourse> otherCourses = new HashSet<>(otherSchedule.courses);
     HashSet<ScheduledCourse> thisCourses = new HashSet<>(this.courses);
     return otherSchedule.weight == this.weight && otherCourses.equals(thisCourses);
+  }
+
+  public Collection<ScheduledCourse> getCourses() {
+    return this.courses;
   }
 
   // Todo: Add comparator functions based on weight
