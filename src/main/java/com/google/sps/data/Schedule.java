@@ -41,4 +41,5 @@ public class Schedule {
 
   // Todo: Add comparator functions based on weight
   // Todo: Add recalculate weight function/set weight function
+
 }
