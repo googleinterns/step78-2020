@@ -276,6 +276,12 @@ public final class TimeRange {
    * Calculates the overlapping minutes between two TimeRange, if any, otherwise returns 0.
    */
   public int calculateMinutesOverlap(TimeRange other) {
+    // edge case for TimeRanges that start from Saturday and end on Sunday
+    if(this.start() > (this.end() % WHOLE_WEEK.duration()) && 
+    (this.end() % WHOLE_WEEK.duration()) > other.start()) {
+      return (this.end() % WHOLE_WEEK.duration()) - other.start();
+    }
+    
     int start = Math.max(this.start(), other.start());
     int end = Math.min(this.end(), other.end());
     int difference = end - start;
