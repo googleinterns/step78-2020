@@ -19,7 +19,7 @@ public class SubjectCoursesCriteria implements Preference {
    */
   public float preferenceScore(Schedule schedule) {
     int preferredSubjectCount = 0;
-    List<Course> courses = (List) schedule.getCourses();
+    Collection<Course> courses = schedule.getCourses();
 
     for (Course course : courses) {
       if (preferredSubject.equals(course.getSubject())) {
