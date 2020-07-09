@@ -72,20 +72,20 @@ public final class RankTest {
    */
   public static List<Course> createCoursesPriority() {
     Section section1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
-    Course course1 = new Course("Operating System", "15410", 
-        "Computer Science", 15, true, Arrays.asList(section1));
+    ScheduledCourse course1 = new ScheduledCourse("Operating System", "15410", 
+        "Computer Science", 15, true, section1);
     
     Section section2 = new Section("Professor B", tuesThurs(10, 30, DURATION_90_MINUTES));
-    Course course2 = new Course("Compilers", "15411", 
-        "Computer Science", 15, true, Arrays.asList(section2));
+    ScheduledCourse course2 = new ScheduledCourse("Compilers", "15411", 
+        "Computer Science", 15, true, section2);
 
     Section section3 = new Section("Professor C", tuesThurs(12, 00, DURATION_90_MINUTES));
-    Course course3 = new Course("Algorithms", "15210", 
-        "Computer Science", 15, true, Arrays.asList(section3));
+    ScheduledCourse course3 = new ScheduledCourse("Algorithms", "15210", 
+        "Computer Science", 15, true, section3);
 
     Section section4 = new Section("Professor D", tuesThurs(13, 30, DURATION_90_MINUTES));
-    Course course4 = new Course("Experimental Physics", "33104", 
-        "Physics", 33, true, Arrays.asList(section4));
+    ScheduledCourse course4 = new ScheduledCourse("Experimental Physics", "33104", 
+        "Physics", 33, true, section4);
 
     return Arrays.asList(course1, course2, course3, course4);
   }
@@ -94,12 +94,12 @@ public final class RankTest {
   // Creates Schedule 1
   public static Schedule createSchedule1() {
     Section section1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
-    Course course1 = new Course("Operating System", "15410", 
-        "Computer Science", 15, true, Arrays.asList(section1));
+    ScheduledCourse course1 = new ScheduledCourse("Operating System", "15410", 
+        "Computer Science", 15, true, section1);
 
     Section section4 = new Section("Professor D", tuesThurs(13, 30, DURATION_90_MINUTES));
-    Course course4 = new Course("Experimental Physics", "33104", 
-        "Physics", 33, true, Arrays.asList(section4));
+    ScheduledCourse course4 = new ScheduledCourse("Experimental Physics", "33104", 
+        "Physics", 33, true, section4);
 
     return new Schedule(Arrays.asList(course1, course4));
   }
@@ -107,12 +107,12 @@ public final class RankTest {
   // Creates Schedule 2
   public static Schedule createSchedule2() {
     Section section2 = new Section("Professor B", tuesThurs(10, 30, DURATION_90_MINUTES));
-    Course course2 = new Course("Compilers", "15411", 
-        "Computer Science", 15, true, Arrays.asList(section2));
+    ScheduledCourse course2 = new ScheduledCourse("Compilers", "15411", 
+        "Computer Science", 15, true, section2);
 
     Section section3 = new Section("Professor C", tuesThurs(12, 00, DURATION_90_MINUTES));
-    Course course3 = new Course("Algorithms", "15210", 
-        "Computer Science", 15, true, Arrays.asList(section3));
+    ScheduledCourse course3 = new ScheduledCourse("Algorithms", "15210", 
+        "Computer Science", 15, true, section3);
 
     return new Schedule(Arrays.asList(course2, course3));
   }
@@ -120,12 +120,12 @@ public final class RankTest {
   // Creates Schedule 3
   public static Schedule createSchedule3() {
     Section section1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
-    Course course1 = new Course("Operating System", "15410", 
-        "Computer Science", 15, true, Arrays.asList(section1));
+    ScheduledCourse course1 = new ScheduledCourse("Operating System", "15410", 
+        "Computer Science", 15, true, section1);
     
     Section section2 = new Section("Professor B", tuesThurs(10, 30, DURATION_90_MINUTES));
-    Course course2 = new Course("Compilers", "15411", 
-        "Computer Science", 15, true, Arrays.asList(section2));
+    ScheduledCourse course2 = new ScheduledCourse("Compilers", "15411", 
+        "Computer Science", 15, true, section2);
 
     return new Schedule(Arrays.asList(course1, course2));
   }
@@ -133,12 +133,12 @@ public final class RankTest {
   // Creates Schedule 4
   public static Schedule createSchedule4() {
     Section section1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
-    Course course1 = new Course("Operating System", "15410", 
-        "Computer Science", 15, true, Arrays.asList(section1));
+    ScheduledCourse course1 = new ScheduledCourse("Operating System", "15410", 
+        "Computer Science", 15, true, section1);
     
     Section section3 = new Section("Professor C", tuesThurs(12, 00, DURATION_90_MINUTES));
-    Course course3 = new Course("Algorithms", "15210", 
-        "Computer Science", 15, true, Arrays.asList(section3));
+    ScheduledCourse course3 = new ScheduledCourse("Algorithms", "15210", 
+        "Computer Science", 15, true, section3);
 
     return new Schedule(Arrays.asList(course1, course3));
   }

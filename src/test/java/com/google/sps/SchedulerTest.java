@@ -64,8 +64,8 @@ public final class SchedulerTest {
   @Test
   public void singleCourseValidSchedule() {
     Section section = new Section("Dr. Eggman", monWedFri(10, 30, DURATION_90_MINUTES));
-    Course course1 = new Course("Intro to Evil", "EVIL100", 
-        "Wrongdoing", 1, true, Arrays.asList(section));
+    ScheduledCourse course1 = new ScheduledCourse("Intro to Evil", "EVIL100", 
+        "Wrongdoing", 1, true, section);
     
     Collection<Schedule> actual = scheduler.generateSchedules(
         Arrays.asList(course1), new Invariants(1, 2));
@@ -76,8 +76,8 @@ public final class SchedulerTest {
   @Test
   public void notEnoughCreditsNoSchedules() {
     Section section = new Section("Dr. Eggman", monWedFri(10, 30, DURATION_90_MINUTES));
-    Course course1 = new Course("Intro to Evil", "EVIL100", 
-        "Wrongdoing", 1, true, Arrays.asList(section));
+    ScheduledCourse course1 = new ScheduledCourse("Intro to Evil", "EVIL100", 
+        "Wrongdoing", 1, true, section);
     
     Collection<Schedule> actual = scheduler.generateSchedules(Arrays.asList(course1), 
         new Invariants(3, 5));

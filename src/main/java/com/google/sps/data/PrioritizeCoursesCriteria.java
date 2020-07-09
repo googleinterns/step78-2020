@@ -27,7 +27,7 @@ public class PrioritizeCoursesCriteria implements Preference {
     }
 
     int coursePrioritySum = 0;
-    Collection<Course> courses = schedule.getCourses();
+    Collection<ScheduledCourse> courses = schedule.getCourses();
     
     for (Course course : courses) {
       int priorityIndex = courseScores.get(course);

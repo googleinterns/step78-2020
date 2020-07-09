@@ -21,7 +21,7 @@ public class RestrictTimesCriteria implements Preference {
     // count the number of minutes that overlap
     float minutesPenalty = 0;
     
-    Collection<Course> courses = schedule.getCourses();
+    Collection<ScheduledCourse> courses = schedule.getCourses();
     List<TimeRange> courseTimes = getCourseTimes(courses);
 
     for (TimeRange event : userNoClassTimes) {
@@ -39,11 +39,11 @@ public class RestrictTimesCriteria implements Preference {
   /**
    * Returns a list of TimeRanges from a collection of courses
    */
-  List<TimeRange> getCourseTimes(Collection<Course> courses) {
+  List<TimeRange> getCourseTimes(Collection<ScheduledCourse> courses) {
     List<TimeRange> times = new ArrayList<TimeRange>();
 
-    for(Course course : courses) {
-      times.addAll(course.getSections().get(0).getMeetingTimes());
+    for(ScheduledCourse course : courses) {
+      times.addAll(course.getSection().getMeetingTimes());
     }
 
     return times;

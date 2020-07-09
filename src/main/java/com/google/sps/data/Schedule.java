@@ -5,10 +5,10 @@ import java.util.HashSet;
 import java.util.Objects;
 
 public class Schedule {
-  private Collection<Course> courses;
+  private Collection<ScheduledCourse> courses;
   private long weight;
 
-  public Schedule(Collection<Course> courses) {
+  public Schedule(Collection<ScheduledCourse> courses) {
     this.courses = courses;
     this.weight = -1;
   }
@@ -19,7 +19,7 @@ public class Schedule {
   }
 
   // Getter for schedule courses
-  public Collection<Course> getCourses() {
+  public Collection<ScheduledCourse> getCourses() {
     return this.courses;
   }
 
@@ -34,8 +34,8 @@ public class Schedule {
     }
 
     Schedule otherSchedule = (Schedule) other;
-    HashSet<Course> otherCourses = new HashSet<>(otherSchedule.courses);
-    HashSet<Course> thisCourses = new HashSet<>(this.courses);
+    HashSet<ScheduledCourse> otherCourses = new HashSet<>(otherSchedule.courses);
+    HashSet<ScheduledCourse> thisCourses = new HashSet<>(this.courses);
     return otherSchedule.weight == this.weight && otherCourses.equals(thisCourses);
   }
 
