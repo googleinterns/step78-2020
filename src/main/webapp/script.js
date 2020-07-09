@@ -12,9 +12,62 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * Adds a random greeting to the page.
- */
-function userAuthorization() {
-  window.location.href = "/auth";
+// fetch the secondary calendar with the schedule (just one right now, will be multiple later)
+var currCalendarIndex = 0; 
+var idArray;
+function fetchUserCalendar() {
+  document.getElementById("loading").style.display = "block";
+  fetch('/handleSchedules').then(response => response.json()).then((calIds) => {
+    idArray = calIds;
+    displayCalendar(calIds[0]);
+    showButtons();
+  });
+}
+
+// hide / show the appropriate elements on the page 
+function showButtons() {
+  document.getElementById("schedules").style.display = "none";
+  document.getElementById("previous").style.display = "inline-block";
+  document.getElementById("next").style.display = "inline-block";
+  document.getElementById("loading").style.display = "none";
+  document.getElementById("chosenCal").style.display = "block";
+}
+
+// display the next calendar schedule
+function displayNextCalendar() {
+  if (currCalendarIndex < idArray.length - 1) {
+    currCalendarIndex++;
+    displayCalendar(idArray[currCalendarIndex]);
+  }
+}
+
+// display the previous calendar schedule
+function displayPreviousCalendar() {
+  if (currCalendarIndex > 0) {
+    currCalendarIndex--;
+    displayCalendar(idArray[currCalendarIndex]);
+  }
+}
+
+// display the secondary calendar 
+function displayCalendar(calId) {
+  const url = "https://calendar.google.com/calendar/embed?src=" + calId;
+  document.getElementById("calendar").src = url;
+}
+
+// delete all secondary calendars created, except for the chosen one 
+function deleteUnchosenCalendars() {
+  idArray
+      .filter((id, index) => index !== currCalendarIndex)
+      .forEach(id => deleteCalendar(id));
+
+  const chosenCalendarId = idArray[currCalendarIndex];
+  currCalendarIndex = 0;
+  idArray = [chosenCalendarId];
+
+  displayCalendar(chosenCalendarId);
+}
+
+function deleteCalendar(calendarId) {
+  fetch("/deleteCalendar?calId=" + calendarId, { method: 'POST' });
 }
