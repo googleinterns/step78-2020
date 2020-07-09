@@ -34,6 +34,10 @@ public class Schedule {
     return otherSchedule.weight == this.weight && otherCourses.equals(thisCourses);
   }
 
+  public Collection<ScheduledCourse> getCourses() {
+    return this.courses;
+  }
+
   // Todo: Add comparator functions based on weight
   // Todo: Add recalculate weight function/set weight function
 }

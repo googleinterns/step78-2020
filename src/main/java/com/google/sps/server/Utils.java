@@ -55,6 +55,8 @@ class Utils {
 
   private static GoogleClientSecrets clientSecrets = null;
 
+  private static final String APPLICATION_NAME = "SchedulR";
+
   static GoogleClientSecrets getClientCredential() throws IOException {
     if (clientSecrets == null) {
       clientSecrets = GoogleClientSecrets.load(JSON_FACTORY,
@@ -82,7 +84,7 @@ class Utils {
   static Calendar loadCalendarClient() throws IOException {
     String userId = UserServiceFactory.getUserService().getCurrentUser().getUserId();
     Credential credential = newFlow().loadCredential(userId);
-    return new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).build();
+    return new Calendar.Builder(HTTP_TRANSPORT, JSON_FACTORY, credential).setApplicationName(APPLICATION_NAME).build();
   }
 
   /**
