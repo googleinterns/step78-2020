@@ -57,11 +57,16 @@ function displayCalendar(calId) {
 
 // delete all secondary calendars created, except for the chosen one 
 function deleteUnchosenCalendars() {
-  for (var j = 0; j < idArray.length; j++) {
-    if (j != currCalendarIndex) {
-      fetch("/deleteCalendar?calId=" + idArray[j], {method: 'POST'});
-      idArray.splice(j,1);
-    }
-  }
-  displayCalendar(idArray[0]);
+  idArray
+      .filter((id, index) => index !== currCalendarIndex)
+      .forEach(id => deleteCalendar(id));
+
+  const chosenCalendarId = idArray[currCalendarIndex];
+  idArray = [chosenCalendarId];
+
+  displayCalendar(chosenCalendarId);
+}
+
+function deleteCalendar(calendarId) {
+  fetch("/deleteCalendar?calId=" + calendarId, { method: 'POST' });
 }
