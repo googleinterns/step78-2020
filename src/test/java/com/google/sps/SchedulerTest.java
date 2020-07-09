@@ -70,7 +70,7 @@ public final class SchedulerTest {
     
     Collection<Schedule> actual = scheduler.generateSchedules(
         Arrays.asList(course1), new Invariants(1, 2));
-    Schedule expected = new Schedule(Arrays.asList(course1));
+    Schedule expected = new Schedule(Arrays.asList(new ScheduledCourse(course1, section)));
     Assert.assertEquals(Arrays.asList(expected), actual);
   }
 
@@ -97,10 +97,13 @@ public final class SchedulerTest {
       
     HashSet<Schedule> actual = new HashSet<>(
           scheduler.generateSchedules(Arrays.asList(course1, course2), new Invariants(1, 2)));
+
+    ScheduledCourse schedCourse1 = new ScheduledCourse(course1, section1);
+    ScheduledCourse schedCourse2 = new ScheduledCourse(course2, section2);
         
-    Schedule schedule1 = new Schedule(Arrays.asList(course1));
-    Schedule schedule2 = new Schedule(Arrays.asList(course2));
-    Schedule schedule3 = new Schedule(Arrays.asList(course1, course2));
+    Schedule schedule1 = new Schedule(Arrays.asList(schedCourse1));
+    Schedule schedule2 = new Schedule(Arrays.asList(schedCourse2));
+    Schedule schedule3 = new Schedule(Arrays.asList(schedCourse1, schedCourse2));
 
     HashSet<Schedule> expected = new HashSet<>(Arrays.asList(schedule1, schedule2, schedule3));
 
@@ -123,9 +126,11 @@ public final class SchedulerTest {
     HashSet<Schedule> actual = new HashSet<>(
         scheduler.generateSchedules(Arrays.asList(course1, course2), new Invariants(1, 2)));
 
-        
-    Schedule schedule1 = new Schedule(Arrays.asList(course1));
-    Schedule schedule2 = new Schedule(Arrays.asList(course2));
+    ScheduledCourse schedCourse1 = new ScheduledCourse(course1, section1);
+    ScheduledCourse schedCourse2 = new ScheduledCourse(course2, section2);
+
+    Schedule schedule1 = new Schedule(Arrays.asList(schedCourse1));
+    Schedule schedule2 = new Schedule(Arrays.asList(schedCourse2));
     HashSet<Schedule> expected = new HashSet<>(Arrays.asList(schedule1, schedule2));
 
     Assert.assertEquals(expected, actual);
@@ -146,10 +151,14 @@ public final class SchedulerTest {
 
     HashSet<Schedule> actual = new HashSet<>(scheduler.generateSchedules(
         Arrays.asList(course2, course1, course3), new Invariants(2, 3)));
+
+    ScheduledCourse schedCourse1 = new ScheduledCourse(course1, section1);
+    ScheduledCourse schedCourse2 = new ScheduledCourse(course2, section2);
+    ScheduledCourse schedCourse3 = new ScheduledCourse(course3, section3);
     
-    Schedule schedule1 = new Schedule(Arrays.asList(course1, course2));
-    Schedule schedule2 = new Schedule(Arrays.asList(course1, course3));
-    Schedule schedule3 = new Schedule(Arrays.asList(course1, course2, course3));
+    Schedule schedule1 = new Schedule(Arrays.asList(schedCourse1, schedCourse2));
+    Schedule schedule2 = new Schedule(Arrays.asList(schedCourse1, schedCourse3));
+    Schedule schedule3 = new Schedule(Arrays.asList(schedCourse1, schedCourse2, schedCourse3));
 
     HashSet<Schedule> expected = new HashSet<>(Arrays.asList(schedule1, schedule2, schedule3));
 
@@ -209,14 +218,14 @@ public final class SchedulerTest {
     HashSet<Schedule> actual = new HashSet<>(scheduler.generateSchedules(
         Arrays.asList(course1, course2), new Invariants(1, 3)));
 
-    Course expected1 = new Course("Jumping High", "HERO1983",
-        "Heroism", 1, true, Arrays.asList(section1));
-    Course expected2 = new Course("Jumping High", "HERO1983",
-        "Heroism", 1, true, Arrays.asList(section2));
-    Course expected3 = new Course("Running Fast", "Hero1991",
-        "Heroism", 1, true, Arrays.asList(section3));
-    Course expected4 = new Course("Running Fast", "Hero1991",
-        "Heroism", 1, true, Arrays.asList(section4));
+    ScheduledCourse expected1 = new ScheduledCourse("Jumping High", "HERO1983",
+        "Heroism", 1, true, section1);
+    ScheduledCourse expected2 = new ScheduledCourse("Jumping High", "HERO1983",
+        "Heroism", 1, true, section2);
+    ScheduledCourse expected3 = new ScheduledCourse("Running Fast", "Hero1991",
+        "Heroism", 1, true, section3);
+    ScheduledCourse expected4 = new ScheduledCourse("Running Fast", "Hero1991",
+        "Heroism", 1, true, section4);
 
     Schedule schedule1 = new Schedule(Arrays.asList(expected1, expected4));
     Schedule schedule2 = new Schedule(Arrays.asList(expected2, expected3));
