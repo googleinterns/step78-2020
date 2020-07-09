@@ -36,19 +36,19 @@ public final class Scheduler {
 
     // Generate all possible valid Schedules that include only required courses.
     float reqCredits = totalCredits(requiredCourses);
-    Set<List<Course>> requiredSet = new HashSet<>();
+    Set<List<ScheduledCourse>> requiredSet = new HashSet<>();
 
     generateSchedulesHelper(requiredCourses, new ArrayList<>(), 
         new Invariants(reqCredits, reqCredits), requiredSet);
     
     // Using those Schedules as a building block, generate all valid schedules
-    Set<List<Course>> scheduleSet = new HashSet<>();
-    for (List<Course> requiredCourseList : requiredSet) {
+    Set<List<ScheduledCourse>> scheduleSet = new HashSet<>();
+    for (List<ScheduledCourse> requiredCourseList : requiredSet) {
       generateSchedulesHelper(nonRequiredCourses, requiredCourseList, invariants, scheduleSet);
     }
 
     List<Schedule> schedules = new ArrayList<>();
-    for (List<Course> courseList: scheduleSet) {
+    for (List<ScheduledCourse> courseList: scheduleSet) {
       schedules.add(new Schedule(courseList));
     }
 
@@ -60,17 +60,17 @@ public final class Scheduler {
    * given set.
    * 
    * @param courses     The list of courses to iterate through
-   * @param courseList  The current course list to be added/operated on
+   * @param currentSchedule  The current scheduled course list to be added/operated on
    * @param invariants  The invariants that constrain the valid schedules
    * @param courseLists The set of course lists that is being generated/added to.
    */
-  private void generateSchedulesHelper(List<Course> availableCourses, List<Course> currentCourseList,
-      Invariants invariants, Set<List<Course>> generatedCourseLists) {
+  private void generateSchedulesHelper(List<Course> availableCourses, List<ScheduledCourse> currentSchedule,
+      Invariants invariants, Set<List<ScheduledCourse>> generatedScheduledCourseLists) {
 
     // This means that we have a valid schedule, and should add it to the list.
-    float currCredits = totalCredits(currentCourseList);
+    float currCredits = totalScheduleCredits(currentSchedule);
     if (invariants.meetsCreditRequirement(currCredits)) {
-      generatedCourseLists.add(currentCourseList);
+      generatedScheduledCourseLists.add(currentSchedule);
     }
 
     // We've reached the end of the list or have a full schedule, we are finished.
@@ -80,8 +80,8 @@ public final class Scheduler {
 
     Course course = availableCourses.remove(0);
     List<Section> courseSections = course.getSections();
-    List<Section> scheduleSections = currentCourseList.stream()
-        .map(c -> c.getSections().get(0))
+    List<Section> scheduleSections = currentSchedule.stream()
+        .map(c -> c.getSection())
         .collect(Collectors.toList());
 
     /*
@@ -89,26 +89,34 @@ public final class Scheduler {
      * section doesn't overlap and adding it would result in a valid schedule, add
      * it and make a new recursive call.
      */
-    // TODO: Implement logic for required courses having no valid schedules
     for (Section section : courseSections) {
       boolean doesNotOverlapSchedule = !sectionsOverlap(section, scheduleSections);
       boolean doesNotExceedCreditLimit = 
           currCredits + course.getCredits() <= invariants.getMaxCredits();
       
       if (doesNotOverlapSchedule && doesNotExceedCreditLimit) {
-        List<Course> newCourseList = new ArrayList<>(currentCourseList);
-        newCourseList.add(new Course(course.getName(), course.getCourseID(), course.getSubject(),
-            course.getCredits(), course.isRequired(), Arrays.asList(section)));
-        generateSchedulesHelper(
-            new ArrayList<>(availableCourses), newCourseList, invariants, generatedCourseLists);
+        List<ScheduledCourse> newScheduledCourseLiist = new ArrayList<>(currentSchedule);
+        newScheduledCourseLiist.add(new ScheduledCourse(course, section));
+        generateSchedulesHelper(new ArrayList<>(availableCourses), 
+            newScheduledCourseLiist, invariants, generatedScheduledCourseLists);
       }
     }
 
     //If a course is not required, continue permuting with it *not* added to the schedule
     if (!course.isRequired()) {
-      generateSchedulesHelper(
-          new ArrayList<>(availableCourses), currentCourseList, invariants, generatedCourseLists);
+      generateSchedulesHelper(new ArrayList<>(availableCourses), 
+          currentSchedule, invariants, generatedScheduledCourseLists);
     }
+  }
+
+  // I needed to create this duplicate function because the project
+  // wouldn't compile otherwise
+  private float totalScheduleCredits(List<ScheduledCourse> courseList) {
+    float total = 0;
+    for (ScheduledCourse course : courseList) {
+      total += course.getCredits();
+    }
+    return total;
   }
 
   /**
