@@ -39,6 +39,17 @@ public class ScheduledCourse extends Course {
     this.section = section;
   }
 
+  /**
+   * Constructor for the Scheduled course object.
+   * @param course The course to add to a schedule
+   * @param section The course's section (professor and times)
+   */
+  public ScheduledCourse(Course course, Section section) {
+    super(course.getName(), course.getCourseID(), course.getSubject(), course.getCredits(), 
+        course.isRequired(), Arrays.asList(section));
+    this.section = section;
+  }
+
   @Override
   public boolean equals(Object other) {
     if (other instanceof ScheduledCourse) {
