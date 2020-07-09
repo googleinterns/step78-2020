@@ -50,7 +50,7 @@ public class ScheduledCourse extends Course {
 
   @Override
   public int hashCode() {
-    return super.hashCode();
+    return super.hashCode() * Objects.hashCode(section);
   }
 
   public Section getSection() {
