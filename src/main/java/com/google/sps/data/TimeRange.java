@@ -149,6 +149,10 @@ public final class TimeRange {
     if (range.duration <= 0) {
       return false;
     }
+    
+    if (range.end() > END_OF_WEEK) {
+      return point >= range.start || point < range.end() % END_OF_WEEK;
+    }
 
     // If the point comes before the start of the range, the range cannot contain it.
     if (point < range.start) {
