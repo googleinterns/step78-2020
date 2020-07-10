@@ -43,7 +43,7 @@ public class PrioritizeCoursesCriteria implements Preference {
   public List<String> getCourseListNames(List<ScheduledCourse> courses) {
     List<String> names = new ArrayList<String>();
 
-    for (Course course : courses) {
+    for (ScheduledCourse course : courses) {
       names.add(course.getName());
     }
 
