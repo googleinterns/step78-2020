@@ -21,7 +21,7 @@ public class SubjectCoursesCriteria implements Preference {
     int preferredSubjectCount = 0;
     Collection<ScheduledCourse> courses = schedule.getCourses();
 
-    for (Course course : courses) {
+    for (ScheduledCourse course : courses) {
       if (preferredSubject.equals(course.getSubject())) {
         preferredSubjectCount++;
       }
