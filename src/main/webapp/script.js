@@ -19,8 +19,12 @@ function fetchUserCalendar() {
   document.getElementById("loading").style.display = "block";
   fetch('/handleSchedules').then(response => response.json()).then((calIds) => {
     idArray = calIds;
-    displayCalendar(calIds[0]);
-    showButtons();
+    if (idArray.length === 0) {
+      document.getElementById("loading").innerText = "Sorry, looks like there are no possible schedules!"
+    } else {
+      displayCalendar(calIds[0]);
+      showButtons();
+    }
   });
 }
 
