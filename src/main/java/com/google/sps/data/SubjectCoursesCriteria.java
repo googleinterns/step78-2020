@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 
-public class SubjectCoursesCriteria implements Preference {
+public class SubjectCoursesCriteria implements Criterion {
   public String preferredSubject;
 
   public SubjectCoursesCriteria(String preferredSubject) {

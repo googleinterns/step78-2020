@@ -7,7 +7,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class PrioritizeCoursesCriteria implements Preference {
+public class PrioritizeCoursesCriteria implements Criterion {
   List<Course> courseList;
   HashMap<ScheduledCourse, Integer> courseScores = new HashMap<ScheduledCourse, Integer>();
   
