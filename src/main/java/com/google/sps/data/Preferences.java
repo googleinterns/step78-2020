@@ -10,9 +10,9 @@ import com.google.sps.data.TimeRange;
 
 public class Preferences {
     // Criteria sorted in order of user preference
-    private List<Preference> criteriaPreferences;
+    private List<Criterion> criteriaPreferences;
 
-    public Preferences(List<Preference> criteriaPreferences) {
+    public Preferences(List<Criterion> criteriaPreferences) {
       this.criteriaPreferences = criteriaPreferences;
     }
 
@@ -25,7 +25,7 @@ public class Preferences {
         public int compare(Schedule a, Schedule b) {
           int index = 0;
           while(index < criteriaPreferences.size()) {
-            Preference idxCriteria = criteriaPreferences.get(index);
+            Criterion idxCriteria = criteriaPreferences.get(index);
             if(idxCriteria.preferenceScore(a) > idxCriteria.preferenceScore(b)) {
               return -1;
             } else if(idxCriteria.preferenceScore(a) < idxCriteria.preferenceScore(b)) {
