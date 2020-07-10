@@ -44,9 +44,9 @@ public final class RankTest {
   private static final Schedule schedule4 = createSchedule4();
 
   private static final List<TimeRange> userNoClassTimes = monWedFri(7, 00, DURATION_3_HOUR);
-  private static final List<Course> courseList = createCoursesPriority();
+  private static final List<ScheduledCourse> courseList = createCoursesPriority();
   private static final String preferredSubject = "Computer Science";
-  private static final HashMap<Course, Integer> courseScore = new HashMap<Course, Integer>();
+  private static final HashMap<ScheduledCourse, Integer> courseScore = new HashMap<ScheduledCourse, Integer>();
 
   /**
    * Returns a list of times on monday, wednesday, and friday, to be used in section constructors.
@@ -70,7 +70,7 @@ public final class RankTest {
   /**
    * Returns a list of courses in the order of priority that they should be considered
    */
-  public static List<Course> createCoursesPriority() {
+  public static List<ScheduledCourse> createCoursesPriority() {
     Section section1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
     ScheduledCourse course1 = new ScheduledCourse("Operating System", "15410", 
         "Computer Science", 15, true, section1);
