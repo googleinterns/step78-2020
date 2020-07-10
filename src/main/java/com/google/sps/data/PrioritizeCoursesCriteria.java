@@ -8,10 +8,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class PrioritizeCoursesCriteria implements Preference {
-  List<Course> courseList;
-  HashMap<Course, Integer> courseScores = new HashMap<Course, Integer>();
+  List<ScheduledCourse> courseList;
+  HashMap<ScheduledCourse, Integer> courseScores = new HashMap<ScheduledCourse, Integer>();
   
-  public PrioritizeCoursesCriteria(List<Course> courseList, HashMap<Course, Integer> courseScores) {
+  public PrioritizeCoursesCriteria(List<ScheduledCourse> courseList, HashMap<ScheduledCourse, Integer> courseScores) {
     this.courseList = courseList;
     this.courseScores = courseScores;
   }
@@ -29,7 +29,7 @@ public class PrioritizeCoursesCriteria implements Preference {
     int coursePrioritySum = 0;
     Collection<ScheduledCourse> courses = schedule.getCourses();
     
-    for (Course course : courses) {
+    for (ScheduledCourse course : courses) {
       int priorityIndex = courseScores.get(course);
       coursePrioritySum += priorityIndex;
     }
@@ -40,10 +40,10 @@ public class PrioritizeCoursesCriteria implements Preference {
   /**
    * Returns a list of course names, given a list of courses
    */
-  public List<String> getCourseListNames(List<Course> courses) {
+  public List<String> getCourseListNames(List<ScheduledCourse> courses) {
     List<String> names = new ArrayList<String>();
 
-    for (Course course : courses) {
+    for (ScheduledCourse course : courses) {
       names.add(course.getName());
     }
 
