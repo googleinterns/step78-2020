@@ -40,12 +40,7 @@ public class ScheduleDisplayHandler extends HttpServlet {
       Calendar client = Utils.loadCalendarClient();
 
       // Get the ordered schedules
-      // Temporary hard-coded schedules, will be retrieved from Rank.java later on 
-      Schedule schedule = TesterSchedule.scheduleOne();
-      Schedule schedule2 = TesterSchedule.scheduleTwo();
-      Collection<Schedule> schedules = new ArrayList<>();
-      schedules.add(schedule);
-      schedules.add(schedule2);
+      List<Schedule> schedules = ScheduleCreationHandler.createSchedules();
 
       List<String> calIds = new ArrayList<>();
 
