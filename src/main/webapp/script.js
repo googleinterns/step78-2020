@@ -75,3 +75,7 @@ function deleteUnchosenCalendars() {
 function deleteCalendar(calendarId) {
   fetch("/deleteCalendar?calId=" + calendarId, { method: 'POST' });
 }
+
+function login() {
+  window.location.href = "/auth";
+}
