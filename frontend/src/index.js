@@ -2,13 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-
-class Course extends React.Component {
-  
-}
-class Courses extends React.Component{
-
-}
+import Course from './Course';
 
 ReactDOM.render(
   <React.StrictMode>
