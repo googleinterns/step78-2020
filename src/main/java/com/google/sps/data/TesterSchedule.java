@@ -50,14 +50,17 @@ public final class TesterSchedule {
 
   public static Schedule scheduleOne() {
     List<TimeRange> times = monWedFri(10, 30, DURATION_90_MINUTES);
-    Section section = new Section("Ms. Akins", times);
+    Section lectureSection = new Section("Ms. Akins", times);
+    Section labSection = null;
     ScheduledCourse course1 = new ScheduledCourse("Philosophical Inquiry", "PHIL1001", 
-        "Philosophy", 4, true, section);
+        "Philosophy", 4, true, lectureSection, labSection);
 
     List<TimeRange> times2 = tuesThurs(16, 10, DURATION_2_HOUR);
-    Section section2 = new Section("Prof. Zimmerman", times2);
+    Section lectureSection2 = new Section("Prof. Zimmerman", times2);
+    List<TimeRange> labTimes2 = tuesThurs(19, 0, DURATION_30_MINUTES);
+    Section labSection2 = new Section("TA", labTimes2);
     ScheduledCourse course2 = new ScheduledCourse("Calc III", "MATH246", 
-        "Mathematics", 2, true, section2);
+        "Mathematics", 2, true, lectureSection2, labSection2);
     
     Collection<ScheduledCourse> courses = new ArrayList<>();
     courses.add(course1);
@@ -68,14 +71,16 @@ public final class TesterSchedule {
 
   public static Schedule scheduleTwo() {
     List<TimeRange> times = monWedFri(12, 00, DURATION_30_MINUTES);
-    Section section = new Section("Dr. Eggman", times);
+    Section lectureSection = new Section("Dr. Eggman", times);
+    Section labSection = null;
     ScheduledCourse course1 = new ScheduledCourse("Intro to Evil", "EVIL100", 
-        "Wrongdoing", 1, true, section);
+        "Wrongdoing", 1, true, lectureSection, labSection);
 
     List<TimeRange> times2 = tuesThurs(14, 20, DURATION_1_HOUR);
-    Section section2 = new Section("Prof. Johnson", times2);
+    Section lectureSection2 = new Section("Prof. Johnson", times2);
+    Section labSection2 = null;
     ScheduledCourse course2 = new ScheduledCourse("Intro to Psych", "PSYCH256", 
-        "Psychology", 3, true, section2);
+        "Psychology", 3, true, lectureSection2, labSection2);
     
     Collection<ScheduledCourse> courses = new ArrayList<>();
     courses.add(course1);

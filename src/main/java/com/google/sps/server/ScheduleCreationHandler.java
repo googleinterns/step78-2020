@@ -26,6 +26,7 @@ import com.google.sps.Scheduler;
  */
 public class ScheduleCreationHandler {
   
+  private static final int DURATION_30_MINUTES = 30;
   private static final int DURATION_90_MINUTES = 90;
   private static final int DURATION_3_HOUR = 180;
 
@@ -47,6 +48,7 @@ public class ScheduleCreationHandler {
 
     // Rank the schedules
     preferenceList.sortSchedules(schedules);
+    
     return schedules;
   }
 
@@ -56,21 +58,25 @@ public class ScheduleCreationHandler {
    * @return a List of the ordered Course objects      
    */
   private static List<Course> createCoursesPriority() {
-    Section section1 = new Section("Professor A", TesterSchedule.monWedFri(9, 00, DURATION_90_MINUTES));
+    Section lectureSection1 = new Section("Professor A", TesterSchedule.monWedFri(9, 00, DURATION_90_MINUTES));
+    Section labSection1 = null;
     Course course1 = new Course("Operating System", "15410", 
-        "Computer Science", 15, true, Arrays.asList(section1));
+        "Computer Science", 15, true, Arrays.asList(lectureSection1), Arrays.asList(labSection1));
     
-    Section section2 = new Section("Professor B", TesterSchedule.tuesThurs(10, 30, DURATION_90_MINUTES));
+    Section lectureSection2 = new Section("Professor B", TesterSchedule.tuesThurs(10, 30, DURATION_90_MINUTES));
+    Section labSection2 = new Section("TA B", TesterSchedule.tuesThurs(16, 0, DURATION_30_MINUTES));
     Course course2 = new Course("Compilers", "15411", 
-        "Computer Science", 15, false, Arrays.asList(section2));
+        "Computer Science", 15, false, Arrays.asList(lectureSection2), Arrays.asList(labSection2));
 
-    Section section3 = new Section("Professor C", TesterSchedule.tuesThurs(12, 00, DURATION_90_MINUTES));
+    Section lectureSection3 = new Section("Professor C", TesterSchedule.tuesThurs(12, 00, DURATION_90_MINUTES));
+    Section labSection3 = null;
     Course course3 = new Course("Algorithms", "15210", 
-        "Computer Science", 12, false, Arrays.asList(section3));
+        "Computer Science", 12, false, Arrays.asList(lectureSection3), Arrays.asList(labSection3));
 
-    Section section4 = new Section("Professor D", TesterSchedule.tuesThurs(13, 30, DURATION_90_MINUTES));
+    Section lectureSection4 = new Section("Professor D", TesterSchedule.tuesThurs(13, 30, DURATION_90_MINUTES));
+    Section labSection4 = null;
     Course course4 = new Course("Experimental Physics", "33104", 
-        "Physics", 9, true, Arrays.asList(section4));
+        "Physics", 9, true, Arrays.asList(lectureSection4), Arrays.asList(labSection4));
 
     return Arrays.asList(course1, course2, course3, course4);
   }

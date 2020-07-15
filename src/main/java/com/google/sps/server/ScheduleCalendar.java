@@ -74,11 +74,19 @@ public class ScheduleCalendar {
 
       // for each course in the schedule, add an event to the calendar
       for (ScheduledCourse currentCourse : schedule.getCourses()) {
-        List<TimeRange> sectionTimes = currentCourse.getSection().getMeetingTimes();
-        for (int i = 0; i < sectionTimes.size(); i++) {
-          String startTime = CalendarUtils.calculateStartTime(sectionTimes.get(i), month, year, nextSun);
-          String endTime = CalendarUtils.calculateEndTime(sectionTimes.get(i), month, year, nextSun);
+        List<TimeRange> lectureSectionTimes = currentCourse.getLectureSection().getMeetingTimes();
+        for (int i = 0; i < lectureSectionTimes.size(); i++) {
+          String startTime = CalendarUtils.calculateStartTime(lectureSectionTimes.get(i), month, year, nextSun);
+          String endTime = CalendarUtils.calculateEndTime(lectureSectionTimes.get(i), month, year, nextSun);
           addEvent(currentCourse, startTime, endTime);
+        }
+        if (currentCourse.getLabSection() != null) {
+          List<TimeRange> labSectionTimes = currentCourse.getLabSection().getMeetingTimes();
+          for (int j = 0; j < labSectionTimes.size(); j++) {
+            String startTime = CalendarUtils.calculateStartTime(labSectionTimes.get(j), month, year, nextSun);
+            String endTime = CalendarUtils.calculateEndTime(labSectionTimes.get(j), month, year, nextSun);
+            addEvent(currentCourse, startTime, endTime);
+          }
         }
       } 
     } catch (IOException e) {
