@@ -8,7 +8,6 @@ class Criterion extends React.Component {
   render() {
     return (
       <Card>
-        <h2>Preferences</h2>
         <TimePreference />
         <SubjectNumberPreference />
       </Card>
