@@ -33,7 +33,6 @@ public final class SchedulerTest {
   private static final int DURATION_60_MINUTES = 60;
   private static final int DURATION_90_MINUTES = 90;
   private static final int DURATION_1_HOUR = 60;
-  private static final int DURATION_2_HOUR = 120;
   
 
   private Scheduler scheduler;
@@ -66,7 +65,7 @@ public final class SchedulerTest {
   public void singleCourseValidSchedule() {
     Section section = new Section("Dr. Eggman", monWedFri(10, 30, DURATION_90_MINUTES));
     ScheduledCourse course1 = new ScheduledCourse("Intro to Evil", "EVIL100", 
-        "Wrongdoing", 1, true, section);
+        "Wrongdoing", 1, true, section, null);
     
     Collection<Schedule> actual = scheduler.generateSchedules(
         Arrays.asList(course1), new Invariants(1, 2));
@@ -78,7 +77,7 @@ public final class SchedulerTest {
   public void notEnoughCreditsNoSchedules() {
     Section section = new Section("Dr. Eggman", monWedFri(10, 30, DURATION_90_MINUTES));
     ScheduledCourse course1 = new ScheduledCourse("Intro to Evil", "EVIL100", 
-        "Wrongdoing", 1, true, section);
+        "Wrongdoing", 1, true, section, null);
     
     Collection<Schedule> actual = scheduler.generateSchedules(Arrays.asList(course1), 
         new Invariants(3, 5));
@@ -91,9 +90,9 @@ public final class SchedulerTest {
     Section section2 = new Section("Sonic", tuesThurs(10, 30, DURATION_60_MINUTES));
 
     Course course1 = new Course("Jumping High", "HERO1983", 
-        "Heroism", 1, false, Arrays.asList(section1));
+        "Heroism", 1, false, Arrays.asList(section1), Collections.emptyList());
     Course course2 = new Course("Running Fast", "HERO1991",
-        "Heroism", 1, false, Arrays.asList(section2));
+        "Heroism", 1, false, Arrays.asList(section2), Collections.emptyList());
       
     HashSet<Schedule> actual = new HashSet<>(
           scheduler.generateSchedules(Arrays.asList(course1, course2), new Invariants(1, 2)));
@@ -119,9 +118,9 @@ public final class SchedulerTest {
     Section section2 = new Section("Sonic", monWedFri(10, 30, DURATION_60_MINUTES));
 
     Course course1 = new Course("Jumping High", "HERO1983", 
-        "Heroism", 1, false, Arrays.asList(section1));
+        "Heroism", 1, false, Arrays.asList(section1), Collections.emptyList());
     Course course2 = new Course("Running Fast", "HERO1991",
-        "Heroism", 1, false, Arrays.asList(section2));
+        "Heroism", 1, false, Arrays.asList(section2), Collections.emptyList());
       
     HashSet<Schedule> actual = new HashSet<>(
         scheduler.generateSchedules(Arrays.asList(course1, course2), new Invariants(1, 2)));
@@ -143,11 +142,11 @@ public final class SchedulerTest {
     Section section3 = new Section("Megaman", tuesThurs(15, 0, DURATION_1_HOUR));
    
     Course course1 = new Course("Jumping High", "HERO1983", 
-        "Heroism", 1, true, Arrays.asList(section1));
+        "Heroism", 1, true, Arrays.asList(section1), Collections.emptyList());
     Course course2 = new Course("Running Fast", "HERO1991",
-        "Heroism", 1, false, Arrays.asList(section2));
+        "Heroism", 1, false, Arrays.asList(section2), Collections.emptyList());
     Course course3 = new Course("Shooting Lemons", "HERO1987",
-        "Heroism", 1, false, Arrays.asList(section3));
+        "Heroism", 1, false, Arrays.asList(section3), Collections.emptyList());
 
     HashSet<Schedule> actual = new HashSet<>(scheduler.generateSchedules(
         Arrays.asList(course2, course1, course3), new Invariants(2, 3)));
@@ -172,11 +171,11 @@ public final class SchedulerTest {
     Section section = new Section("Dr. Eggman", tuesThurs(13, 30, DURATION_30_MINUTES));
 
     Course course1 = new Course("Jumping High", "HERO1983", 
-        "Heroism", 1, true, Arrays.asList(section1));
+        "Heroism", 1, true, Arrays.asList(section1), Collections.emptyList());
     Course course2 = new Course("Running Fast", "HERO1991",
-        "Heroism", 1, true, Arrays.asList(section2));
+        "Heroism", 1, true, Arrays.asList(section2), Collections.emptyList());
     Course course3 = new Course("Intro to Evil", "EVIL100", 
-        "Wrongdoing", 1, false, Arrays.asList(section));
+        "Wrongdoing", 1, false, Arrays.asList(section), Collections.emptyList());
 
     List<Schedule> actual = 
         scheduler.generateSchedules(Arrays.asList(course1, course2, course3), new Invariants(1, 2));
@@ -191,11 +190,11 @@ public final class SchedulerTest {
     Section section = new Section("Dr. Eggman", tuesThurs(13, 30, DURATION_30_MINUTES));
 
     Course course1 = new Course("Jumping High", "HERO1983", 
-        "Heroism", 1, true, Arrays.asList(section1));
+        "Heroism", 1, true, Arrays.asList(section1), Collections.emptyList());
     Course course2 = new Course("Running Fast", "HERO1991",
-        "Heroism", 1, true, Arrays.asList(section2));
+        "Heroism", 1, true, Arrays.asList(section2), Collections.emptyList());
     Course course3 = new Course("Intro to Evil", "EVIL100", 
-        "Wrongdoing", 1, true, Arrays.asList(section));
+        "Wrongdoing", 1, true, Arrays.asList(section), Collections.emptyList());
 
     List<Schedule> actual = 
         scheduler.generateSchedules(Arrays.asList(course1, course3, course2), new Invariants(1, 2));
@@ -211,26 +210,71 @@ public final class SchedulerTest {
     Section section4 = new Section("Sonic", monWedFri(16, 00, DURATION_60_MINUTES));
 
     Course course1 = new Course("Jumping High", "HERO1983",
-        "Heroism", 1, true, Arrays.asList(section1, section2));
+        "Heroism", 1, true, Arrays.asList(section1, section2), Collections.emptyList());
     Course course2 = new Course("Running Fast", "Hero1991",
-        "Heroism", 1, true, Arrays.asList(section3, section4));
+        "Heroism", 1, true, Arrays.asList(section3, section4), Collections.emptyList());
 
     HashSet<Schedule> actual = new HashSet<>(scheduler.generateSchedules(
         Arrays.asList(course1, course2), new Invariants(1, 3)));
 
     ScheduledCourse expected1 = new ScheduledCourse("Jumping High", "HERO1983",
-        "Heroism", 1, true, section1);
+        "Heroism", 1, true, section1, null);
     ScheduledCourse expected2 = new ScheduledCourse("Jumping High", "HERO1983",
-        "Heroism", 1, true, section2);
+        "Heroism", 1, true, section2, null);
     ScheduledCourse expected3 = new ScheduledCourse("Running Fast", "Hero1991",
-        "Heroism", 1, true, section3);
+        "Heroism", 1, true, section3, null);
     ScheduledCourse expected4 = new ScheduledCourse("Running Fast", "Hero1991",
-        "Heroism", 1, true, section4);
+        "Heroism", 1, true, section4, null);
 
     Schedule schedule1 = new Schedule(Arrays.asList(expected1, expected4));
     Schedule schedule2 = new Schedule(Arrays.asList(expected2, expected3));
 
     HashSet<Schedule> expected = new HashSet<>(Arrays.asList(schedule1, schedule2));
+    Assert.assertEquals(expected, actual);
+  }
+
+  @Test
+  public void LabLectureSectionsCountedAsOne()  {
+    Section lectureSection1 = new Section("Mario", monWedFri(10, 0, DURATION_30_MINUTES));
+    Section labSection1 = new Section("Trampoline", tuesThurs(13, 0, DURATION_60_MINUTES));
+    Section otherClass = new Section("IDK", tuesThurs(13, 30, DURATION_60_MINUTES));
+
+    Course course1 = new Course("Jumping High", "Hero1983", "Heroism", 1, false, 
+        Arrays.asList(lectureSection1), Arrays.asList(labSection1));
+    Course course2 = new Course("Smthn", "1337", "Testing", 1, false, 
+        Arrays.asList(otherClass), Collections.emptyList());
+    
+    HashSet<Schedule> actual = new HashSet<>(scheduler.generateSchedules(
+        Arrays.asList(course1, course2), new Invariants(2, 2)));
+    
+    Assert.assertEquals(Collections.emptyList(), actual);
+  }
+
+  @Test
+  public void nonRequiredWithLabBothIncluded() {
+    Section lectureSection1 = new Section("Mario", monWedFri(10, 0, DURATION_30_MINUTES));
+    Section labSection1 = new Section("Trampoline", tuesThurs(13, 0, DURATION_60_MINUTES));
+    Section labSection2 = new Section("Working", tuesThurs(10, 0, DURATION_30_MINUTES));
+    Section otherSection = new Section("IDK", tuesThurs(13, 30, DURATION_60_MINUTES));
+
+    Course course1 = new Course("Jumping High", "Hero1983", "Heroism", 1, false, 
+        Arrays.asList(lectureSection1), Arrays.asList(labSection1, labSection2));
+    Course course2 = new Course("Smthn", "1337", "Testing", 1, false, 
+        Arrays.asList(otherSection), Collections.emptyList());
+
+    HashSet<Schedule> actual = new HashSet<>(scheduler.generateSchedules(
+        Arrays.asList(course1, course2), new Invariants(1, 2)));
+
+    ScheduledCourse lab1 = new ScheduledCourse(course1, lectureSection1, labSection1);
+    ScheduledCourse lab2 = new ScheduledCourse(course1, lectureSection1, labSection2);
+    ScheduledCourse otherCourse = new ScheduledCourse(course2, otherSection);
+
+    Schedule schedule1 = new Schedule(Arrays.asList(lab2, otherCourse));
+    Schedule schedule2 = new Schedule(Arrays.asList(lab1));
+    Schedule schedule3 = new Schedule(Arrays.asList(lab2));
+    Schedule schedule4 = new Schedule(Arrays.asList(otherCourse));
+    HashSet<Schedule> expected = new HashSet<>(Arrays.asList(schedule1, schedule2, schedule3, schedule4));
+
     Assert.assertEquals(expected, actual);
   }
 }
