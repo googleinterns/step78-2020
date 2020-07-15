@@ -1,6 +1,6 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Input, Card, CardContent, Switch } from '@material-ui/core';
+import { Input, Card, CardContent, Switch, FormControlLabel } from '@material-ui/core';
 
 class Course extends React.Component {
   constructor(props) {
