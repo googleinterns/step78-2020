@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import Criterion from './Criterion';
 import Course from './Course';
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Course />
+    <Criterion />
   </React.StrictMode>,
   document.getElementById('root')
 )
