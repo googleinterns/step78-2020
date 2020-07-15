@@ -42,25 +42,27 @@ class Course extends React.Component {
     return (
       <Card>
         <CardContent>
-          <Input id="name-input" placeholder="Course Name" 
+          <Input placeholder="Course Name" inputProps={{ 'aria-label': 'description' }} 
             value={this.state.name} onChange={this.handleNameChange} />
-          <Input id="id-input" placeholder="Course ID"
+          <Input placeholder="Course ID" inputProps={{ 'aria-label': 'description' }}
             value={this.state.courseID} onChange={this.handleIDChange} />
-          <Input id="subject-input" placeholder="Subject"
+          <Input placeholder="Subject" inputProps={{ 'aria-label': 'description' }}
             value={this.state.subject} onChange={this.handleSubjectChange} />
 
-          //TODO: implement react-number-format (https://github.com/s-yadav/react-number-format)
-          <Input id="credits-input" placeholder="Credits" 
+          {/* //TODO: implement react-number-format (https://github.com/s-yadav/react-number-format) */}
+          <Input placeholder="Credits" inputProps={{ 'aria-label': 'description' }}
             value={this.state.subject} onChange={this.handleSubjectChange} />
             
-          <FormControlLabel>
+          {/* <FormControlLabel>
             control = {<Switch id="isRequired-input" checked={this.state.isRequired} onChange={this.handleisRequiredChange} />}
             label = "Required"
-          </FormControlLabel>
+          </FormControlLabel> */}
 
-          //TODO: Implement proper section inputs
+          {/* //TODO: Implement proper section inputs */}
         </CardContent>
       </Card>
     );
   }
 }
+
+export default Course;
