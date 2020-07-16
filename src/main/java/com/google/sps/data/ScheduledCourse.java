@@ -87,9 +87,15 @@ public class ScheduledCourse extends Course {
   public boolean equals(Object other) {
     if (other instanceof ScheduledCourse) {
       ScheduledCourse otherCourse = (ScheduledCourse) other;
+      boolean labsEqual = false;
+      if(this.labSection != null && otherCourse.labSection != null) {
+        labsEqual = otherCourse.labSection.equals(this.labSection);
+      } else if (this.labSection == null && otherCourse.labSection == null) {
+        labsEqual = true;
+      }
       return super.equals(other) 
         && this.lectureSection.equals(otherCourse.lectureSection)
-        && this.labSection.equals(otherCourse.labSection);
+        && labsEqual;
     }
 
     return false;

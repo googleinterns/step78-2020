@@ -64,6 +64,24 @@ public final class SchedulerTest {
   }
 
   @Test
+  public void testScheduledCourseEquality() {
+    Section section = new Section("Dr. Eggman", monWedFri(10, 30, DURATION_90_MINUTES));
+    Course course1 = new Course("Intro to Evil", "EVIL100", 
+        "Wrongdoing", 1, true, Arrays.asList(section), Collections.emptyList());
+
+    ScheduledCourse t1 = new ScheduledCourse(course1, section);
+    ScheduledCourse t2 = new ScheduledCourse(course1, section, null);
+    ScheduledCourse t3 = new ScheduledCourse("Intro to Evil", "EVIL100", "Wrongdoing", 1, true, section);
+    ScheduledCourse t4 = new ScheduledCourse("Intro to Evil", "EVIL100", "Wrongdoing", 1, true, section, null);
+    ScheduledCourse[] courses = {t1, t2, t3, t4};
+    for(int i = 0; i < 4; i++) {
+      for (int j = i + 1; j < 4; j++){
+        Assert.assertEquals(courses[i], courses[j]);
+      }
+    }
+  }
+
+  @Test
   public void singleCourseValidSchedule() {
     Section section = new Section("Dr. Eggman", monWedFri(10, 30, DURATION_90_MINUTES));
     Course course1 = new Course("Intro to Evil", "EVIL100", 
