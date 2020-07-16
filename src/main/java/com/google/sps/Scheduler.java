@@ -79,26 +79,50 @@ public final class Scheduler {
     }
 
     Course course = availableCourses.remove(0);
-    List<Section> courseSections = course.getSections();
-    List<Section> scheduleSections = currentSchedule.stream()
-        .map(c -> c.getSection())
-        .collect(Collectors.toList());
+    List<Section> courseLectureSections = course.getLectureSections();
+    List<Section> courseLabSections = course.getLabSections();
+    boolean hasLabs = !courseLabSections.isEmpty();
+
+    List<Section> scheduleSections = new ArrayList<>();
+    for (ScheduledCourse c : currentSchedule) {
+      scheduleSections.add(c.getLectureSection());
+      if (c.getLabSection() != null) {
+        scheduleSections.add(c.getLabSection());
+      }
+    }
 
     /*
      * Iterate over each section in the current course and check for overlap. If the
      * section doesn't overlap and adding it would result in a valid schedule, add
      * it and make a new recursive call.
      */
-    for (Section section : courseSections) {
-      boolean doesNotOverlapSchedule = !sectionsOverlap(section, scheduleSections);
-      boolean doesNotExceedCreditLimit = 
-          currCredits + course.getCredits() <= invariants.getMaxCredits();
-      
-      if (doesNotOverlapSchedule && doesNotExceedCreditLimit) {
-        List<ScheduledCourse> newScheduledCourseLiist = new ArrayList<>(currentSchedule);
-        newScheduledCourseLiist.add(new ScheduledCourse(course, section));
-        generateSchedulesHelper(new ArrayList<>(availableCourses), 
-            newScheduledCourseLiist, invariants, generatedScheduledCourseLists);
+    if (hasLabs) {
+      for (Section lectureSection : courseLectureSections) {
+        for (Section labSection : courseLabSections) {
+          boolean doesNotOverlapSchedule = !sectionsOverlap(lectureSection, labSection, scheduleSections);
+          boolean doesNotExceedCreditLimit = 
+              currCredits + course.getCredits() <= invariants.getMaxCredits();
+          
+          if (doesNotOverlapSchedule && doesNotExceedCreditLimit) {
+            List<ScheduledCourse> newScheduledCourseList = new ArrayList<>(currentSchedule);
+            newScheduledCourseList.add(new ScheduledCourse(course, lectureSection, labSection));
+            generateSchedulesHelper(new ArrayList<>(availableCourses), 
+                newScheduledCourseList, invariants, generatedScheduledCourseLists);
+          }
+        }
+      }
+    } else {
+      for (Section lectureSection : courseLectureSections) {
+        boolean doesNotOverlapSchedule = !sectionsOverlap(lectureSection, scheduleSections);
+        boolean doesNotExceedCreditLimit = 
+            currCredits + course.getCredits() <= invariants.getMaxCredits();
+        
+        if (doesNotOverlapSchedule && doesNotExceedCreditLimit) {
+          List<ScheduledCourse> newScheduledCourseList = new ArrayList<>(currentSchedule);
+          newScheduledCourseList.add(new ScheduledCourse(course, lectureSection));
+          generateSchedulesHelper(new ArrayList<>(availableCourses), 
+              newScheduledCourseList, invariants, generatedScheduledCourseLists);
+        }
       }
     }
 
@@ -140,6 +164,19 @@ public final class Scheduler {
       }
     }
     
+    return false;
+  }
+
+  /**
+   * Checks if two sections overlap with any of the sections in another list.
+   */
+  private boolean sectionsOverlap(Section toCheck1, Section toCheck2, List<Section> sections) {
+    for (Section section : sections) {
+      if (toCheck1.overlaps(section) || toCheck2.overlaps(section)) {
+        return true;
+      }
+    }
+
     return false;
   }
 }
