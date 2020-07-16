@@ -150,6 +150,36 @@ public final class RankTest {
     return new Schedule(Arrays.asList(course1, course3));
   }
 
+  // Creates the Big Schedule 1
+  public static List<Course> createBigScheduleCourses() {
+    Section section1 = new Section("Professor A", monWedFri(10, 30, DURATION_90_MINUTES));
+    Recitation recitation1 = new Recitation(Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 13, 30, DURATION_1_HOUR)));
+    ScheduledCourse course1 = new ScheduledCourse("Parallel and Sequential Data Structures and Algorithms", 
+    "15210", "Computer Science", 12, true, section1, recitation1);
+
+    Section section2 = new Section("Professor B", monFri(12, 00, DURATION_90_MINUTES));
+    Recitation recitation2 = new Recitation(Arrays.asList());
+    ScheduledCourse course2 = new ScheduledCourse("Research and Innovation in Computer Science", "15300", 
+    "Computer Science", 9, true, section2, recitation2);
+
+    Section section3 = new Section("Professor C", tuesThurs(9, 00, DURATION_90_MINUTES));
+    Recitation recitation3 = new Recitation(Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 13, 30, DURATION_1_HOUR)));
+    ScheduledCourse course3 = new ScheduledCourse("Compiler Design", "15411", 
+    "Computer Science", 15, true, section3, recitation3);
+
+    Section section4 = new Section("Professor D", tuesThurs(15, 00, DURATION_90_MINUTES));
+    Recitation recitation4 = new Recitation(Arrays.asList());
+    ScheduledCourse course4 = new ScheduledCourse("Organizational Behavior", 
+    "70311", "Tepper", 9, false, section4, recitation4);
+
+    Section section5 = new Section("Professor E", Arrays.asList(TimeRange.fromStartDuration(TimeRange.WEDNESDAY, 14, 30, DURATION_90_MINUTES)));
+    Recitation recitation5 = new Recitation(Arrays.asList(monFri(14, 30, DURATION_60_MINUTES)));
+    ScheduledCourse course5 = new ScheduledCourse("Intro to Civil Engineering", 
+    "12100", "Civil Engineering", 0, false, section5, recitation5);
+
+    return Arrays.asList(course1, course2, course3, course4, course5);
+  }
+
 
   @Test
   public void emptyPreferenceList() {
