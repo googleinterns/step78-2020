@@ -15,6 +15,8 @@
 package com.google.sps;
 
 import com.google.sps.data.*;
+
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -64,20 +66,20 @@ public final class SchedulerTest {
   @Test
   public void singleCourseValidSchedule() {
     Section section = new Section("Dr. Eggman", monWedFri(10, 30, DURATION_90_MINUTES));
-    ScheduledCourse course1 = new ScheduledCourse("Intro to Evil", "EVIL100", 
-        "Wrongdoing", 1, true, section, null);
+    Course course1 = new Course("Intro to Evil", "EVIL100", 
+        "Wrongdoing", 1, true, Arrays.asList(section), Collections.emptyList());
     
-    Collection<Schedule> actual = scheduler.generateSchedules(
+    List<Schedule> actual = scheduler.generateSchedules(
         Arrays.asList(course1), new Invariants(1, 2));
-    Schedule expected = new Schedule(Arrays.asList(new ScheduledCourse(course1, section)));
-    Assert.assertEquals(Arrays.asList(expected), actual);
+    List<Schedule> expected = Arrays.asList(new Schedule(Arrays.asList(new ScheduledCourse(course1, section))));
+    Assert.assertEquals(expected, actual);
   }
 
   @Test
   public void notEnoughCreditsNoSchedules() {
     Section section = new Section("Dr. Eggman", monWedFri(10, 30, DURATION_90_MINUTES));
-    ScheduledCourse course1 = new ScheduledCourse("Intro to Evil", "EVIL100", 
-        "Wrongdoing", 1, true, section, null);
+    Course course1 = new Course("Intro to Evil", "EVIL100", 
+        "Wrongdoing", 1, true, Arrays.asList(section), Collections.emptyList());
     
     Collection<Schedule> actual = scheduler.generateSchedules(Arrays.asList(course1), 
         new Invariants(3, 5));
@@ -96,6 +98,8 @@ public final class SchedulerTest {
       
     HashSet<Schedule> actual = new HashSet<>(
           scheduler.generateSchedules(Arrays.asList(course1, course2), new Invariants(1, 2)));
+
+    ArrayList<Schedule> testStore = new ArrayList<>(actual);
 
     ScheduledCourse schedCourse1 = new ScheduledCourse(course1, section1);
     ScheduledCourse schedCourse2 = new ScheduledCourse(course2, section2);
@@ -218,13 +222,13 @@ public final class SchedulerTest {
         Arrays.asList(course1, course2), new Invariants(1, 3)));
 
     ScheduledCourse expected1 = new ScheduledCourse("Jumping High", "HERO1983",
-        "Heroism", 1, true, section1, null);
+        "Heroism", 1, true, section1);
     ScheduledCourse expected2 = new ScheduledCourse("Jumping High", "HERO1983",
-        "Heroism", 1, true, section2, null);
+        "Heroism", 1, true, section2);
     ScheduledCourse expected3 = new ScheduledCourse("Running Fast", "Hero1991",
-        "Heroism", 1, true, section3, null);
+        "Heroism", 1, true, section3);
     ScheduledCourse expected4 = new ScheduledCourse("Running Fast", "Hero1991",
-        "Heroism", 1, true, section4, null);
+        "Heroism", 1, true, section4);
 
     Schedule schedule1 = new Schedule(Arrays.asList(expected1, expected4));
     Schedule schedule2 = new Schedule(Arrays.asList(expected2, expected3));
@@ -244,8 +248,8 @@ public final class SchedulerTest {
     Course course2 = new Course("Smthn", "1337", "Testing", 1, false, 
         Arrays.asList(otherClass), Collections.emptyList());
     
-    HashSet<Schedule> actual = new HashSet<>(scheduler.generateSchedules(
-        Arrays.asList(course1, course2), new Invariants(2, 2)));
+    List<Schedule> actual = scheduler.generateSchedules(
+        Arrays.asList(course1, course2), new Invariants(2, 2));
     
     Assert.assertEquals(Collections.emptyList(), actual);
   }
