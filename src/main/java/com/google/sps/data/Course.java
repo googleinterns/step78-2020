@@ -60,7 +60,7 @@ public class Course {
     return this.isRequired;
   }
 
-  public List<Section> getlectureSections() {
+  public List<Section> getLectureSections() {
     return this.lectureSections;
   }
 
