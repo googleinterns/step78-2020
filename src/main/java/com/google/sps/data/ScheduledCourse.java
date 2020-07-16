@@ -43,9 +43,26 @@ public class ScheduledCourse extends Course {
   }
 
     /**
+   * Constructor for the Scheduled Course object.
+   * @param name The course name.
+   * @param courseID The course ID.
+   * @param subject The course subject.
+   * @param credits The number of credits the course is worth.
+   * @param isRequired Whether or not the course is required.
+   * @param section The course's section (professor and times).
+   */
+  public ScheduledCourse(String name, String courseID, String subject, float credits, 
+      boolean isRequired, Section lectureSection) {
+    super(name, courseID, subject, credits, isRequired, Collections.emptyList(), Collections.emptyList());
+    this.lectureSection = lectureSection;
+    this.labSection = null;
+  }
+
+    /**
    * Constructor for the Scheduled course object.
    * @param course The course to add to a schedule
-   * @param section The course's section (professor and times)
+   * @param lectureSection The course's lecture Section (professor and times)
+   * @param labSection The course's lab Section
    */
   public ScheduledCourse(Course course, Section lectureSection, Section labSection) {
     super(course.getName(), course.getCourseID(), course.getSubject(), course.getCredits(), 
