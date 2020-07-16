@@ -24,7 +24,7 @@ public class PrioritizeCoursesCriteria implements Criterion {
     // Instantiate the HashMap, courseScores
     for (int i = 0; i < courseList.size(); i++) {
       Course currentCourse = courseList.get(i);
-      for(Section section: currentCourse.getSections()){
+      for(Section section: currentCourse.getlectureSections()){
         ScheduledCourse convertedCourse = new ScheduledCourse(currentCourse, section);
         courseScores.put(convertedCourse, courseList.size()-i);
       }

@@ -43,7 +43,7 @@ public class RestrictTimesCriteria implements Criterion {
     List<TimeRange> times = new ArrayList<TimeRange>();
 
     for(ScheduledCourse course : courses) {
-      times.addAll(course.getSection().getMeetingTimes());
+      times.addAll(course.getlectureSection().getMeetingTimes());
     }
 
     return times;
