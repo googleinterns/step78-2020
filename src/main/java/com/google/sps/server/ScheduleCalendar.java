@@ -97,7 +97,7 @@ public class ScheduleCalendar {
         addEvent(currentCourse, startTime, endTime);
       }
     } catch (IOException e) {
-      System.out.println("Couldn't iterate through section times");
+      System.out.println("Couldn't add course section to the calendar");
     }
   }
 
