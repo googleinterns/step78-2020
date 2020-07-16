@@ -76,16 +76,12 @@ public class ScheduleCalendar {
       for (ScheduledCourse currentCourse : schedule.getCourses()) {
         List<TimeRange> lectureSectionTimes = currentCourse.getLectureSection().getMeetingTimes();
         for (int i = 0; i < lectureSectionTimes.size(); i++) {
-          String startTime = CalendarUtils.calculateStartTime(lectureSectionTimes.get(i), month, year, nextSun);
-          String endTime = CalendarUtils.calculateEndTime(lectureSectionTimes.get(i), month, year, nextSun);
-          addEvent(currentCourse, startTime, endTime);
+          addEvent(currentCourse, lectureSectionTimes.get(i), month, year, nextSun);
         }
         if (currentCourse.getLabSection() != null) {
           List<TimeRange> labSectionTimes = currentCourse.getLabSection().getMeetingTimes();
           for (int j = 0; j < labSectionTimes.size(); j++) {
-            String startTime = CalendarUtils.calculateStartTime(labSectionTimes.get(j), month, year, nextSun);
-            String endTime = CalendarUtils.calculateEndTime(labSectionTimes.get(j), month, year, nextSun);
-            addEvent(currentCourse, startTime, endTime);
+            addEvent(currentCourse, labSectionTimes.get(j), month, year, nextSun);
           }
         }
       } 
@@ -107,12 +103,16 @@ public class ScheduleCalendar {
    * Helper function to add a course in the schedule to the calendar, as an event. 
    *
    * @param course the course being added 
-   * @param calendarId the id of the secondary calendar to add the course to
-   * @param startTime the start time of the course
-   * @param endTime the end time of the course
+   * @param sectionTime the timerange of the current course section
+   * @param month the current month, to be used in calculating the start and end times
+   * @param year the current year, to be used in calculating the start and end times
+   * @param nextSun the date of the next Sunday, to be used in calculating the start and end times
    */
-  private void addEvent(Course course, String startTime, String endTime) throws IOException {
+  private void addEvent(ScheduledCourse course, TimeRange sectionTime, int month, int year, int nextSun) throws IOException {
     try {  
+      String startTime = CalendarUtils.calculateStartTime(sectionTime, month, year, nextSun);
+      String endTime = CalendarUtils.calculateEndTime(sectionTime, month, year, nextSun);
+
       /* Get an event from the primary calendar to get the timezone offset from the 
        event (to use for properly adjusting the start and end times to the correct timezone) */
       Events events = this.client.events().list("primary").execute();
