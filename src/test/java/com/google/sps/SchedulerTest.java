@@ -74,8 +74,8 @@ public final class SchedulerTest {
     ScheduledCourse t3 = new ScheduledCourse("Intro to Evil", "EVIL100", "Wrongdoing", 1, true, section);
     ScheduledCourse t4 = new ScheduledCourse("Intro to Evil", "EVIL100", "Wrongdoing", 1, true, section, null);
     ScheduledCourse[] courses = {t1, t2, t3, t4};
-    for(int i = 0; i < 4; i++) {
-      for (int j = i + 1; j < 4; j++){
+    for(int i = 0; i < courses.length; i++) {
+      for (int j = i + 1; j < courses.length; j++){
         Assert.assertEquals(courses[i], courses[j]);
       }
     }
@@ -116,8 +116,6 @@ public final class SchedulerTest {
       
     HashSet<Schedule> actual = new HashSet<>(
           scheduler.generateSchedules(Arrays.asList(course1, course2), new Invariants(1, 2)));
-
-    ArrayList<Schedule> testStore = new ArrayList<>(actual);
 
     ScheduledCourse schedCourse1 = new ScheduledCourse(course1, section1);
     ScheduledCourse schedCourse2 = new ScheduledCourse(course2, section2);
@@ -256,7 +254,7 @@ public final class SchedulerTest {
   }
 
   @Test
-  public void LabLectureSectionsCountedAsOne()  {
+  public void labLectureSectionsCountedAsOne()  {
     Section lectureSection1 = new Section("Mario", monWedFri(10, 0, DURATION_30_MINUTES));
     Section labSection1 = new Section("Trampoline", tuesThurs(13, 0, DURATION_60_MINUTES));
     Section otherClass = new Section("IDK", tuesThurs(13, 30, DURATION_60_MINUTES));
