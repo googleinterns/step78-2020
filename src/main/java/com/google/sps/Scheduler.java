@@ -96,32 +96,30 @@ public final class Scheduler {
      * section doesn't overlap and adding it would result in a valid schedule, add
      * it and make a new recursive call.
      */
-    if (hasLabs) {
+    boolean doesNotExceedCreditLimit = 
+        currCredits + course.getCredits() <= invariants.getMaxCredits();
+    if (doesNotExceedCreditLimit) {
       for (Section lectureSection : courseLectureSections) {
         for (Section labSection : courseLabSections) {
           boolean doesNotOverlapSchedule = !sectionsOverlap(lectureSection, labSection, scheduleSections);
-          boolean doesNotExceedCreditLimit = 
-              currCredits + course.getCredits() <= invariants.getMaxCredits();
           
-          if (doesNotOverlapSchedule && doesNotExceedCreditLimit) {
+          if (doesNotOverlapSchedule) {
             List<ScheduledCourse> newScheduledCourseList = new ArrayList<>(currentSchedule);
             newScheduledCourseList.add(new ScheduledCourse(course, lectureSection, labSection));
             generateSchedulesHelper(new ArrayList<>(availableCourses), 
                 newScheduledCourseList, invariants, generatedScheduledCourseLists);
           }
         }
-      }
-    } else {
-      for (Section lectureSection : courseLectureSections) {
-        boolean doesNotOverlapSchedule = !sectionsOverlap(lectureSection, scheduleSections);
-        boolean doesNotExceedCreditLimit = 
-            currCredits + course.getCredits() <= invariants.getMaxCredits();
-        
-        if (doesNotOverlapSchedule && doesNotExceedCreditLimit) {
-          List<ScheduledCourse> newScheduledCourseList = new ArrayList<>(currentSchedule);
-          newScheduledCourseList.add(new ScheduledCourse(course, lectureSection));
-          generateSchedulesHelper(new ArrayList<>(availableCourses), 
-              newScheduledCourseList, invariants, generatedScheduledCourseLists);
+
+        if (!hasLabs) {
+          boolean doesNotOverlapSchedule = !sectionsOverlap(lectureSection, scheduleSections);
+          
+          if (doesNotOverlapSchedule) {
+            List<ScheduledCourse> newScheduledCourseList = new ArrayList<>(currentSchedule);
+            newScheduledCourseList.add(new ScheduledCourse(course, lectureSection));
+            generateSchedulesHelper(new ArrayList<>(availableCourses), 
+                newScheduledCourseList, invariants, generatedScheduledCourseLists);
+          }
         }
       }
     }
