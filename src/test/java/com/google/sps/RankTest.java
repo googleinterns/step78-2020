@@ -72,19 +72,19 @@ public final class RankTest {
   public static List<Course> createCoursesPriority() {
     Section section1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
     Course course1 = new Course("Operating System", "15410", 
-        "Computer Science", 15, true, Arrays.asList(section1));
+        "Computer Science", 15, true, Arrays.asList(section1), Arrays.asList());
     
     Section section2 = new Section("Professor B", tuesThurs(10, 30, DURATION_90_MINUTES));
     Course course2 = new Course("Compilers", "15411", 
-        "Computer Science", 15, true, Arrays.asList(section2));
+        "Computer Science", 15, true, Arrays.asList(section2), Arrays.asList());
 
     Section section3 = new Section("Professor C", tuesThurs(12, 00, DURATION_90_MINUTES));
     Course course3 = new Course("Algorithms", "15210", 
-        "Computer Science", 15, true, Arrays.asList(section3));
+        "Computer Science", 15, true, Arrays.asList(section3), Arrays.asList());
 
     Section section4 = new Section("Professor D", tuesThurs(13, 30, DURATION_90_MINUTES));
     Course course4 = new Course("Experimental Physics", "33104", 
-        "Physics", 33, true, Arrays.asList(section4));
+        "Physics", 33, true, Arrays.asList(section4), Arrays.asList());
 
     return Arrays.asList(course1, course2, course3, course4);
   }
