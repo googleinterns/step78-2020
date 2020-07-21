@@ -5,11 +5,44 @@ import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 
 class BasicInfo extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.updateMinCredits = this.updateMinCredits.bind(this);
+    this.updateMaxCredits = this.updateMaxCredits.bind(this);
+    this.updateTermStartDate = this.updateTermStartDate.bind(this);
+    this.updateTermEndDate = this.updateTermEndDate.bind(this);
+  }
+
+  updateMinCredits(minCredits) {
+    this.props.updateMinCredits(minCredits);
+  }
+
+  updateMaxCredits(maxCredits) {
+    this.props.updateMaxCredits(maxCredits);
+  }
+
+  updateTermStartDate(startDate) {
+    this.props.updateTermStartDate(startDate);
+  }
+
+  updateTermEndDate(endDate) {
+    this.props.updateTermEndDate(endDate);
+  }
+  
   render() {
     return (
       <Card>
-        <Credits />
-        <TermDates />
+        <Credits 
+          minCredits={this.props.minCredits}
+          maxCredits={this.props.maxCredits}
+          updateMinCredits={this.updateMinCredits}
+          updateMaxCredits={this.updateMaxCredits}/>
+        <TermDates 
+          startDate={this.props.startDate}
+          endDate={this.props.endDate}
+          updateTermStartDate={this.updateTermStartDate}
+          updateTermEndDate={this.updateTermEndDate}/>
       </Card>
     )
   }
@@ -18,29 +51,25 @@ class BasicInfo extends React.Component {
 class Credits extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      minCredits: 12,
-      maxCredits: 18
-    }
 
     this.handleMinCreditsChange = this.handleMinCreditsChange.bind(this);
     this.handleMaxCreditsChange = this.handleMaxCreditsChange.bind(this);
   }
 
   handleMinCreditsChange(event) {
-    this.setState({...this.state, minCredits: event.target.value});
+    this.props.updateMinCredits(event.target.value);
   }
 
   handleMaxCreditsChange(event) {
-    this.setState({...this.state, maxCredits: event.target.value});
+    this.props.updateMaxCredits(event.target.value);
   }
 
   render() {
     return (
       <CardContent>
-        <TextField label="Minimum credits:" value={this.state.minCredits} onChange={this.handleMinCreditsChange}
+        <TextField label="Minimum credits:" value={this.props.minCredits} onChange={this.handleMinCreditsChange}
           InputProps={{ inputComponent: NumberFormatCustom }} />
-        <TextField label="Maximum credits:" value={this.state.maxCredits} onChange={this.handleMaxCreditsChange}
+        <TextField label="Maximum credits:" value={this.props.maxCredits} onChange={this.handleMaxCreditsChange}
           InputProps={{ inputComponent: NumberFormatCustom }} />
       </CardContent>
     );
@@ -77,31 +106,27 @@ NumberFormatCustom.propTypes = {
 class TermDates extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      startDate: "",
-      endDate: ""
-    }
 
     this.handleStartDateChange = this.handleStartDateChange.bind(this);
     this.handleEndDateChange = this.handleEndDateChange.bind(this);
   }
 
   handleStartDateChange(event) {
-    this.setState({...this.state, startDate: event.target.value});
+    this.props.updateTermStartDate(event.target.value);
   }
 
   handleEndDateChange(event) {
-    this.setState({...this.state, endDate: event.target.value});
+    this.props.updateTermEndDate(event.target.value);
   }
 
   render() {
     return (
       <CardContent>    
         <TextField label="Term start date:" type="date" onChange={this.handleStartDateChange}
-          defaultValue="2020-08-24" InputLabelProps={{ shrink: true, }}
+          value={this.props.startDate} InputLabelProps={{ shrink: true, }}
         />
         <TextField label="Term end date:" type="date" onChange={this.handleEndDateChange}
-          defaultValue="2020-12-11" InputLabelProps={{ shrink: true, }}
+          value={this.props.endDate} InputLabelProps={{ shrink: true, }}
         />
       </CardContent>
     );

@@ -5,11 +5,35 @@ import NumberFormat from 'react-number-format';
 import PropTypes from 'prop-types';
 
 class Criterion extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.updateTimeStartPreference = this.updateTimeStartPreference.bind(this);
+    this.updateTimeEndPreference = this.updateTimeEndPreference.bind(this);
+    this.updateSubjectPreference = this.updateSubjectPreference.bind(this);
+  }
+
+  updateTimeStartPreference(id, startTime) {
+    this.props.updateTimeStartPreference(id, startTime);
+  }
+
+  updateTimeEndPreference(id, endTime) {
+    this.props.updateTimeEndPreference(id, endTime);
+  }
+  
+  updateSubjectPreference(subject) {
+    this.props.updateSubjectPreference(subject);
+  }
+  
   render() {
     return (
       <Card>
-        <TimePreference />
-        <SubjectNumberPreference />
+        <TimePreference 
+          updateTimeStartPreference={this.updateTimeStartPreference}
+          updateTimeEndPreference={this.updateTimeEndPreference}/>
+        <SubjectPreference 
+          subject={this.props.subject}
+          updateSubjectPreference={this.updateSubjectPreference}/>
       </Card>
     )
   }
@@ -18,37 +42,31 @@ class Criterion extends React.Component {
 class TimePreference extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      timeBefore: "",
-      timeAfter: ""
-    }
 
-    this.handleTimeBeforeChange = this.handleTimeBeforeChange.bind(this);
-    this.handleTimeAfterChange = this.handleTimeAfterChange.bind(this);
+    this.handleStartTimeChange = this.handleStartTimeChange.bind(this);
+    this.handleEndTimeChange = this.handleEndTimeChange.bind(this);
   }
 
-  handleTimeBeforeChange(event) {
-    this.setState({...this.state, timeBefore: event.target.value});
+  handleStartTimeChange(event) {
+    this.props.updateTimeStartPreference(this.props.id, event.target.value);
   }
 
-  handleTimeAfterChange(event) {
-    this.setState({...this.state, timeAfter: event.target.value});
+  handleEndTimeChange(event) {
+    this.props.updateTimeEndPreference(this.props.id, event.target.value);
   }
 
   render() {
     return (
       <CardContent>
         <TextField
-          id="time-before-input" label="Earliest class: " type="time"
-          defaultValue="08:00" onChange={this.handleTimeBeforeChange}
-          InputLabelProps={{ shrink: true, }}
-          inputProps={{ step: 300, }}
+          id="time-before-input" label="Start time: " type="time"
+          defaultValue="08:00" onChange={this.handleStartTimeChange}
+          InputLabelProps={{ shrink: true, }} inputProps={{ step: 300, }}
         />
         <TextField
-          id="time-after-input" label="Latest class: " type="time"
-          defaultValue="17:00" onChange={this.handleTimeAfterChange}
-          InputLabelProps={{ shrink: true, }}
-          inputProps={{ step: 300, }}
+          id="time-after-input" label="End time: " type="time"
+          defaultValue="17:00" onChange={this.handleEndTimeChange}
+          InputLabelProps={{ shrink: true, }} inputProps={{ step: 300, }}
         />
       </CardContent>
     );
@@ -82,72 +100,23 @@ NumberFormatCustom.propTypes = {
   onChange: PropTypes.func.isRequired,
 };
 
-class SubjectNumberPreference extends React.Component {
+class SubjectPreference extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      subjectOne: "",
-      numberOne: 0,
-      subjectTwo: "",
-      numberTwo: 0,
-      subjectThree: "",
-      numberThree: 0
-    }
 
-    this.handleSubjectOneChange = this.handleSubjectOneChange.bind(this);
-    this.handleNumberOneChange = this.handleNumberOneChange.bind(this);
-    this.handleSubectTwoChange = this.handleSubjectTwoChange.bind(this);
-    this.handleNumberTwoChange = this.handleNumberTwoChange.bind(this);
-    this.handleSubectThreeChange = this.handleSubjectThreeChange.bind(this);
-    this.handleNumberThreeChange = this.handleNumberThreeChange.bind(this);
+    this.handleSubjectChange = this.handleSubjectChange.bind(this);
   }
 
-  handleSubjectOneChange(event) {
-    this.setState({...this.state, subjectOne: event.target.value});
-  }
-
-  handleNumberOneChange(event) {
-    this.setState({...this.state, numberOne: event.target.value});
-  }
-
-  handleSubjectTwoChange(event) {
-    this.setState({...this.state, subjectTwo: event.target.value});
-  }
-
-  handleNumberTwoChange(event) {
-    this.setState({...this.state, numberTwo: event.target.value});
-  }
-
-  handleSubjectThreeChange(event) {
-    this.setState({...this.state, subjectThree: event.target.value});
-  }
-
-  handleNumberThreeChange(event) {
-    this.setState({...this.state, numberThree: event.target.value});
+  handleSubjectChange(event) {
+    this.props.updateSubjectPreference(event.target.value)
   }
 
   render() {
     return (
       <CardContent>
-        <div id="label">Number of courses in each subject: </div>
-        
+        <div id="label">Preferred subject: </div>
         <Input placeholder="Subject" inputProps={{ 'aria-label': 'description' }} 
-          value={this.state.subjectOne} onChange={this.handleSubjectOneChange} />
-          
-        <TextField value={this.state.numberOne} onChange={this.handleNumberOneChange}
-          InputProps={{ inputComponent: NumberFormatCustom }} />
-
-        <Input placeholder="Subject" inputProps={{ 'aria-label': 'description' }}
-          value={this.state.subjectTwo} onChange={this.handleSubjectTwoChange} />
-        
-        <TextField value={this.state.numberTwo} onChange={this.handleNumberTwoChange}
-          InputProps={{ inputComponent: NumberFormatCustom }} />
-        
-        <Input placeholder="Subject" inputProps={{ 'aria-label': 'description' }}
-          value={this.state.subjectThree} onChange={this.handleSubjectThreeChange} />
-        
-        <TextField value={this.state.numberThree} onChange={this.handleNumberThreeChange}
-          InputProps={{ inputComponent: NumberFormatCustom }} />
+          value={this.props.subject} onChange={this.handleSubjectChange} />
       </CardContent>
     );
   }
