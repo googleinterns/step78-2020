@@ -21,19 +21,6 @@
           "duration": 90
         }
       ]
-    },
-    {
-      "professor": "Dr. Eggman",
-      "meetingTimes": [
-        {
-          "start": 3690,
-          "duration": 30
-        },
-        {
-          "start": 6570,
-          "duration": 30
-        }
-      ]
     }
   ]
 }
