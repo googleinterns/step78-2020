@@ -85,7 +85,7 @@ public final class Scheduler {
 
     List<Section> scheduleSections = new ArrayList<>();
     for (ScheduledCourse c : currentSchedule) {
-      scheduleSections.add(c.getLectureSection());
+      scheduleSections.add(c.getlectureSection());
       if (c.getLabSection() != null) {
         scheduleSections.add(c.getLabSection());
       }
