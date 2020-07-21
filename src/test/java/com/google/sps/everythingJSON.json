@@ -1,0 +1,52 @@
+{
+  "courses": [
+    {
+      "name": "Intro to Evil",
+      "courseID": "EVIL100",
+      "subject": "Wrongdoing",
+      "credits": 1.0,
+      "isRequired": true,
+      "sections": [
+        {
+          "professor": "Dr. Eggman",
+          "meetingTimes": [
+            {
+              "start": 2070,
+              "duration": 90
+            },
+            {
+              "start": 4950,
+              "duration": 90
+            },
+            {
+              "start": 7830,
+              "duration": 90
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "criterion": {
+    "timePreference": {
+      "timeBefore": "",
+      "timeAfter": ""
+    },
+    "subjectNumPreference": {
+      "subjectOne": "",
+      "numOne": 0,
+      "subjectTwo": "",
+      "numTwo": 0
+    }
+  },
+  "basicInfo": {
+    "credits": {
+      "minCredits": 1,
+      "maxCredits": 3
+    },
+    "termDates": {
+      "startDate": "",
+      "endDate": ""
+    }
+  }
+}
