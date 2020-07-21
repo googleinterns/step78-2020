@@ -15,42 +15,47 @@
 package com.google.sps;
 
 import com.google.sps.data.*;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
+
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonIOException;
 
 public final class JSONTest {
   public static void main(String[] args) {
-    Section section1 = new Section("Dr. Eggman", monWedFri(10, 30, 90));
-    Section section2 = new Section("Dr. Eggman", tuesThurs(13, 30, 30));
-    Course course1 = new Course("Intro to Evil", "EVIL100", 
-        "Wrongdoing", 1, true, Arrays.asList(section1, section2));
-
-    Invariants inv = new Invariants(3, 5);
-
     Gson gson = new Gson();
-    String json = gson.toJson(course1);
-    // System.out.println(json);
-    System.out.println(gson.toJson(inv));
-
-
-    Course courseFrom = gson.fromJson(json, Course.class);
-    System.out.println(courseFrom);
+    // JsonParser parser = new JsonParser();
+    try {
+      JsonObject wholeJSON = JsonParser.parseReader(new FileReader("/home/maceothompson/step78-2020/src/test/java/com/google/sps/everythingJSON.json")).getAsJsonObject();
+      
+      Type courseListType = new TypeToken<List<Course>>(){}.getType();
+      List<Course> courses = gson.fromJson(wholeJSON.getAsJsonArray("courses"), courseListType);
+      
+      JsonObject basicInfo = wholeJSON.getAsJsonObject("basicInfo");
+      Invariants invariants = gson.fromJson(basicInfo.get("credits"), Invariants.class);
+      Scheduler scheduler = new Scheduler();
+      List<Schedule> schedules = scheduler.generateSchedules(courses, invariants);
+    } catch (JsonIOException e) {
+      System.out.println(e.getMessage());
+    } catch (JsonSyntaxException e) {
+      System.out.println(e.getMessage());
+    } catch (FileNotFoundException e) {
+      System.out.println(e.getMessage());
+    }
+    
   }
 
-  public static List<TimeRange> tuesThurs(int hour, int minute, int durationMinutes) {
-    TimeRange tues = TimeRange.fromStartDuration(TimeRange.TUESDAY, hour, minute, durationMinutes);
-    TimeRange thurs = TimeRange.fromStartDuration(TimeRange.THURSDAY, hour, minute, durationMinutes);
-    return Arrays.asList(tues, thurs);
-  }
-  
-  public static List<TimeRange> monWedFri(int hour, int minute, int durationMinutes) {
-    TimeRange mon = TimeRange.fromStartDuration(TimeRange.MONDAY, hour, minute, durationMinutes);
-    TimeRange wed = TimeRange.fromStartDuration(TimeRange.WEDNESDAY, hour, minute, durationMinutes);
-    TimeRange fri = TimeRange.fromStartDuration(TimeRange.FRIDAY, hour, minute, durationMinutes);
-    return Arrays.asList(mon, wed, fri);
-  }
 }
