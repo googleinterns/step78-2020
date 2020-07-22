@@ -1,5 +1,6 @@
 import React from 'react';
 import MenuItem from '@material-ui/core/MenuItem';
+import Button from '@material-ui/core/Button';
 import Course from './Course';
 import Criterion from './Criterion';
 import BasicInfo from './BasicInfo';
@@ -48,6 +49,9 @@ class InputForm extends React.Component {
     this.createNewCourse = this.createNewCourse.bind(this);
     this.createNewSection = this.createNewSection.bind(this);
     this.createNewTimePreference = this.createNewTimePreference.bind(this);
+    this.deleteCourse = this.deleteCourse.bind(this);
+    this.deleteSection = this.deleteSection.bind(this);
+    this.deleteTimePreference = this.deleteTimePreference.bind(this);
     
     // courses
     this.updateCourseName = this.updateCourseName.bind(this);
@@ -345,6 +349,52 @@ class InputForm extends React.Component {
     }))
   }
 
+  deleteCourse(id) {
+    var courses = [...this.state.courses];
+    this.state.courses.map((course, index) =>
+      index === id
+        ? (courses.splice(index, 1),
+          this.setState({...this.state, courses: courses}))
+        : course)
+  }
+
+  deleteSection(courseID, sectionID) {
+    var sections = [];
+    this.state.courses.map((course, courseIndex) =>
+      courseIndex === courseID
+        ? (sections = [...this.state.courses[courseIndex].sections],
+          this.state.courses[courseIndex].sections.map((section, sectionIndex) =>
+            sectionIndex === sectionID
+              ? (sections.splice(sectionIndex, 1))
+              : section)
+        )
+        : course)
+
+    this.setState({
+      ...this.state,
+        courses: this.state.courses.map((course, index) =>
+          index === courseID
+            ? ({...course, sections: sections})
+            : course)
+    })
+  }
+
+  deleteTimePreference(id) {
+    var timePreferences = [...this.state.criterion.timePreferences];
+    this.state.criterion.timePreferences.map((timePreference, index) =>
+      index === id
+        ? (timePreferences.splice(index, 1))
+        : timePreference)
+
+    this.setState(state => ({
+      ...this.state,
+      criterion: {
+        ...state.criterion,
+        timePreferences: timePreferences
+      }
+    }))
+  }
+
   submit() {
     var json = JSON.stringify(this.state);
     console.log(json);
@@ -373,8 +423,10 @@ class InputForm extends React.Component {
             updateSectionStartTime={this.updateSectionStartTime}
             updateSectionEndTime={this.updateSectionEndTime}
             updateSectionDays={this.updateSectionDays}
-            createNewSection={this.createNewSection}/>))}
-        <button onClick={this.createNewCourse}>Add Course</button>
+            createNewSection={this.createNewSection}
+            deleteCourse={this.deleteCourse}
+            deleteSection={this.deleteSection}/>))}
+        <Button onClick={this.createNewCourse}>+ Course</Button>
         <h2>Preferences</h2>
         <Criterion 
           times={this.state.criterion.timePreferences}
@@ -382,7 +434,8 @@ class InputForm extends React.Component {
           createNewTimePreference={this.createNewTimePreference}
           updateSubjectPreference={this.updateSubjectPreference}
           updateTimeStartPreference={this.updateTimeStartPreference}
-          updateTimeEndPreference={this.updateTimeEndPreference}/>
+          updateTimeEndPreference={this.updateTimeEndPreference}
+          deleteTimePreference={this.deleteTimePreference}/>
         <h2>Other info</h2>
         <BasicInfo 
           minCredits={this.state.basicInfo.credits.minCredits}
@@ -393,7 +446,7 @@ class InputForm extends React.Component {
           updateMaxCredits={this.updateMaxCredits}
           updateTermStartDate={this.updateTermStartDate}
           updateTermEndDate={this.updateTermEndDate}/>
-        <button onClick={this.submit}>Submit</button>
+        <Button onClick={this.submit}>Submit</Button>
       </div>)
   }
 }
