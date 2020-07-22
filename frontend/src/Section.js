@@ -1,6 +1,10 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import { Input, Card, CardContent } from '@material-ui/core';
+import FormLabel from '@material-ui/core/FormLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Checkbox from '@material-ui/core/Checkbox';
 
 class Section extends React.Component {
   constructor(props) {
@@ -9,6 +13,7 @@ class Section extends React.Component {
     this.handleProfessorChange = this.handleProfessorChange.bind(this);
     this.handleStartTimeChange = this.handleStartTimeChange.bind(this);
     this.handleEndTimeChange = this.handleEndTimeChange.bind(this);
+    this.handleDayChange = this.handleDayChange.bind(this);
   }
 
   handleProfessorChange(event) {
@@ -21,6 +26,10 @@ class Section extends React.Component {
 
   handleEndTimeChange(event) {
     this.props.updateSectionEndTime(this.props.id, event.target.value);
+  }
+
+  handleDayChange(day) {
+    this.props.updateSectionDays(this.props.id, day);
   }
 
   render() {
@@ -37,6 +46,34 @@ class Section extends React.Component {
             onChange={this.handleEndTimeChange} InputLabelProps={{ shrink: true, }}
             value={this.props.endTime} inputProps={{ step: 300, }}
           />
+          <FormLabel component="legend">Days of Week</FormLabel>
+          <FormGroup row>
+            <FormControlLabel
+              control={<Checkbox
+              onChange={() => this.handleDayChange("monday")} />}
+              label="Monday"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={this.props.tueChecked}
+              onChange={() => this.handleDayChange("tuesday")} />}
+              label="Tuesday"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={this.props.wedChecked}
+              onChange={() => this.handleDayChange("wednesday")} />}
+              label="Wednesday"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={this.props.thurChecked}
+              onChange={() => this.handleDayChange("thursday")} />}
+              label="Thursday"
+            />
+            <FormControlLabel
+              control={<Checkbox checked={this.props.friChecked} 
+              onChange={() => this.handleDayChange("friday")} />}
+              label="Friday"
+            />
+          </FormGroup>
         </CardContent>
       </Card>
     );

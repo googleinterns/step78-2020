@@ -16,7 +16,12 @@ class InputForm extends React.Component {
         sections: [{
           professor: "",
           startTime: "",
-          endTime: ""
+          endTime: "",
+          monday: false,
+          tuesday: false,
+          wednesday: false,
+          thursday: false, 
+          friday: false
         }]
       }],
       criterion: {
@@ -51,6 +56,7 @@ class InputForm extends React.Component {
     this.updateSectionProfessor = this.updateSectionProfessor.bind(this);
     this.updateSectionStartTime = this.updateSectionStartTime.bind(this);
     this.updateSectionEndTime = this.updateSectionEndTime.bind(this);
+    this.updateSectionDays = this.updateSectionDays.bind(this);
 
     // criterion
     this.updateTimeStartPreference = this.updateTimeStartPreference.bind(this);
@@ -150,6 +156,26 @@ class InputForm extends React.Component {
           ? ({ ...course, sections: state.courses[courseIndex].sections.map((section, sectionIndex) =>
             sectionIndex === sectionID
               ? ({...section, endTime: sectionEndTime})
+              : section)})
+          : course)
+    }))
+  }
+
+  updateSectionDays(courseID, sectionID, day) {
+    this.setState(state => ({
+      ...this.state,
+      courses: state.courses.map((course, courseIndex) =>
+        courseIndex === courseID
+          ? ({ ...course, sections: state.courses[courseIndex].sections.map((section, sectionIndex) =>
+            sectionIndex === sectionID
+              ? (
+                day === "monday" ? ({...section, monday: !this.state.courses[courseIndex].sections[sectionIndex].monday}) 
+                : day === "tuesday" ? ({...section, tuesday: !this.state.courses[courseIndex].sections[sectionIndex].tuesday}) 
+                : day === "wednesday" ? ({...section, wednesday: !this.state.courses[courseIndex].sections[sectionIndex].wednesday})
+                : day === "thursday" ? ({...section, thursday: !this.state.courses[courseIndex].sections[sectionIndex].thursday})
+                : day === "friday" ? ({...section, friday: !this.state.courses[courseIndex].sections[sectionIndex].friday})
+                : ({...section});
+              )
               : section)})
           : course)
     }))
@@ -270,14 +296,13 @@ class InputForm extends React.Component {
       endTime: ""
     }
 
-    this.setState(state => ({
+    this.setState({
       ...this.state,
       courses: this.state.courses.map((course, index) =>
         index === id
-          ? ({...state.courses, 
-            sections: this.state.courses[index].sections.concat(defaultSection)})
+          ? ({...course, sections: this.state.courses[index].sections.concat(defaultSection)})
           : course)
-    }))
+    });
   }
 
   createNewTimePreference() {
@@ -319,6 +344,7 @@ class InputForm extends React.Component {
             updateSectionProfessor={this.updateSectionProfessor}
             updateSectionStartTime={this.updateSectionStartTime}
             updateSectionEndTime={this.updateSectionEndTime}
+            updateSectionDays={this.updateSectionDays}
             createNewSection={this.createNewSection}/>))}
         <button onClick={this.createNewCourse}>Add Course</button>
         <h2>Preferences</h2>

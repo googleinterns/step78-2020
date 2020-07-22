@@ -19,6 +19,7 @@ class Course extends React.Component {
     this.updateSectionProfessor = this.updateSectionProfessor.bind(this);
     this.updateSectionStartTime = this.updateSectionStartTime.bind(this);
     this.updateSectionEndTime = this.updateSectionEndTime.bind(this);
+    this.updateSectionDays = this.updateSectionDays.bind(this);
     this.createNewSection = this.createNewSection.bind(this);
   }
 
@@ -54,6 +55,10 @@ class Course extends React.Component {
     this.props.updateSectionEndTime(this.props.id, sectionId, endTime);
   }
 
+  updateSectionDays(sectionId, day) {
+    this.props.updateSectionDays(this.props.id, sectionId, day);
+  }
+
   createNewSection() {
     this.props.createNewSection(this.props.id);
   }
@@ -80,7 +85,8 @@ class Course extends React.Component {
               section={section}
               updateSectionProfessor={this.updateSectionProfessor}
               updateSectionStartTime={this.updateSectionStartTime}
-              updateSectionEndTime={this.updateSectionEndTime}/>))}
+              updateSectionEndTime={this.updateSectionEndTime}
+              updateSectionDays={this.updateSectionDays}/>))}
           <button onClick={this.createNewSection}>Add Section</button>
         </CardContent>
       </Card>
