@@ -75,6 +75,7 @@ class InputForm extends React.Component {
     this.updateTermStartDate = this.updateTermStartDate.bind(this);
     this.updateTermEndDate = this.updateTermEndDate.bind(this);
 
+    this.convertCourseSections = this.convertCourseSections.bind(this);
     this.submit = this.submit.bind(this);
   }
 
@@ -346,9 +347,56 @@ class InputForm extends React.Component {
   }
 
   submit() {
-    var json = JSON.stringify(this.state);
+    let submitState = JSON.parse(JSON.stringify(this.state));
+    console.log(submitState.courses);
+    submitState.courses = submitState.courses.map((course) => this.convertCourseSections(course));
+
+    var json = JSON.stringify(submitState);
     console.log(json);
   } 
+
+  convertCourseSections(course) {
+    course['sections'] = course.sections.map((section) => {
+      let newSection = {professor: section['professor'], meetingTimes: []};
+      if (section.monday) {
+        newSection.meetingTimes.push(this.timeToTimeRange(1, section.startTime, section.endTime));
+      }
+      if (section.tuesday) {
+        newSection.meetingTimes.push(this.timeToTimeRange(2, section.startTime, section.endTime));
+      }
+      if (section.wednesday) {
+        newSection.meetingTimes.push(this.timeToTimeRange(3, section.startTime, section.endTime));
+      }
+      if (section.thursday) {
+        newSection.meetingTimes.push(this.timeToTimeRange(4, section.startTime, section.endTime));
+      }
+      if (section.friday) {
+        newSection.meetingTimes.push(this.timeToTimeRange(5, section.startTime, section.endTime));
+      }
+
+      return newSection;
+    });
+    return course;
+  }
+
+  timeToTimeRange(day, startTime, endTime) {
+    let startHourMin = startTime.split(':');
+    let startHour = parseInt(startHourMin[0]);
+    let startMin = parseInt(startHourMin[1]);
+
+    let endHourMin = endTime.split(':');
+    let endHour = parseInt(endHourMin[0]);
+    let endMin = parseInt(endHourMin[1]);
+
+    let start = (startHour * 60) + startMin;
+    let end = (endHour * 60) + endMin;
+    let duration = start < end ? end - start 
+        : (end + 24 * 60) - start;
+    
+    start += day * 24 * 60;
+
+    return {start: start, duration: duration}
+  }
 
   render() {
     return (
