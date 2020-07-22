@@ -1,8 +1,10 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import { Input, Card, CardContent } from '@material-ui/core';
-import NumberFormat from 'react-number-format';
-import PropTypes from 'prop-types';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch';
+import Section from './Section';
+import { NumberFormatCustom } from './NumberFormat';
 
 class Course extends React.Component {  
   constructor(props) {
@@ -12,6 +14,12 @@ class Course extends React.Component {
     this.handleIDChange = this.handleIDChange.bind(this);
     this.handleSubjectChange = this.handleSubjectChange.bind(this);
     this.handleCreditsChange = this.handleCreditsChange.bind(this);
+    this.handleIsRequiredChange = this.handleIsRequiredChange.bind(this);
+
+    this.updateSectionProfessor = this.updateSectionProfessor.bind(this);
+    this.updateSectionStartTime = this.updateSectionStartTime.bind(this);
+    this.updateSectionEndTime = this.updateSectionEndTime.bind(this);
+    this.createNewSection = this.createNewSection.bind(this);
   }
 
   handleNameChange(event) {
@@ -30,6 +38,26 @@ class Course extends React.Component {
     this.props.updateCourseCredits(this.props.id, event.target.value);
   }
 
+  handleIsRequiredChange(event) {
+    this.props.updateCourseIsRequired(this.props.id);
+  }
+
+  updateSectionProfessor(sectionId, professor) {
+    this.props.updateSectionProfessor(this.props.id, sectionId, professor);
+  }
+
+  updateSectionStartTime(sectionId, startTime) {
+    this.props.updateSectionStartTime(this.props.id, sectionId, startTime);
+  }
+
+  updateSectionEndTime(sectionId, endTime) {
+    this.props.updateSectionEndTime(this.props.id, sectionId, endTime);
+  }
+
+  createNewSection() {
+    this.props.createNewSection(this.props.id);
+  }
+
   render() {
     return (
       <Card>
@@ -42,66 +70,22 @@ class Course extends React.Component {
             value={this.props.subject} onChange={this.handleSubjectChange} />
           <TextField placeholder="Credits" value={this.props.credits} onChange={this.handleCreditsChange}
             InputProps={{ inputComponent: NumberFormatCustom }} />
-          <Section />
-          <button onClick={this.props.createNewSection}>Add Section</button>
-            
-          {/* <FormControlLabel>
-            control = {<Switch id="isRequired-input" checked={this.state.isRequired} onChange={this.handleisRequiredChange} />}
-            label = "Required"
-          </FormControlLabel> */}
-
+          <FormControlLabel
+            control={<Switch checked={this.props.isRequired} onChange={this.handleIsRequiredChange} />}
+            label="Required"/>
+          {this.props.sections.map((section, index) => (
+            <Section
+              id={index}
+              key={index}
+              section={section}
+              updateSectionProfessor={this.updateSectionProfessor}
+              updateSectionStartTime={this.updateSectionStartTime}
+              updateSectionEndTime={this.updateSectionEndTime}/>))}
+          <button onClick={this.createNewSection}>Add Section</button>
         </CardContent>
       </Card>
     );
   }
 }
-
-class Section extends React.Component {
-  render() {
-    return (
-      <Card>
-        <CardContent>
-          <Input placeholder="Professor" inputProps={{ 'aria-label': 'description' }} 
-            value={this.props.professor} onChange={this.handleProfessorChange} />
-          <TextField label="Start time: " type="time" defaultValue="08:00" 
-            onChange={this.handleStartTimeChange} InputLabelProps={{ shrink: true, }}
-            value={this.props.startTime} inputProps={{ step: 300, }}
-          />
-          <TextField label="End time: " type="time" defaultValue="09:00" 
-            onChange={this.handleEndTimeChange} InputLabelProps={{ shrink: true, }}
-            value={this.props.endTime} inputProps={{ step: 300, }}
-          />
-        </CardContent>
-      </Card>
-    );
-  }
-}
-
-function NumberFormatCustom(props) {
-  const { inputRef, onChange, ...other } = props;
-
-  return (
-    <NumberFormat
-      {...other}
-      getInputRef={inputRef}
-      onValueChange={(values) => {
-        onChange({
-          target: {
-            name: props.name,
-            value: values.value,
-          },
-        });
-      }}
-      thousandSeparator
-      isNumericString
-    />
-  );
-}
-
-NumberFormatCustom.propTypes = {
-  inputRef: PropTypes.func.isRequired,
-  name: PropTypes.string.isRequired,
-  onChange: PropTypes.func.isRequired,
-};
 
 export default Course;
