@@ -3,6 +3,9 @@ import TextField from '@material-ui/core/TextField';
 import { Input, Card, CardContent } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
+import Select from '@material-ui/core/Select';
+import InputLabel from '@material-ui/core/InputLabel';
+import FormControl from '@material-ui/core/FormControl';
 import Section from './Section';
 import { NumberFormatCustom } from './NumberFormat';
 
@@ -15,6 +18,8 @@ class Course extends React.Component {
     this.handleSubjectChange = this.handleSubjectChange.bind(this);
     this.handleCreditsChange = this.handleCreditsChange.bind(this);
     this.handleIsRequiredChange = this.handleIsRequiredChange.bind(this);
+    this.handleRankChange = this.handleRankChange.bind(this);
+    this.updateRankSelectOptions = this.updateRankSelectOptions.bind(this);
 
     this.updateSectionProfessor = this.updateSectionProfessor.bind(this);
     this.updateSectionStartTime = this.updateSectionStartTime.bind(this);
@@ -41,6 +46,16 @@ class Course extends React.Component {
 
   handleIsRequiredChange(event) {
     this.props.updateCourseIsRequired(this.props.id);
+  }
+
+  handleRankChange(event) {
+    this.props.updateCourseRank(this.props.id, event.target.value);
+  }
+
+  updateRankSelectOptions() {
+    let items = [];
+    items = this.props.updateRankSelectOptions();
+    return items;
   }
 
   updateSectionProfessor(sectionId, professor) {
@@ -78,6 +93,14 @@ class Course extends React.Component {
           <FormControlLabel
             control={<Switch checked={this.props.isRequired} onChange={this.handleIsRequiredChange} />}
             label="Required"/>
+
+          <FormControl>
+            <InputLabel>Rank</InputLabel>
+            <Select onChange={this.handleRankChange} value={this.props.selected}>
+              {this.updateRankSelectOptions()}
+            </Select>
+          </FormControl>
+
           {this.props.sections.map((section, index) => (
             <Section
               id={index}

@@ -1,4 +1,5 @@
 import React from 'react';
+import MenuItem from '@material-ui/core/MenuItem';
 import Course from './Course';
 import Criterion from './Criterion';
 import BasicInfo from './BasicInfo';
@@ -13,6 +14,7 @@ class InputForm extends React.Component {
         subject: "",
         credits: 0,
         isRequired: false,
+        rank: "",
         sections: [{
           professor: "",
           startTime: "",
@@ -53,6 +55,10 @@ class InputForm extends React.Component {
     this.updateCourseSubject = this.updateCourseSubject.bind(this);
     this.updateCourseCredits = this.updateCourseCredits.bind(this);
     this.updateCourseIsRequired = this.updateCourseIsRequired.bind(this);
+    this.updateCourseRank = this.updateCourseRank.bind(this);
+    this.updateRankSelectOptions = this.updateRankSelectOptions.bind(this);
+    
+    // sections
     this.updateSectionProfessor = this.updateSectionProfessor.bind(this);
     this.updateSectionStartTime = this.updateSectionStartTime.bind(this);
     this.updateSectionEndTime = this.updateSectionEndTime.bind(this);
@@ -120,6 +126,16 @@ class InputForm extends React.Component {
           ? ({ ...course, isRequired: !this.state.courses[index].isRequired })
           : course)
     });
+  }
+
+  updateCourseRank(id, selected) {
+    this.setState({
+      ...this.state,
+      courses: this.state.courses.map((course, index) =>
+        index === id
+          ? ({ ...course, rank: selected })
+          : course)
+    });   
   }
 
   updateSectionProfessor(courseID, sectionID, sectionProfessor) {
@@ -275,6 +291,7 @@ class InputForm extends React.Component {
       subject: "",
       credits: 0,
       isRequired: false,
+      rank: "",
       sections: [{
         professor: "",
         startTime: "",
@@ -286,6 +303,15 @@ class InputForm extends React.Component {
       ...this.state,
       courses: this.state.courses.concat(defaultCourse)
     });
+  }
+
+  updateRankSelectOptions() {
+     let items = [];   
+     let numCourses = this.state.courses.length;     
+     for (let i = 1; i <= numCourses; i++) {             
+          items.push(<MenuItem key={i} value={i}>{i}</MenuItem>);   
+     }
+     return items;
   }
 
   createNewSection(id) {
@@ -335,11 +361,14 @@ class InputForm extends React.Component {
             course={course}
             sections={this.state.courses[index].sections}
             isRequired={this.state.courses[index].isRequired}
+            selected={this.state.courses[index].rank}
             updateCourseName={this.updateCourseName}
             updateCourseID={this.updateCourseID}
             updateCourseSubject={this.updateCourseSubject}
             updateCourseCredits={this.updateCourseCredits}
             updateCourseIsRequired={this.updateCourseIsRequired}
+            updateCourseRank={this.updateCourseRank}
+            updateRankSelectOptions={this.updateRankSelectOptions}
             updateSectionProfessor={this.updateSectionProfessor}
             updateSectionStartTime={this.updateSectionStartTime}
             updateSectionEndTime={this.updateSectionEndTime}
