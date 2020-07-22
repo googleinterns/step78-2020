@@ -173,8 +173,7 @@ class InputForm extends React.Component {
                 : day === "tuesday" ? ({...section, tuesday: !this.state.courses[courseIndex].sections[sectionIndex].tuesday}) 
                 : day === "wednesday" ? ({...section, wednesday: !this.state.courses[courseIndex].sections[sectionIndex].wednesday})
                 : day === "thursday" ? ({...section, thursday: !this.state.courses[courseIndex].sections[sectionIndex].thursday})
-                : day === "friday" ? ({...section, friday: !this.state.courses[courseIndex].sections[sectionIndex].friday})
-                : ({...section});
+                : ({...section, friday: !this.state.courses[courseIndex].sections[sectionIndex].friday})
               )
               : section)})
           : course)
