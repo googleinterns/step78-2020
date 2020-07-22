@@ -167,7 +167,7 @@ public final class RankTest {
   // =========================================================================================================
 
   // Creates the big schedule courses
-  public static List<Course> createBigScheduleCourses() {
+  public static List<ScheduledCourse> createBigScheduleCourses() {
     Section section1 = new Section("Professor A", monWedFri(10, 30, DURATION_90_MINUTES));
     //Recitation recitation1 = new Recitation(Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 13, 30, DURATION_1_HOUR)));
     Section recitation1 = new Section("Professsor A", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 13, 30, DURATION_1_HOUR)));
@@ -194,7 +194,7 @@ public final class RankTest {
 
     Section section5 = new Section("Professor E", Arrays.asList(TimeRange.fromStartDuration(TimeRange.WEDNESDAY, 14, 30, DURATION_90_MINUTES)));
     //Recitation recitation5 = new Recitation(Arrays.asList(monFri(14, 30, DURATION_60_MINUTES)));
-    Section recitation5 = new Seciton("Professor E", Arrays.asList(monFri(14, 30, DURATION_60_MINUTES)));
+    Section recitation5 = new Section("Professor E", monFri(14, 30, DURATION_60_MINUTES));
     ScheduledCourse course5 = new ScheduledCourse("Intro to Civil Engineering", 
     "12100", "Civil Engineering", 12, false, section5, recitation5);
 
@@ -204,7 +204,7 @@ public final class RankTest {
   // 57 units
   // Creates the Big Schedule 1
   public static Schedule createBigSchedule1() {
-    List<Course> courses = createBigScheduleCourses();
+    List<ScheduledCourse> courses = createBigScheduleCourses();
     Schedule schedule = new Schedule(courses);
     return schedule;
   }
@@ -212,38 +212,38 @@ public final class RankTest {
   // 36 units
   // Creates the Big Schedule 2
   public static Schedule createBigSchedule2() {
-    List<Course> courses = createBigScheduleCourses();
-    Course course1 = courses.get(0);
-    Course course2 = courses.get(1);
-    Course course3 = courses.get(2);
+    List<ScheduledCourse> courses = createBigScheduleCourses();
+    ScheduledCourse course1 = courses.get(0);
+    ScheduledCourse course2 = courses.get(1);
+    ScheduledCourse course3 = courses.get(2);
 
-    Schedule schedule = new Schedule(course1, course2, course3);
+    Schedule schedule = new Schedule(Arrays.asList(course1, course2, course3));
     return schedule;
   }
 
   // 45 units
   // Creates the Big Schedule 3
   public static Schedule createBigSchedule3() {
-    List<Course> courses = createBigScheduleCourses();
-    Course course1 = courses.get(0);
-    Course course2 = courses.get(1);
-    Course course3 = courses.get(2);
-    Course course4 = courses.get(3);
+    List<ScheduledCourse> courses = createBigScheduleCourses();
+    ScheduledCourse course1 = courses.get(0);
+    ScheduledCourse course2 = courses.get(1);
+    ScheduledCourse course3 = courses.get(2);
+    ScheduledCourse course4 = courses.get(3);
 
-    Schedule schedule = new Schedule(course1, course2, course3, course4);
+    Schedule schedule = new Schedule(Arrays.asList(course1, course2, course3, course4));
     return schedule;
   }
 
   // 48 units
   // Creates the Big Schedule 4
   public static Schedule createBigSchedule4() {
-    List<Course> courses = createBigScheduleCourses();
-    Course course1 = courses.get(0);
-    Course course2 = courses.get(1);
-    Course course3 = courses.get(2);
-    Course course5 = courses.get(4);
+    List<ScheduledCourse> courses = createBigScheduleCourses();
+    ScheduledCourse course1 = courses.get(0);
+    ScheduledCourse course2 = courses.get(1);
+    ScheduledCourse course3 = courses.get(2);
+    ScheduledCourse course5 = courses.get(4);
 
-    Schedule schedule = new Schedule(course1, course2, course3, course5);
+    Schedule schedule = new Schedule(Arrays.asList(course1, course2, course3, course5));
     return schedule;
   }
 
@@ -355,18 +355,88 @@ public final class RankTest {
 
   @Test
   public void bigTestEmptyPreference() {
-    Preferences preferenceList = new Preferences(Arrays.asList());
-    //List<Course> courses = createBigScheduleCourses();
+    // RESTORE AFTER PRINTING 
+    // Preferences preferenceList = new Preferences(Arrays.asList());
 
-    List<Schedule> schedules = Arrays.asList(bigSchedule1, bigSchedule2, bigSchedule3, bigSchedule4);
+    // List<Schedule> schedules = Arrays.asList(bigSchedule1, bigSchedule2, bigSchedule3, bigSchedule4);
+    // preferenceList.sortSchedules(schedules);
+
+    // List<Schedule> actual = schedules;
+    // List<Schedule> expected = Arrays.asList(bigSchedule1, bigSchedule2, bigSchedule3, bigSchedule4);
+    // Assert.assertEquals(expected, actual);
+
+    // For printing purposes, will remove when merged into HandleRecitations branch
+    List<Course> courses1 = createBigScheduleCourses1();
+    Scheduler scheduler = new Scheduler();
+    List<Schedule> schedules1 = scheduler.generateSchedules(courses1, new Invariants(36, 60));
+    System.out.println(schedules1.size());
+
+    for (Schedule schedule : schedules1) {
+      printSchedule(schedule);
+    }
+  }
+
+  // Creates the big schedule courses
+  public static List<Course> createBigScheduleCourses1() {
+    Section section1 = new Section("Professor A", monWedFri(10, 30, DURATION_90_MINUTES));
+    //Recitation recitation1 = new Recitation(Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 13, 30, DURATION_1_HOUR)));
+    Section recitation1 = new Section("Professsor A", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 13, 30, DURATION_1_HOUR)));
+    Course course1 = new Course("Parallel and Sequential Data Structures and Algorithms", 
+    "15210", "Computer Science", 12, true, Arrays.asList(section1), Arrays.asList(recitation1));
+
+    Section section2 = new Section("Professor B", monFri(12, 00, DURATION_90_MINUTES));
+    //Recitation recitation2 = new Recitation(Arrays.asList());
+    Section recitation2 = new Section("Professor B", Arrays.asList());
+    Course course2 = new Course("Research and Innovation in Computer Science", "15300", 
+    "Computer Science", 9, true, Arrays.asList(section2), Arrays.asList(recitation2));
+
+    Section section3 = new Section("Professor C", tuesThurs(9, 00, DURATION_90_MINUTES));
+    //Recitation recitation3 = new Recitation(Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 13, 30, DURATION_1_HOUR)));
+    Section recitation3 = new Section("Professor C", Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 13, 30, DURATION_1_HOUR)));
+    Course course3 = new Course("Compiler Design", "15411", 
+    "Computer Science", 15, true, Arrays.asList(section3), Arrays.asList(recitation3));
+
+    Section section4 = new Section("Professor D", tuesThurs(15, 00, DURATION_90_MINUTES));
+    //Recitation recitation4 = new Recitation(Arrays.asList());
+    Section recitation4 = new Section("Professor D", Arrays.asList());
+    Course course4 = new Course("Organizational Behavior", 
+    "70311", "Tepper", 9, false, Arrays.asList(section4), Arrays.asList(recitation4));
+
+    Section section5 = new Section("Professor E", Arrays.asList(TimeRange.fromStartDuration(TimeRange.WEDNESDAY, 14, 30, DURATION_90_MINUTES)));
+    //Recitation recitation5 = new Recitation(Arrays.asList(monFri(14, 30, DURATION_60_MINUTES)));
+    Section recitation5 = new Section("Professor E", monFri(14, 30, DURATION_60_MINUTES));
+    Course course5 = new Course("Intro to Civil Engineering", 
+    "12100", "Civil Engineering", 12, false, Arrays.asList(section5), Arrays.asList(recitation5));
+
+    return Arrays.asList(course1, course2, course3, course4, course5);
+  }
+
+  public void printSchedule(Schedule schedule) {
+    float creditCount = 0;
+    Collection<ScheduledCourse> courses = schedule.getCourses();
+    System.out.println(schedule);
+    for (ScheduledCourse course : courses) {
+      creditCount += course.getCredits();
+      System.out.println(course.getName() + course.getlectureSection().getMeetingTimes() + course.getLabSection().getMeetingTimes());
+    }
+    System.out.println(creditCount);
+    System.out.println("======================================");
+  }
+
+
+  // More Tests with criteria now
+  @Test
+  public void restrictTimesPreferenceBigTest() {
+    RestrictTimesCriteria restrictCriteria = new RestrictTimesCriteria(userNoClassTimesNEW);
+    Preferences preferenceList = new Preferences(Arrays.asList(restrictCriteria));
+
+    // restrictCriteria becomes a tie => subjectCourses becomes a tie => sort by coursePriority
+    List<Schedule> schedules = Arrays.asList(schedule3, schedule4);
     preferenceList.sortSchedules(schedules);
 
     List<Schedule> actual = schedules;
-    List<Schedule> expected = Arrays.asList(bigSchedule1, bigSchedule4, bigSchedule3, bigSchedule2);
+    List<Schedule> expected = Arrays.asList(schedule3, schedule4);
     Assert.assertEquals(expected, actual);
-
-    // For printing purposes, will remove when merged into HandleRecitations branch
-    //List<Schedule> schedules = preferenceList.generateSchedules(courses, new Invariant(36, 60));
   }
 
 }
