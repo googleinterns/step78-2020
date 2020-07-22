@@ -322,9 +322,11 @@ class InputForm extends React.Component {
 
   submit() {
     let submitState = JSON.parse(JSON.stringify(this.state));
-    console.log(submitState.courses);
+    console.log(JSON.stringify(this.state));
     submitState.courses = submitState.courses.map((course) => this.convertCourseSections(course));
 
+    submitState.criterion.timePreferences = submitState.criterion.timePreferences.map((times) => 
+        this.timeToTimeRange(0, times.startTime, times.endTime));
     var json = JSON.stringify(submitState);
     console.log(json);
   } 
