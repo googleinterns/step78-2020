@@ -19,11 +19,7 @@ class InputForm extends React.Component {
           professor: "",
           startTime: "",
           endTime: "",
-          monday: false,
-          tuesday: false,
-          wednesday: false,
-          thursday: false, 
-          friday: false
+          days: []
         }]
       }],
       criterion: {
@@ -179,6 +175,24 @@ class InputForm extends React.Component {
   }
 
   updateSectionDays(courseID, sectionID, day) {
+    var days = [];
+    var index = 0;
+    this.state.courses.map((course, courseIndex) =>
+      courseIndex === courseID
+        ? ({...course, sections: this.state.courses[courseIndex].sections.map((section, sectionIndex) =>
+          sectionIndex === sectionID
+            ? (
+              days = [...this.state.courses[courseIndex].sections[sectionIndex].days],
+              days.includes(day)
+                ? (
+                  index = days.indexOf(day),
+                  days.splice(index, 1)
+                )
+                : days = []
+            )
+            : section)})
+        : course)
+
     this.setState(state => ({
       ...this.state,
       courses: state.courses.map((course, courseIndex) =>
@@ -186,11 +200,9 @@ class InputForm extends React.Component {
           ? ({ ...course, sections: state.courses[courseIndex].sections.map((section, sectionIndex) =>
             sectionIndex === sectionID
               ? (
-                day === "monday" ? ({...section, monday: !this.state.courses[courseIndex].sections[sectionIndex].monday}) 
-                : day === "tuesday" ? ({...section, tuesday: !this.state.courses[courseIndex].sections[sectionIndex].tuesday}) 
-                : day === "wednesday" ? ({...section, wednesday: !this.state.courses[courseIndex].sections[sectionIndex].wednesday})
-                : day === "thursday" ? ({...section, thursday: !this.state.courses[courseIndex].sections[sectionIndex].thursday})
-                : ({...section, friday: !this.state.courses[courseIndex].sections[sectionIndex].friday})
+                days.length > 0 
+                  ? ({ ...section, days: days})
+                  : ({ ...section, days: state.courses[courseIndex].sections[sectionIndex].days.concat(day)})
               )
               : section)})
           : course)

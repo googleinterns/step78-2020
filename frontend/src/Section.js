@@ -50,28 +50,38 @@ class Section extends React.Component {
           <FormGroup row>
             <FormControlLabel
               control={<Checkbox
-              onChange={() => this.handleDayChange("monday")} />}
-              label="Monday"
+              onChange={() => this.handleDayChange(0)} />}
+              label="Sun"
             />
             <FormControlLabel
-              control={<Checkbox checked={this.props.tueChecked}
-              onChange={() => this.handleDayChange("tuesday")} />}
-              label="Tuesday"
+              control={<Checkbox
+              onChange={() => this.handleDayChange(1)} />}
+              label="Mon"
             />
             <FormControlLabel
-              control={<Checkbox checked={this.props.wedChecked}
-              onChange={() => this.handleDayChange("wednesday")} />}
-              label="Wednesday"
+              control={<Checkbox
+              onChange={() => this.handleDayChange(2)} />}
+              label="Tues"
             />
             <FormControlLabel
-              control={<Checkbox checked={this.props.thurChecked}
-              onChange={() => this.handleDayChange("thursday")} />}
-              label="Thursday"
+              control={<Checkbox
+              onChange={() => this.handleDayChange(3)} />}
+              label="Wed"
             />
             <FormControlLabel
-              control={<Checkbox checked={this.props.friChecked} 
-              onChange={() => this.handleDayChange("friday")} />}
-              label="Friday"
+              control={<Checkbox
+              onChange={() => this.handleDayChange(4)} />}
+              label="Thurs"
+            />
+            <FormControlLabel
+              control={<Checkbox
+              onChange={() => this.handleDayChange(5)} />}
+              label="Fri"
+            />
+            <FormControlLabel
+              control={<Checkbox
+              onChange={() => this.handleDayChange(6)} />}
+              label="Sat"
             />
           </FormGroup>
         </CardContent>
