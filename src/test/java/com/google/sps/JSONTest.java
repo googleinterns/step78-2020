@@ -37,9 +37,9 @@ import com.google.gson.JsonIOException;
 public final class JSONTest {
   public static void main(String[] args) {
     Gson gson = new Gson();
-    // JsonParser parser = new JsonParser();
+
     try {
-      JsonObject wholeJSON = JsonParser.parseReader(new FileReader("/home/maceothompson/step78-2020/src/test/java/com/google/sps/everythingJSON.json")).getAsJsonObject();
+      JsonObject wholeJSON = JsonParser.parseReader(new FileReader("src/test/java/com/google/sps/everythingJSON.json")).getAsJsonObject();
       
       Type courseListType = new TypeToken<List<Course>>(){}.getType();
       List<Course> courses = gson.fromJson(wholeJSON.getAsJsonArray("courses"), courseListType);
