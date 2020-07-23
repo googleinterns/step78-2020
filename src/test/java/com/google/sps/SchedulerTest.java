@@ -35,6 +35,7 @@ public final class SchedulerTest {
   private static final int DURATION_60_MINUTES = 60;
   private static final int DURATION_90_MINUTES = 90;
   private static final int DURATION_1_HOUR = 60;
+  private static final int DURATION_2_HOUR = 120;
   
 
   private Scheduler scheduler;
@@ -52,6 +53,33 @@ public final class SchedulerTest {
     TimeRange wed = TimeRange.fromStartDuration(TimeRange.WEDNESDAY, hour, minute, durationMinutes);
     TimeRange fri = TimeRange.fromStartDuration(TimeRange.FRIDAY, hour, minute, durationMinutes);
     return Arrays.asList(mon, wed, fri);
+  }
+
+  /**
+   * Returns a list of times on monday and friday, to be used in section constructors.
+   */
+  public List<TimeRange> monFri(int hour, int minute, int durationMinutes) {
+    TimeRange mon = TimeRange.fromStartDuration(TimeRange.MONDAY, hour, minute, durationMinutes);
+    TimeRange fri = TimeRange.fromStartDuration(TimeRange.FRIDAY, hour, minute, durationMinutes);
+    return Arrays.asList(mon, fri);
+  }
+
+  /**
+   * Returns a list of times on monday and friday, to be used in section constructors.
+   */
+  public List<TimeRange> monWed(int hour, int minute, int durationMinutes) {
+    TimeRange mon = TimeRange.fromStartDuration(TimeRange.MONDAY, hour, minute, durationMinutes);
+    TimeRange wed = TimeRange.fromStartDuration(TimeRange.WEDNESDAY, hour, minute, durationMinutes);
+    return Arrays.asList(mon, wed);
+  }
+
+    /**
+   * Returns a list of times on monday, wednesday, and friday, to be used in section constructors.
+   */
+  public List<TimeRange> wedFri(int hour, int minute, int durationMinutes) {
+    TimeRange wed = TimeRange.fromStartDuration(TimeRange.WEDNESDAY, hour, minute, durationMinutes);
+    TimeRange fri = TimeRange.fromStartDuration(TimeRange.FRIDAY, hour, minute, durationMinutes);
+    return Arrays.asList(wed, fri);
   }
 
   /**
@@ -296,5 +324,50 @@ public final class SchedulerTest {
     HashSet<Schedule> expected = new HashSet<>(Arrays.asList(schedule1, schedule2, schedule3, schedule4));
 
     Assert.assertEquals(expected, actual);
+  }
+
+  public List<Course> createTrash() {
+    // PARALLEL ALGORITHMS
+    List<Section> section1 = Arrays.asList(new Section("Professor A", monWedFri(9, 30, DURATION_2_HOUR)));
+    List<Section> recitation1 = Arrays.asList(new Section("Professor A", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 10, 30, DURATION_1_HOUR))),
+                                              new Section("Professor A", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 11, 30, DURATION_1_HOUR))));
+    Course course1 = new Course("Parallel and Sequential Data Structures and Algorithms", 
+    "15210", "Computer Science", 12, true, section1, recitation1);
+
+    // RESEARCH AND INNOVATION
+    List<Section> section2 = Arrays.asList(new Section("Professor B", monFri(11, 30, DURATION_90_MINUTES)),
+                                           new Section("Professor B", wedFri(11, 30, DURATION_90_MINUTES)));
+    List<Section> recitation2 = Arrays.asList();
+    Course course2 = new Course("Research and Innovation in Computer Science", "15300", 
+    "Computer Science", 9, true, section2, recitation2);
+
+    // COMPILIERS
+    List<Section> section3 = Arrays.asList(new Section("Professor C", tuesThurs(8, 00, DURATION_90_MINUTES)));
+    List<Section> recitation3 = Arrays.asList(new Section("Professor C", Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 14, 30, DURATION_1_HOUR))),
+                                              new Section("Professor C", Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 16, 00, DURATION_1_HOUR))));
+    Course course3 = new Course("Compiler Design", "15411", 
+    "Computer Science", 15, true, section3, recitation3);
+
+    // ORGANIZATIONAL BEHAVIOR
+    List<Section> section4 = Arrays.asList(new Section("Professor D", monWed(13, 30, DURATION_2_HOUR)),
+                                           new Section("Professor D", tuesThurs(15, 00, DURATION_2_HOUR)));
+    List<Section> recitation4 = Arrays.asList();
+    Course course4 = new Course("Organizational Behavior", 
+    "70311", "Tepper", 9, false, section4, recitation4);
+
+    // INTRO TO CIVIL ENGINEERING
+    List<Section> section5 = Arrays.asList(new Section("Professor E", Arrays.asList(TimeRange.fromStartDuration(TimeRange.WEDNESDAY, 16, 00, DURATION_2_HOUR))));
+    List<Section> recitation5 = Arrays.asList(new Section("Professor E", monFri(16,00, DURATION_1_HOUR)));
+    Course course5 = new Course("Intro to Civil Engineering", 
+    "12100", "Civil Engineering", 12, false, section5, recitation5);
+
+    return Arrays.asList(course1, course2, course3, course4, course5);
+  }
+
+  @Test
+  public void bigTestWeird() {
+    List<Course> courses = createTrash();
+    List<Schedule> schedules = scheduler.generateSchedules(courses, new Invariants(54, 60));
+    System.out.println("woo");
   }
 }
