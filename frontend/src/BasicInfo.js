@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import { Card } from '@material-ui/core';
 import Credits from './Credits';
 import TermDates from './TermDates';
 
-class BasicInfo extends React.Component {  
+export default class BasicInfo extends PureComponent {
   render() {
     return (
       <Card>
@@ -23,5 +23,3 @@ class BasicInfo extends React.Component {
     )
   }
 }
-
-export default BasicInfo;

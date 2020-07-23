@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
 import { Card, CardContent } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import SubjectPreference from './SubjectPreference';
 import TimePreference from './TimePreference';
 
-class Criterion extends React.Component { 
+export default class Criterion extends PureComponent {
   render() {
     return (
       <Card>
@@ -28,5 +28,3 @@ class Criterion extends React.Component {
     )
   }
 }
-
-export default Criterion;
