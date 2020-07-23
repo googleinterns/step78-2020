@@ -40,7 +40,7 @@ public class ScheduleDisplayHandler extends HttpServlet {
       Calendar client = Utils.loadCalendarClient();
 
       // Get the ordered schedules
-      List<Schedule> schedules = ScheduleCreationHandler.createSchedules();
+      List<Schedule> schedules =  new ArrayList<>();
 
       List<String> calIds = new ArrayList<>();
 
