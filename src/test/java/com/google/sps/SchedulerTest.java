@@ -326,7 +326,7 @@ public final class SchedulerTest {
     Assert.assertEquals(expected, actual);
   }
 
-  public List<Course> createTrash() {
+  public List<Course> generateLargeSchedule() {
     // PARALLEL ALGORITHMS
     List<Section> section1 = Arrays.asList(new Section("Professor A", monWedFri(9, 30, DURATION_2_HOUR)));
     List<Section> recitation1 = Arrays.asList(new Section("Professor A", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 10, 30, DURATION_1_HOUR))),
@@ -365,9 +365,9 @@ public final class SchedulerTest {
   }
 
   @Test
-  public void bigTestWeird() {
-    List<Course> courses = createTrash();
+  public void nonRequiredNotDeleted() {
+    List<Course> courses = generateLargeSchedule();
     List<Schedule> schedules = scheduler.generateSchedules(courses, new Invariants(54, 60));
-    System.out.println("woo");
+    Assert.assertTrue(schedules.size() == 8);
   }
 }
