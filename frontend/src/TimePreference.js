@@ -30,13 +30,11 @@ class TimePreference extends React.Component {
       <Card>
         <CardContent>
           <TextField
-            label="Start time: " type="time"
-            defaultValue="08:00" onChange={this.handleStartTimeChange}
+            label="Start time: " type="time" onChange={this.handleStartTimeChange}
             InputLabelProps={{ shrink: true, }} inputProps={{ step: 300, }}
           />
           <TextField
-            label="End time: " type="time"
-            defaultValue="17:00" onChange={this.handleEndTimeChange}
+            label="End time: " type="time" onChange={this.handleEndTimeChange}
             InputLabelProps={{ shrink: true, }} inputProps={{ step: 300, }}
           />
           <IconButton aria-label="delete" onClick={this.handleDeleteTimePreference}>

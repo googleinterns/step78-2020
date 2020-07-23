@@ -44,12 +44,13 @@ class Section extends React.Component {
       <Card>
         <CardContent>
           <Input placeholder="Professor" inputProps={{ 'aria-label': 'description' }} 
-            value={this.props.professor} onChange={this.handleProfessorChange} />
-          <TextField label="Start time: " type="time" defaultValue="08:00" 
+            value={this.props.professor} onChange={this.handleProfessorChange} 
+          />
+          <TextField label="Start time: " type="time"
             onChange={this.handleStartTimeChange} InputLabelProps={{ shrink: true, }}
             value={this.props.startTime} inputProps={{ step: 300, }}
           />
-          <TextField label="End time: " type="time" defaultValue="09:00" 
+          <TextField label="End time: " type="time"
             onChange={this.handleEndTimeChange} InputLabelProps={{ shrink: true, }}
             value={this.props.endTime} inputProps={{ step: 300, }}
           />
