@@ -36,12 +36,14 @@ class BasicInfo extends React.Component {
           minCredits={this.props.minCredits}
           maxCredits={this.props.maxCredits}
           updateMinCredits={this.updateMinCredits}
-          updateMaxCredits={this.updateMaxCredits}/>
+          updateMaxCredits={this.updateMaxCredits}
+        />
         <TermDates 
           startDate={this.props.startDate}
           endDate={this.props.endDate}
           updateTermStartDate={this.updateTermStartDate}
-          updateTermEndDate={this.updateTermEndDate}/>
+          updateTermEndDate={this.updateTermEndDate}
+        />
       </Card>
     )
   }

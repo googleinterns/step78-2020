@@ -23,9 +23,11 @@ class Credits extends React.Component {
     return (
       <CardContent>
         <TextField label="Minimum credits:" value={this.props.minCredits} 
-          onChange={this.handleMinCreditsChange} InputProps={{ inputComponent: NumberFormatCustom }} />
+          onChange={this.handleMinCreditsChange} InputProps={{ inputComponent: NumberFormatCustom }} 
+        />
         <TextField label="Maximum credits:" value={this.props.maxCredits} 
-          onChange={this.handleMaxCreditsChange} InputProps={{ inputComponent: NumberFormatCustom }} />
+          onChange={this.handleMaxCreditsChange} InputProps={{ inputComponent: NumberFormatCustom }} 
+        />
       </CardContent>
     );
   }

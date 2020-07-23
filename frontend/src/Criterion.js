@@ -41,11 +41,13 @@ class Criterion extends React.Component {
             timePreference={timePreference}
             updateTimeStartPreference={this.updateTimeStartPreference}
             updateTimeEndPreference={this.updateTimeEndPreference}
-            deleteTimePreference={this.deleteTimePreference}/>))}
+            deleteTimePreference={this.deleteTimePreference}
+          />))}
           <Button onClick={this.props.createNewTimePreference}>+ time-block</Button>
           <SubjectPreference 
             subject={this.props.subject}
-            updateSubjectPreference={this.updateSubjectPreference}/>
+            updateSubjectPreference={this.updateSubjectPreference}
+          />
         </CardContent>
       </Card>
     )

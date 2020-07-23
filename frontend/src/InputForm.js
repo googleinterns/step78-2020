@@ -412,6 +412,7 @@ class InputForm extends React.Component {
             sections={this.state.courses[index].sections}
             isRequired={this.state.courses[index].isRequired}
             selected={this.state.courses[index].rank}
+            
             updateCourseName={this.updateCourseName}
             updateCourseID={this.updateCourseID}
             updateCourseSubject={this.updateCourseSubject}
@@ -419,13 +420,15 @@ class InputForm extends React.Component {
             updateCourseIsRequired={this.updateCourseIsRequired}
             updateCourseRank={this.updateCourseRank}
             updateRankSelectOptions={this.updateRankSelectOptions}
+            
             updateSectionProfessor={this.updateSectionProfessor}
             updateSectionStartTime={this.updateSectionStartTime}
             updateSectionEndTime={this.updateSectionEndTime}
             updateSectionDays={this.updateSectionDays}
             createNewSection={this.createNewSection}
             deleteCourse={this.deleteCourse}
-            deleteSection={this.deleteSection}/>))}
+            deleteSection={this.deleteSection}
+          />))}
         <Button onClick={this.createNewCourse}>+ Course</Button>
         <h2>Preferences</h2>
         <Criterion 
@@ -435,7 +438,8 @@ class InputForm extends React.Component {
           updateSubjectPreference={this.updateSubjectPreference}
           updateTimeStartPreference={this.updateTimeStartPreference}
           updateTimeEndPreference={this.updateTimeEndPreference}
-          deleteTimePreference={this.deleteTimePreference}/>
+          deleteTimePreference={this.deleteTimePreference}
+        />
         <h2>Other info</h2>
         <BasicInfo 
           minCredits={this.state.basicInfo.credits.minCredits}
@@ -445,7 +449,8 @@ class InputForm extends React.Component {
           updateMinCredits={this.updateMinCredits}
           updateMaxCredits={this.updateMaxCredits}
           updateTermStartDate={this.updateTermStartDate}
-          updateTermEndDate={this.updateTermEndDate}/>
+          updateTermEndDate={this.updateTermEndDate}
+        />
         <Button onClick={this.submit}>Submit</Button>
       </div>)
   }
