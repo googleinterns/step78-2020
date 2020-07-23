@@ -373,21 +373,9 @@ class InputForm extends React.Component {
   convertCourseSections(course) {
     course['sections'] = course.sections.map((section) => {
       let newSection = {professor: section['professor'], meetingTimes: []};
-      if (section.monday) {
-        newSection.meetingTimes.push(this.timeToTimeRange(1, section.startTime, section.endTime));
-      }
-      if (section.tuesday) {
-        newSection.meetingTimes.push(this.timeToTimeRange(2, section.startTime, section.endTime));
-      }
-      if (section.wednesday) {
-        newSection.meetingTimes.push(this.timeToTimeRange(3, section.startTime, section.endTime));
-      }
-      if (section.thursday) {
-        newSection.meetingTimes.push(this.timeToTimeRange(4, section.startTime, section.endTime));
-      }
-      if (section.friday) {
-        newSection.meetingTimes.push(this.timeToTimeRange(5, section.startTime, section.endTime));
-      }
+      section.days.forEach(day => {
+        newSection.meetingTimes.push(this.timeToTimeRange(day, section.startTime, section.endTime));
+      });
 
       return newSection;
     });
