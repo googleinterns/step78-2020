@@ -108,7 +108,7 @@ public class ScheduledCourse extends Course {
     return super.hashCode() * Objects.hash(lectureSection, labSection);
   }
 
-  public Section getlectureSection() {
+  public Section getLectureSection() {
     return this.lectureSection;
   }
 
