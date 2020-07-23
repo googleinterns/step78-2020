@@ -110,7 +110,7 @@ class Course extends React.Component {
           <TextField placeholder="Credits" value={this.props.credits} onChange={this.handleCreditsChange}
             InputProps={{ inputComponent: NumberFormatCustom }} 
           />
-          <br></br>
+          <br/>
           <FormControl>
             <InputLabel>Rank</InputLabel>
             <Select onChange={this.handleRankChange} value={this.props.selected}>
