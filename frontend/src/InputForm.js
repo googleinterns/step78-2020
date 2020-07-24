@@ -331,7 +331,8 @@ class InputForm extends React.Component {
     const defaultSection = {
       professor: "",
       startTime: "",
-      endTime: ""
+      endTime: "",
+      days: []
     }
 
     this.setState({
