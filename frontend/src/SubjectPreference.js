@@ -17,7 +17,8 @@ class SubjectPreference extends React.Component {
       <CardContent>
         <div id="label">Preferred subject: </div>
         <Input placeholder="Subject" inputProps={{ 'aria-label': 'description' }} 
-          value={this.props.subject} onChange={this.handleSubjectChange} />
+          value={this.props.subject} onChange={this.handleSubjectChange} 
+        />
       </CardContent>
     );
   }
