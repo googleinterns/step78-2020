@@ -59,10 +59,11 @@ public final class Scheduler {
    * Recursively iterates through a list of courses and adds schedules to the
    * given set.
    * 
-   * @param courses     The list of courses to iterate through
-   * @param currentSchedule  The current scheduled course list to be added/operated on
-   * @param invariants  The invariants that constrain the valid schedules
-   * @param courseLists The set of course lists that is being generated/added to.
+   * @param index                         The index the current course in availableCourses
+   * @param availableCourses              The list of courses to iterate through
+   * @param currentSchedule               The current scheduled course list to be added/operated on
+   * @param invariants                    The invariants that constrain the valid schedules
+   * @param generatedScheduledCourseLists The set of scheduledCourse lists that is being generated/added to.
    */
   private void generateSchedulesHelper(int index, List<Course> availableCourses, List<ScheduledCourse> currentSchedule,
       Invariants invariants, Set<List<ScheduledCourse>> generatedScheduledCourseLists) {
@@ -117,7 +118,7 @@ public final class Scheduler {
           if (doesNotOverlapSchedule) {
             List<ScheduledCourse> newScheduledCourseList = new ArrayList<>(currentSchedule);
             newScheduledCourseList.add(new ScheduledCourse(course, lectureSection));
-            generateSchedulesHelper(index +1, availableCourses, 
+            generateSchedulesHelper(index + 1, availableCourses, 
                 newScheduledCourseList, invariants, generatedScheduledCourseLists);
           }
         }

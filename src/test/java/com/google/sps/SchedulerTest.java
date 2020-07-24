@@ -341,7 +341,7 @@ public final class SchedulerTest {
     Course course2 = new Course("Research and Innovation in Computer Science", "15300", 
     "Computer Science", 9, true, section2, recitation2);
 
-    // COMPILIERS
+    // COMPILERS
     List<Section> section3 = Arrays.asList(new Section("Professor C", tuesThurs(8, 00, DURATION_90_MINUTES)));
     List<Section> recitation3 = Arrays.asList(new Section("Professor C", Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 14, 30, DURATION_1_HOUR))),
                                               new Section("Professor C", Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 16, 00, DURATION_1_HOUR))));
