@@ -6,6 +6,9 @@ import Switch from '@material-ui/core/Switch';
 import Select from '@material-ui/core/Select';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 import Section from './Section';
 import { NumberFormatCustom } from './NumberFormat';
 
@@ -19,6 +22,7 @@ class Course extends React.Component {
     this.handleCreditsChange = this.handleCreditsChange.bind(this);
     this.handleIsRequiredChange = this.handleIsRequiredChange.bind(this);
     this.handleRankChange = this.handleRankChange.bind(this);
+    this.handleDeleteCourse = this.handleDeleteCourse.bind(this);
     this.updateRankSelectOptions = this.updateRankSelectOptions.bind(this);
 
     this.updateSectionProfessor = this.updateSectionProfessor.bind(this);
@@ -26,6 +30,7 @@ class Course extends React.Component {
     this.updateSectionEndTime = this.updateSectionEndTime.bind(this);
     this.updateSectionDays = this.updateSectionDays.bind(this);
     this.createNewSection = this.createNewSection.bind(this);
+    this.deleteSection = this.deleteSection.bind(this);
   }
 
   handleNameChange(event) {
@@ -50,6 +55,10 @@ class Course extends React.Component {
 
   handleRankChange(event) {
     this.props.updateCourseRank(this.props.id, event.target.value);
+  }
+
+  handleDeleteCourse() {
+    this.props.deleteCourse(this.props.id);
   }
 
   updateRankSelectOptions() {
@@ -78,29 +87,40 @@ class Course extends React.Component {
     this.props.createNewSection(this.props.id);
   }
 
+  deleteSection(sectionId) {
+    this.props.deleteSection(this.props.id, sectionId);
+  }
+
   render() {
     return (
       <Card>
         <CardContent>
           <Input placeholder="Course Name" inputProps={{ 'aria-label': 'description' }} 
-            value={this.props.name} onChange={this.handleNameChange} />
+            value={this.props.name} onChange={this.handleNameChange} 
+          />
           <Input placeholder="Course ID" inputProps={{ 'aria-label': 'description' }}
-            value={this.props.courseID} onChange={this.handleIDChange} />
+            value={this.props.courseID} onChange={this.handleIDChange} 
+          />
+          <IconButton aria-label="delete" onClick={this.handleDeleteCourse}>
+            <DeleteIcon />
+          </IconButton>
           <Input placeholder="Subject" inputProps={{ 'aria-label': 'description' }}
-            value={this.props.subject} onChange={this.handleSubjectChange} />
+            value={this.props.subject} onChange={this.handleSubjectChange} 
+          />
           <TextField placeholder="Credits" value={this.props.credits} onChange={this.handleCreditsChange}
-            InputProps={{ inputComponent: NumberFormatCustom }} />
-          <FormControlLabel
-            control={<Switch checked={this.props.isRequired} onChange={this.handleIsRequiredChange} />}
-            label="Required"/>
-
+            InputProps={{ inputComponent: NumberFormatCustom }} 
+          />
+          <br/>
           <FormControl>
             <InputLabel>Rank</InputLabel>
             <Select onChange={this.handleRankChange} value={this.props.selected}>
               {this.updateRankSelectOptions()}
             </Select>
           </FormControl>
-
+          <FormControlLabel
+            control={<Switch checked={this.props.isRequired} onChange={this.handleIsRequiredChange} />}
+            label="Required"
+          />
           {this.props.sections.map((section, index) => (
             <Section
               id={index}
@@ -109,8 +129,10 @@ class Course extends React.Component {
               updateSectionProfessor={this.updateSectionProfessor}
               updateSectionStartTime={this.updateSectionStartTime}
               updateSectionEndTime={this.updateSectionEndTime}
-              updateSectionDays={this.updateSectionDays}/>))}
-          <button onClick={this.createNewSection}>Add Section</button>
+              updateSectionDays={this.updateSectionDays}
+              deleteSection={this.deleteSection}
+            />))}
+          <Button onClick={this.createNewSection}>+ section</Button>
         </CardContent>
       </Card>
     );

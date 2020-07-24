@@ -1,6 +1,8 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { CardContent } from '@material-ui/core';
+import { Card, CardContent } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 class TimePreference extends React.Component {
   constructor(props) {
@@ -8,6 +10,7 @@ class TimePreference extends React.Component {
 
     this.handleStartTimeChange = this.handleStartTimeChange.bind(this);
     this.handleEndTimeChange = this.handleEndTimeChange.bind(this);
+    this.handleDeleteTimePreference = this.handleDeleteTimePreference.bind(this);
   }
 
   handleStartTimeChange(event) {
@@ -18,20 +21,27 @@ class TimePreference extends React.Component {
     this.props.updateTimeEndPreference(this.props.id, event.target.value);
   }
 
+  handleDeleteTimePreference() {
+    this.props.deleteTimePreference(this.props.id);
+  }
+
   render() {
     return (
-      <CardContent>
-        <TextField
-          label="Start time: " type="time"
-          defaultValue="08:00" onChange={this.handleStartTimeChange}
-          InputLabelProps={{ shrink: true, }} inputProps={{ step: 300, }}
-        />
-        <TextField
-          label="End time: " type="time"
-          defaultValue="17:00" onChange={this.handleEndTimeChange}
-          InputLabelProps={{ shrink: true, }} inputProps={{ step: 300, }}
-        />
-      </CardContent>
+      <Card>
+        <CardContent>
+          <TextField
+            label="Start time: " type="time" onChange={this.handleStartTimeChange}
+            InputLabelProps={{ shrink: true, }} inputProps={{ step: 300, }}
+          />
+          <TextField
+            label="End time: " type="time" onChange={this.handleEndTimeChange}
+            InputLabelProps={{ shrink: true, }} inputProps={{ step: 300, }}
+          />
+          <IconButton aria-label="delete" onClick={this.handleDeleteTimePreference}>
+            <DeleteIcon />
+          </IconButton>
+        </CardContent>
+      </Card>
     );
   }
 }
