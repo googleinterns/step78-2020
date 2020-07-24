@@ -443,10 +443,18 @@ class InputForm extends React.Component {
 
     submitState.criterion.timePreferences = submitState.criterion.timePreferences.map((times) => 
         this.timeToTimeRange(0, times.startTime, times.endTime));
-    var json = JSON.stringify(submitState);
-    //! This will be changed to send the json to the backend
-    console.log(json);
-  } 
+
+    var scheduleList;
+    fetch("/handleUserInput", {
+      method:"POST",
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(submitState)
+    }).then(response => response.json())
+      .then(responseSchedules => {
+        scheduleList = responseSchedules;
+        console.log(JSON.stringify(scheduleList));
+      });
+  }
 
   convertCourseSections(course) {
     course['sections'] = course.sections.map((section) => {
@@ -454,9 +462,9 @@ class InputForm extends React.Component {
       section.days.forEach(day => {
         newSection.meetingTimes.push(this.timeToTimeRange(day, section.startTime, section.endTime));
       });
-
       return newSection;
     });
+    
     return course;
   }
 
