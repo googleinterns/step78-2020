@@ -40,24 +40,21 @@ public class ScheduleCreationHandler extends HttpServlet {
   
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) {
-    JsonObject wholeJSON;
+    Gson gson = new Gson();
+    GenerateScheduleRequest userInput;
     try {
-      wholeJSON = JsonParser.parseReader(request.getReader()).getAsJsonObject();
+      JsonObject wholeJSON = JsonParser.parseReader(request.getReader()).getAsJsonObject();
+      userInput = gson.fromJson(wholeJSON, GenerateScheduleRequest.class);
     } catch (Exception e) {
       System.out.println("Error reading JSON: " + e.getMessage());
       return; //TODO: Handle this properly
     }
 
-    Gson gson = new Gson();
-    System.out.println(wholeJSON.toString());
-
-    Type courseListType = new TypeToken<List<Course>>(){}.getType();
-    List<Course> courses = gson.fromJson(wholeJSON.getAsJsonArray("courses"), courseListType);
-    
-    JsonObject basicInfo = wholeJSON.getAsJsonObject("basicInfo");
-    Invariants invariants = gson.fromJson(basicInfo.get("credits"), Invariants.class);
+    List<Course> courses = userInput.getCourses();
+    Invariants invariants = userInput.getCredits();
 
     Scheduler scheduler = new Scheduler();
+    System.out.printf("Generating Schedules from %d courses", courses.size());
     List<Schedule> schedules = scheduler.generateSchedules(courses, invariants);
     response.setContentType("application/json");
     try {
