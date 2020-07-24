@@ -423,9 +423,10 @@ class InputForm extends React.Component {
       headers: {'Content-Type':'application/json'},
       body: JSON.stringify(submitState)
     }).then(response => response.json())
-      .then(responseSchedules => scheduleList = responseSchedules);
-    
-    console.log(scheduleList);
+      .then(responseSchedules => {
+        scheduleList = responseSchedules;
+        console.log(JSON.stringify(scheduleList));
+      });
   }
 
   convertCourseSections(course) {
