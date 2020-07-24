@@ -4,6 +4,7 @@ import { Input, Card, CardContent } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
@@ -63,7 +64,7 @@ class Course extends React.Component {
 
   updateRankSelectOptions() {
     let items = [];
-    items = this.props.updateRankSelectOptions();
+    items = this.props.updateRankSelectOptions(this.props.id);
     return items;
   }
 
@@ -114,6 +115,7 @@ class Course extends React.Component {
           <FormControl>
             <InputLabel>Rank</InputLabel>
             <Select onChange={this.handleRankChange} value={this.props.selected}>
+              <MenuItem key="label" value="label" disabled>order courses by preference</MenuItem>
               {this.updateRankSelectOptions()}
             </Select>
           </FormControl>

@@ -79,6 +79,10 @@ class InputForm extends React.Component {
     this.submit = this.submit.bind(this);
   }
 
+  // used to keep track of which ranks have been selected for ordering the courses,
+  // so that no two courses have the same rank 
+  selectedRanks = [];
+
   updateCourseName(id, courseName) {
     this.setState({
       ...this.state,
@@ -130,12 +134,24 @@ class InputForm extends React.Component {
   }
 
   updateCourseRank(id, selected) {
+    var previousSelected = this.state.courses[id].rank;
+    if (previousSelected !== "") {
+      var index = this.selectedRanks.indexOf(previousSelected);
+      this.selectedRanks.splice(index, 1);
+    }
+    if (this.selectedRanks.indexOf(selected) === -1) {
+      this.selectedRanks.push(selected);
+    }
+
     this.setState({
       ...this.state,
       courses: this.state.courses.map((course, index) =>
         index === id
           ? ({ ...course, rank: selected })
-          : course)
+          : this.state.courses[index].rank === selected
+            ? ({...course, rank: ""})
+            : course
+        )
     });   
   }
 
@@ -323,13 +339,24 @@ class InputForm extends React.Component {
     });
   }
 
-  updateRankSelectOptions() {
-     let items = [];   
-     let numCourses = this.state.courses.length;     
-     for (let i = 1; i <= numCourses; i++) {             
-          items.push(<MenuItem key={i} value={i}>{i}</MenuItem>);   
-     }
-     return items;
+  updateRankSelectOptions(id) {
+    let items = [];   
+    let numCourses = this.state.courses.length;     
+    if (this.state.courses[id].rank !== "") {
+      for (let j = 1; j <= numCourses; j++) {
+        items.push(<MenuItem key={j} value={j}>{j}</MenuItem>)       
+      }
+      return items;
+    } else {
+      for (let j = 1; j <= numCourses; j++) {
+        if (this.selectedRanks.indexOf(j) === -1) {
+          items.push(<MenuItem key={j} value={j}>{j}</MenuItem>)
+        } else {
+          items.push(<MenuItem key={j} value={j} disabled>{j}</MenuItem>)
+        }
+      }
+      return items;
+    }
   }
 
   createNewSection(id) {
