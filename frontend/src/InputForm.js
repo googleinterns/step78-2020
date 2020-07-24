@@ -308,7 +308,8 @@ class InputForm extends React.Component {
       sections: [{
         professor: "",
         startTime: "",
-        endTime: ""
+        endTime: "",
+        days: []
       }]
     }
 
