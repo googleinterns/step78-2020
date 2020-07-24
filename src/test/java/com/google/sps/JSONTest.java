@@ -40,14 +40,20 @@ public final class JSONTest {
 
     try {
       JsonObject wholeJSON = JsonParser.parseReader(new FileReader("src/test/java/com/google/sps/everythingJSON.json")).getAsJsonObject();
+      GenerateScheduleRequest request = gson.fromJson(wholeJSON, GenerateScheduleRequest.class);
       
-      Type courseListType = new TypeToken<List<Course>>(){}.getType();
-      List<Course> courses = gson.fromJson(wholeJSON.getAsJsonArray("courses"), courseListType);
-      
-      JsonObject basicInfo = wholeJSON.getAsJsonObject("basicInfo");
-      Invariants invariants = gson.fromJson(basicInfo.get("credits"), Invariants.class);
+      List<Course> courses = request.getCourses();
+      Invariants invariants = request.getCredits();
+      /*  Old logic
+        Type courseListType = new TypeToken<List<Course>>(){}.getType();
+        List<Course> courses = gson.fromJson(wholeJSON.getAsJsonArray("courses"), courseListType);
+    
+        JsonObject basicInfo = wholeJSON.getAsJsonObject("basicInfo");
+        Invariants invariants = gson.fromJson(basicInfo.get("credits"), Invariants.class);
+      */
       Scheduler scheduler = new Scheduler();
       List<Schedule> schedules = scheduler.generateSchedules(courses, invariants);
+      System.out.println("woo");
     } catch (JsonIOException e) {
       System.out.println(e.getMessage());
     } catch (JsonSyntaxException e) {
