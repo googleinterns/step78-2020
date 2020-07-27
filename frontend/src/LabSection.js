@@ -8,7 +8,7 @@ import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 
-class Section extends React.Component {
+class LabSection extends React.Component {
   constructor(props) {
     super(props);
 
@@ -20,23 +20,23 @@ class Section extends React.Component {
   }
 
   handleProfessorChange(event) {
-    this.props.updateSectionProfessor(this.props.id, event.target.value);
+    this.props.updateLabSectionProfessor(this.props.id, event.target.value);
   }
 
   handleStartTimeChange(event) {
-    this.props.updateSectionStartTime(this.props.id, event.target.value);
+    this.props.updateLabSectionStartTime(this.props.id, event.target.value);
   }
 
   handleEndTimeChange(event) {
-    this.props.updateSectionEndTime(this.props.id, event.target.value);
+    this.props.updateLabSectionEndTime(this.props.id, event.target.value);
   }
 
   handleDayChange(day) {
-    this.props.updateSectionDays(this.props.id, day);
+    this.props.updateLabSectionDays(this.props.id, day);
   }
 
   handleDeleteSection() {
-    this.props.deleteSection(this.props.id);
+    this.props.deleteLabSection(this.props.id);
   }
 
   render() {
@@ -63,36 +63,43 @@ class Section extends React.Component {
               control={<Checkbox
               onChange={() => this.handleDayChange(0)} />}
               label="Sun"
+              checked={this.props.sun}
             />
             <FormControlLabel
               control={<Checkbox
               onChange={() => this.handleDayChange(1)} />}
               label="Mon"
+              checked={this.props.mon}
             />
             <FormControlLabel
               control={<Checkbox
               onChange={() => this.handleDayChange(2)} />}
               label="Tues"
+              checked={this.props.tue}
             />
             <FormControlLabel
               control={<Checkbox
               onChange={() => this.handleDayChange(3)} />}
               label="Wed"
+              checked={this.props.wed}
             />
             <FormControlLabel
               control={<Checkbox
               onChange={() => this.handleDayChange(4)} />}
               label="Thurs"
+              checked={this.props.thur}
             />
             <FormControlLabel
               control={<Checkbox
               onChange={() => this.handleDayChange(5)} />}
               label="Fri"
+              checked={this.props.fri}
             />
             <FormControlLabel
               control={<Checkbox
               onChange={() => this.handleDayChange(6)} />}
               label="Sat"
+              checked={this.props.sat}
             />
           </FormGroup>
         </CardContent>
@@ -101,4 +108,4 @@ class Section extends React.Component {
   }
 }
 
-export default Section;
+export default LabSection;
