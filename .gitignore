@@ -18,6 +18,9 @@ frontend/coverage/
 # production
 frontend/build
 
+# client secrets
+src/main/resources/client_secrets.json
+
 # misc
 .DS_Store
 .env.local
