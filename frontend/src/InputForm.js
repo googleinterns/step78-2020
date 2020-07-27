@@ -22,12 +22,7 @@ class InputForm extends React.Component {
           endTime: "",
           days: []
         }],
-        labSections: [{
-          professor: "",
-          startTime: "",
-          endTime: "",
-          days: []
-        }]
+        labSections: []
       }],
       criterion: {
         timePreferences: [{
@@ -569,6 +564,8 @@ class InputForm extends React.Component {
 
     submitState.criterion.timePreferences = submitState.criterion.timePreferences.map((times) => 
         this.timeToTimeRange(0, times.startTime, times.endTime));
+
+    console.log(JSON.stringify(submitState))
 
     var scheduleList;
     fetch("/handleUserInput", {
