@@ -43,8 +43,7 @@ class Section extends React.Component {
     return (
       <Card>
         <CardContent>
-          <Input placeholder="Professor" inputProps={{ 'aria-label': 'description' }} 
-            value={this.props.professor} onChange={this.handleProfessorChange} 
+          <Input placeholder="Professor" value={this.props.professor} onChange={this.handleProfessorChange} 
           />
           <TextField label="Start time: " type="time"
             onChange={this.handleStartTimeChange} InputLabelProps={{ shrink: true, }}
