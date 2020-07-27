@@ -171,36 +171,36 @@ public final class RankTest {
 
   public static List<Course> createCoursesPriorityBigTest() {
     // PARALLEL ALGORITHMS
-    List<Section> section1 = Arrays.asList(new Section("Lecture", monWedFri(9, 30, DURATION_2_HOUR)));
-    List<Section> recitation1 = Arrays.asList(new Section("Recitation 1", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 10, 30, DURATION_1_HOUR))),
-                                              new Section("Recitation 2", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 11, 30, DURATION_1_HOUR))));
+    List<Section> section1 = Arrays.asList(new Section("Professor A", monWedFri(9, 30, DURATION_2_HOUR)));
+    List<Section> recitation1 = Arrays.asList(new Section("Professor A", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 10, 30, DURATION_1_HOUR))),
+                                              new Section("Professor A", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 11, 30, DURATION_1_HOUR))));
     Course course1 = new Course("Parallel and Sequential Data Structures and Algorithms", 
     "15210", "Computer Science", 12, true, section1, recitation1);
 
     // RESEARCH AND INNOVATION
-    List<Section> section2 = Arrays.asList(new Section("Lecture 1", monFri(11, 30, DURATION_90_MINUTES)),
-                                           new Section("Lecture 2", wedFri(11, 30, DURATION_90_MINUTES)));
+    List<Section> section2 = Arrays.asList(new Section("Professor B", monFri(11, 30, DURATION_90_MINUTES)),
+                                           new Section("Professor B", wedFri(11, 30, DURATION_90_MINUTES)));
     List<Section> recitation2 = Arrays.asList();
     Course course2 = new Course("Research and Innovation in Computer Science", "15300", 
     "Computer Science", 9, true, section2, recitation2);
 
     // COMPILIERS
-    List<Section> section3 = Arrays.asList(new Section("Lecture", tuesThurs(8, 00, DURATION_90_MINUTES)));
-    List<Section> recitation3 = Arrays.asList(new Section("Recitation 1", Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 14, 30, DURATION_1_HOUR))),
-                                              new Section("Recitation 2", Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 16, 00, DURATION_1_HOUR))));
+    List<Section> section3 = Arrays.asList(new Section("Professor C", tuesThurs(8, 00, DURATION_90_MINUTES)));
+    List<Section> recitation3 = Arrays.asList(new Section("Professor C", Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 14, 30, DURATION_1_HOUR))),
+                                              new Section("Professor C", Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 16, 00, DURATION_1_HOUR))));
     Course course3 = new Course("Compiler Design", "15411", 
     "Computer Science", 15, true, section3, recitation3);
 
     // ORGANIZATIONAL BEHAVIOR
-    List<Section> section4 = Arrays.asList(new Section("Lecture 1", monWed(13, 30, DURATION_2_HOUR)),
-                                           new Section("Lecture 2", tuesThurs(15, 00, DURATION_2_HOUR)));
+    List<Section> section4 = Arrays.asList(new Section("Professor D", monWed(13, 30, DURATION_2_HOUR)),
+                                           new Section("Professor D", tuesThurs(15, 00, DURATION_2_HOUR)));
     List<Section> recitation4 = Arrays.asList();
     Course course4 = new Course("Organizational Behavior", 
     "70311", "Tepper", 9, true, section4, recitation4);
 
     // INTRO TO CIVIL ENGINEERING
-    List<Section> section5 = Arrays.asList(new Section("Lecture", Arrays.asList(TimeRange.fromStartDuration(TimeRange.WEDNESDAY, 16, 00, DURATION_2_HOUR))));
-    List<Section> recitation5 = Arrays.asList(new Section("Recitation", monFri(16,00, DURATION_1_HOUR)));
+    List<Section> section5 = Arrays.asList(new Section("Professor E", Arrays.asList(TimeRange.fromStartDuration(TimeRange.WEDNESDAY, 16, 00, DURATION_2_HOUR))));
+    List<Section> recitation5 = Arrays.asList(new Section("Professor E", monFri(16,00, DURATION_1_HOUR)));
     Course course5 = new Course("Intro to Civil Engineering", 
     "12100", "Civil Engineering", 12, false, section5, recitation5);
 
@@ -672,22 +672,5 @@ public final class RankTest {
                                              bigSchedule13, bigSchedule14, bigSchedule15, bigSchedule17, bigSchedule6, bigSchedule8,
                                              bigSchedule11, bigSchedule18, bigSchedule20, bigSchedule21, bigSchedule22, bigSchedule23);
     Assert.assertEquals(expected, actual);
-  }
-
-  public void printSchedule(Schedule schedule) {
-    float creditCount = 0;
-    Collection<ScheduledCourse> courses = schedule.getCourses();
-    System.out.println(schedule);
-    for (ScheduledCourse course : courses) {
-      creditCount += course.getCredits();
-      if(course.getLabSection() == null) {
-        System.out.println(course.getName() + " : " + course.getLectureSection().getProfessor());
-      } else {
-        System.out.println(course.getName() +  " : " + course.getLectureSection().getProfessor() + " : " +  course.getLabSection().getProfessor());
-      }
-      //System.out.println(course.getName());
-    }
-    System.out.println(creditCount);
-    System.out.println("======================================");
   }
 }
