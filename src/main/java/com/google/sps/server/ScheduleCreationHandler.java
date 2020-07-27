@@ -14,64 +14,55 @@
 
 package com.google.sps.server;
 
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
 
 import com.google.sps.data.*;
 import com.google.sps.Scheduler;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
+import com.google.gson.reflect.TypeToken;
 
 /**
  * Create and rank the schedules     
  */
-public class ScheduleCreationHandler {
+@WebServlet("/handleUserInput")
+public class ScheduleCreationHandler extends HttpServlet {
   
-  private static final int DURATION_90_MINUTES = 90;
-  private static final int DURATION_3_HOUR = 180;
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) {
+    Gson gson = new Gson();
+    GenerateScheduleRequest userInput;
+    try {
+      JsonObject wholeJSON = JsonParser.parseReader(request.getReader()).getAsJsonObject();
+      userInput = gson.fromJson(wholeJSON, GenerateScheduleRequest.class);
+    } catch (Exception e) {
+      System.out.println("Error reading JSON: " + e.getMessage());
+      return; //TODO: Handle this properly
+    }
 
-  public static List<Schedule> createSchedules() {
-    // Currently using hard-coded courses and preferences 
-    List<Course> courses = createCoursesPriority();
-    List<TimeRange> userNoClassTimes = TesterSchedule.monWedFri(7, 00, DURATION_3_HOUR);
-    List<Course> courseList = createCoursesPriority();
-    String preferredSubject = "Computer Science";
+    List<Course> courses = userInput.getCourses();
+    Invariants invariants = userInput.getCredits();
 
-    // Permute the courses to create the schedules 
     Scheduler scheduler = new Scheduler();
-    List<Schedule> schedules = scheduler.generateSchedules(courses, new Invariants(10,54));
-
-    PrioritizeCoursesCriteria coursePriority = new PrioritizeCoursesCriteria(courseList);
-    RestrictTimesCriteria restrictCriteria = new RestrictTimesCriteria(userNoClassTimes);
-    SubjectCoursesCriteria subjectCourses = new SubjectCoursesCriteria(preferredSubject);
-    Preferences preferenceList = new Preferences(Arrays.asList(coursePriority, restrictCriteria, subjectCourses));
-
-    // Rank the schedules
-    preferenceList.sortSchedules(schedules);
-    return schedules;
-  }
-
-   /**
-   * Helper function to instantiate hard-coded courses, and their preferred order 
-   *
-   * @return a List of the ordered Course objects      
-   */
-  private static List<Course> createCoursesPriority() {
-    Section section1 = new Section("Professor A", TesterSchedule.monWedFri(9, 00, DURATION_90_MINUTES));
-    Course course1 = new Course("Operating System", "15410", 
-        "Computer Science", 15, true, Arrays.asList(section1));
-    
-    Section section2 = new Section("Professor B", TesterSchedule.tuesThurs(10, 30, DURATION_90_MINUTES));
-    Course course2 = new Course("Compilers", "15411", 
-        "Computer Science", 15, false, Arrays.asList(section2));
-
-    Section section3 = new Section("Professor C", TesterSchedule.tuesThurs(12, 00, DURATION_90_MINUTES));
-    Course course3 = new Course("Algorithms", "15210", 
-        "Computer Science", 12, false, Arrays.asList(section3));
-
-    Section section4 = new Section("Professor D", TesterSchedule.tuesThurs(13, 30, DURATION_90_MINUTES));
-    Course course4 = new Course("Experimental Physics", "33104", 
-        "Physics", 9, true, Arrays.asList(section4));
-
-    return Arrays.asList(course1, course2, course3, course4);
+    System.out.printf("Generating Schedules from %d courses", courses.size());
+    List<Schedule> schedules = scheduler.generateSchedules(courses, invariants);
+    response.setContentType("application/json");
+    try {
+      response.getWriter().write(gson.toJson(schedules));
+      response.getWriter().flush();
+    } catch (IOException e) {
+      e.printStackTrace();
+      System.out.println("Error writing JSON to response! \n" + e.getMessage());
+    } 
   }
 }

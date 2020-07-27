@@ -4,6 +4,7 @@ import { Input, Card, CardContent } from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import InputLabel from '@material-ui/core/InputLabel';
 import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
@@ -23,7 +24,6 @@ class Course extends React.Component {
     this.handleIsRequiredChange = this.handleIsRequiredChange.bind(this);
     this.handleRankChange = this.handleRankChange.bind(this);
     this.handleDeleteCourse = this.handleDeleteCourse.bind(this);
-    this.updateRankSelectOptions = this.updateRankSelectOptions.bind(this);
 
     this.updateSectionProfessor = this.updateSectionProfessor.bind(this);
     this.updateSectionStartTime = this.updateSectionStartTime.bind(this);
@@ -59,10 +59,6 @@ class Course extends React.Component {
 
   handleDeleteCourse() {
     this.props.deleteCourse(this.props.id);
-  }
-
-  updateRankSelectOptions() {
-    return this.props.updateRankSelectOptions();
   }
 
   updateSectionProfessor(sectionId, professor) {
@@ -107,9 +103,14 @@ class Course extends React.Component {
           />
           <br/>
           <FormControl>
-            <InputLabel>Rank</InputLabel>
+            <InputLabel>Score</InputLabel>
             <Select onChange={this.handleRankChange} value={this.props.selected}>
-              {this.updateRankSelectOptions()}
+              <MenuItem key="label" value="label" disabled>rank how much you'd like to take this course (1=least, 5=most)</MenuItem>
+              <MenuItem value="1">1</MenuItem>
+              <MenuItem value="2">2</MenuItem>
+              <MenuItem value="3">3</MenuItem>
+              <MenuItem value="4">4</MenuItem>
+              <MenuItem value="5">5</MenuItem>
             </Select>
           </FormControl>
           <FormControlLabel
