@@ -63,9 +63,7 @@ class Course extends React.Component {
   }
 
   updateRankSelectOptions() {
-    let items = [];
-    items = this.props.updateRankSelectOptions(this.props.id);
-    return items;
+    return this.props.updateRankSelectOptions(this.props.id);
   }
 
   updateSectionProfessor(sectionId, professor) {
@@ -96,17 +94,14 @@ class Course extends React.Component {
     return (
       <Card>
         <CardContent>
-          <Input placeholder="Course Name" inputProps={{ 'aria-label': 'description' }} 
-            value={this.props.name} onChange={this.handleNameChange} 
+          <Input placeholder="Course Name" value={this.props.name} onChange={this.handleNameChange} 
           />
-          <Input placeholder="Course ID" inputProps={{ 'aria-label': 'description' }}
-            value={this.props.courseID} onChange={this.handleIDChange} 
+          <Input placeholder="Course ID" value={this.props.courseID} onChange={this.handleIDChange} 
           />
           <IconButton aria-label="delete" onClick={this.handleDeleteCourse}>
             <DeleteIcon />
           </IconButton>
-          <Input placeholder="Subject" inputProps={{ 'aria-label': 'description' }}
-            value={this.props.subject} onChange={this.handleSubjectChange} 
+          <Input placeholder="Subject" value={this.props.subject} onChange={this.handleSubjectChange} 
           />
           <TextField placeholder="Credits" value={this.props.credits} onChange={this.handleCreditsChange}
             InputProps={{ inputComponent: NumberFormatCustom }} 
