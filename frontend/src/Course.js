@@ -12,7 +12,6 @@ import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
 import LectureSection from './LectureSection';
 import LabSection from './LabSection';
-import { NumberFormatCustom } from './NumberFormat';
 
 class Course extends React.Component {  
   constructor(props) {
@@ -140,8 +139,7 @@ class Course extends React.Component {
           <Input placeholder="Subject" inputProps={{ 'aria-label': 'description' }}
             value={this.props.subject} onChange={this.handleSubjectChange} 
           />
-          <TextField placeholder="Credits" value={this.props.credits} onChange={this.handleCreditsChange}
-            InputProps={{ inputComponent: NumberFormatCustom }} 
+          <TextField placeholder="Credits" value={this.props.credits} onChange={this.handleCreditsChange} type="number" 
           />
           <br/>
           <FormControl>
