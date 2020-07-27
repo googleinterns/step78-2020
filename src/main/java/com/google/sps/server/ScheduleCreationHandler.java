@@ -61,7 +61,7 @@ public class ScheduleCreationHandler {
     Section lectureSection1 = new Section("Professor A", TesterSchedule.monWedFri(9, 00, DURATION_90_MINUTES));
     Section labSection1 = null;
     Course course1 = new Course("Operating System", "15410", 
-        "Computer Science", 15, true, Arrays.asList(lectureSection1), Arrays.asList(labSection1));
+        "Computer Science", 15, true, Arrays.asList(lectureSection1), Arrays.asList());
     
     Section lectureSection2 = new Section("Professor B", TesterSchedule.tuesThurs(10, 30, DURATION_90_MINUTES));
     Section labSection2 = new Section("TA B", TesterSchedule.tuesThurs(16, 0, DURATION_30_MINUTES));
@@ -71,12 +71,12 @@ public class ScheduleCreationHandler {
     Section lectureSection3 = new Section("Professor C", TesterSchedule.tuesThurs(12, 00, DURATION_90_MINUTES));
     Section labSection3 = null;
     Course course3 = new Course("Algorithms", "15210", 
-        "Computer Science", 12, false, Arrays.asList(lectureSection3), Arrays.asList(labSection3));
+        "Computer Science", 12, false, Arrays.asList(lectureSection3), Arrays.asList());
 
     Section lectureSection4 = new Section("Professor D", TesterSchedule.tuesThurs(13, 30, DURATION_90_MINUTES));
     Section labSection4 = null;
     Course course4 = new Course("Experimental Physics", "33104", 
-        "Physics", 9, true, Arrays.asList(lectureSection4), Arrays.asList(labSection4));
+        "Physics", 9, true, Arrays.asList(lectureSection4), Arrays.asList());
 
     return Arrays.asList(course1, course2, course3, course4);
   }

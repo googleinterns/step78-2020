@@ -9,11 +9,11 @@ import java.util.HashMap;
 
 public class PrioritizeCoursesCriteria implements Criterion {
   List<Course> courseList;
-  HashMap<ScheduledCourse, Integer> courseScores = new HashMap<ScheduledCourse, Integer>();
+  HashMap<String, Integer> courseScores = new HashMap<String, Integer>();
   
   public PrioritizeCoursesCriteria(List<Course> courseList) {
     this.courseList = courseList;
-    this.courseScores = new HashMap<ScheduledCourse, Integer>();
+    this.courseScores = new HashMap<String, Integer>();
   }
   
   /**
@@ -24,17 +24,14 @@ public class PrioritizeCoursesCriteria implements Criterion {
     // Instantiate the HashMap, courseScores
     for (int i = 0; i < courseList.size(); i++) {
       Course currentCourse = courseList.get(i);
-      for(Section section: currentCourse.getLectureSections()){
-        ScheduledCourse convertedCourse = new ScheduledCourse(currentCourse, section, null);
-        courseScores.put(convertedCourse, courseList.size()-i);
-      }
+      courseScores.put(currentCourse.getName(), courseList.size()-i);
     }
 
     int coursePrioritySum = 0;
     Collection<ScheduledCourse> courses = schedule.getCourses();
     
     for (ScheduledCourse course : courses) {
-      int priorityIndex = courseScores.get(course);
+      int priorityIndex = courseScores.get(course.getName());
       coursePrioritySum += priorityIndex;
     }
 

@@ -63,6 +63,10 @@ public class Section {
     return this.meetingTimes;
   }
 
+  public String getProfessor() {
+    return this.professor;
+  }
+
   /**
    * Function to return whether or not a section overlaps with another.
    * 
