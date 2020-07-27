@@ -15,17 +15,11 @@
 // fetch the secondary calendar with the schedule (just one right now, will be multiple later)
 var currCalendarIndex = 0; 
 var idArray;
-function fetchUserCalendar() {
-  document.getElementById("loading").style.display = "block";
-  fetch('/handleSchedules').then(response => response.json()).then((calIds) => {
-    idArray = calIds;
-    if (idArray.length === 0) {
-      document.getElementById("loading").innerText = "Sorry, looks like there are no possible schedules!"
-    } else {
-      displayCalendar(calIds[0]);
-      showButtons();
-    }
-  });
+export async function fetchUserCalendar() {
+  // change back to /fullCalendar
+  const response = await fetch('/fullCalendar');
+  const responseJson = await response.json();
+  return responseJson;
 }
 
 // hide / show the appropriate elements on the page 

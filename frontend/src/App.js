@@ -4,7 +4,10 @@ import Calendar from './Calendar.js';
 
 function App() {
   return (
-    <Calendar />
+    <div>
+      
+      <Calendar />
+    </div>
   );
 }
 
