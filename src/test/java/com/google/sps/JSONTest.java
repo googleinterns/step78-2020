@@ -44,13 +44,6 @@ public final class JSONTest {
       
       List<Course> courses = request.getCourses();
       Invariants invariants = request.getCredits();
-      /*  Old logic
-        Type courseListType = new TypeToken<List<Course>>(){}.getType();
-        List<Course> courses = gson.fromJson(wholeJSON.getAsJsonArray("courses"), courseListType);
-    
-        JsonObject basicInfo = wholeJSON.getAsJsonObject("basicInfo");
-        Invariants invariants = gson.fromJson(basicInfo.get("credits"), Invariants.class);
-      */
       Scheduler scheduler = new Scheduler();
       List<Schedule> schedules = scheduler.generateSchedules(courses, invariants);
       System.out.println("woo");
