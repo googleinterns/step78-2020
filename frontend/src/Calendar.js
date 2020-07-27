@@ -6,13 +6,16 @@ import timeGridPlugin from '@fullcalendar/timegrid'
 
 import {fetchUserCalendar} from './script'
 
+// the conversion of one minute to 60000 milliseconds
+const MIN_TO_MS = 60000;
+
 export default class Calendar extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
       fetchDone: false,
       schedulesTimes: [],
-      scheduleIdx: 0                 // Current schedule
+      scheduleIdx: 0     // Current schedule
     }
   }
 
@@ -30,7 +33,6 @@ export default class Calendar extends React.Component {
     this.setState({
       fetchDone: true
     })
-    console.log(this.state.schedulesTimes)
   }
 
   getNextSchedule() {
@@ -47,7 +49,7 @@ export default class Calendar extends React.Component {
 
   getMeetingTimes(schedule) {
     let combinedMeetingTimes = []
-    console.log(schedule)
+
     for (const course of schedule.courses) {
       // Lecture Sections
       const lectureTime = this.getScheduleSections(course.name, course.lectureSection.meetingTimes)
@@ -58,20 +60,19 @@ export default class Calendar extends React.Component {
       }
       combinedMeetingTimes = combinedMeetingTimes.concat(lectureTime)
     }
-    //console.log(combinedMeetingTimes)
+
     this.setState({
       schedulesTimes:  [...this.state.schedulesTimes, combinedMeetingTimes]
     })
-    //return combinedMeetingTimes
   }
   
   getScheduleSections(courseName, meetingTimes) {
     const lastSunday = this.getLastMonday(Date.now())
     const courseMeetingTimes = []
+
     for (const meetingTime of meetingTimes) {
-      // 60000 is seconds to miliseconds
-      const startTime = new Date(lastSunday.getTime() + meetingTime.start*60000)
-      const endTime = new Date(startTime.getTime() + meetingTime.duration*60000)
+      const startTime = new Date(lastSunday.getTime() + meetingTime.start*MIN_TO_MS)
+      const endTime = new Date(startTime.getTime() + meetingTime.duration*MIN_TO_MS)
 
       courseMeetingTimes.push({
         title: courseName,
@@ -90,20 +91,19 @@ export default class Calendar extends React.Component {
   }
 
   render() {
-  return (
-    <div>
-      <button onClick = {() => {this.getPrevSchedule()}}>Previous Schedule</button>
-      <button onClick = {() => {this.getNextSchedule()}}>Next Schedule</button>
-      {this.state.fetchDone &&
-      (<FullCalendar
-        plugins={[ dayGridPlugin, timeGridPlugin ]}
-        initialView="timeGridWeek"
-        //weekends={true}
-        events={
-          this.state.schedulesTimes[this.state.scheduleIdx]      
-        }
-      />)}
-    </div>
+    return (
+      <div>
+        <button onClick = {() => {this.getPrevSchedule()}}>Previous Schedule</button>
+        <button onClick = {() => {this.getNextSchedule()}}>Next Schedule</button>
+        {this.state.fetchDone &&
+        (<FullCalendar
+          plugins={[ dayGridPlugin, timeGridPlugin ]}
+          initialView="timeGridWeek"
+          events={
+            this.state.schedulesTimes[this.state.scheduleIdx]      
+          }
+        />)}
+      </div>
     )
   }
 }
