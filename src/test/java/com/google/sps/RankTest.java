@@ -119,7 +119,7 @@ public final class RankTest {
   /**
    * Returns a list of courses in the order of priority that they should be considered
    */
-  public static List<Course> createCoursesPriority() {
+  private static List<Course> createCoursesPriority() {
     Section section1 = new Section("Professor A", createSectionTimes(MON_WED_FRI, 9, 00, DURATION_90_MINUTES));
     Course course1 = new Course("Operating System", "15410", 
         "Computer Science", 15, true, Arrays.asList(section1), Arrays.asList());
@@ -139,7 +139,7 @@ public final class RankTest {
     return Arrays.asList(course1, course2, course3, course4);
   }
 
-  public static List<Course> createCoursesPriorityBigTest() {
+  private static List<Course> createCoursesPriorityBigTest() {
     // PARALLEL ALGORITHMS
     List<Section> section1 = Arrays.asList(new Section("Professor A", createSectionTimes(MON_WED_FRI, 9, 30, DURATION_2_HOUR)));
     List<Section> recitation1 = Arrays.asList(new Section("Professor A", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 10, 30, DURATION_1_HOUR))),
@@ -178,7 +178,7 @@ public final class RankTest {
   }
 
   // Creates the big schedule courses
-  public static List<ScheduledCourse> createBigScheduleCourses() {
+  private static List<ScheduledCourse> createBigScheduleCourses() {
     // PARALLEL ALGORITHMS
     Section section1 = new Section("Professor A", createSectionTimes(MON_WED_FRI,9, 30, DURATION_2_HOUR));
     List<Section> recitation1 = Arrays.asList(new Section("Professor A", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 10, 30, DURATION_1_HOUR))),
@@ -226,7 +226,7 @@ public final class RankTest {
   }
 
   // Creates Schedule 1
-  public static Schedule createSchedule1() {
+  private static Schedule createSchedule1() {
     Section lectureSection1 = new Section("Professor A", createSectionTimes(MON_WED_FRI, 9, 00, DURATION_90_MINUTES));
     Section labSection1 = null;
     ScheduledCourse course1 = new ScheduledCourse("Operating System", "15410", 
@@ -241,7 +241,7 @@ public final class RankTest {
   }
 
   // Creates Schedule 2
-  public static Schedule createSchedule2() {
+  private static Schedule createSchedule2() {
     Section lectureSection2 = new Section("Professor B", createSectionTimes(TUES_THURS , 10, 30, DURATION_90_MINUTES));
     Section labSection2 = null;
     ScheduledCourse course2 = new ScheduledCourse("Compilers", "15411", 
@@ -256,7 +256,7 @@ public final class RankTest {
   }
 
   // Creates Schedule 3
-  public static Schedule createSchedule3() {
+  private static Schedule createSchedule3() {
     Section lectureSection1 = new Section("Professor A", createSectionTimes(MON_WED_FRI, 9, 00, DURATION_90_MINUTES));
     Section labSection1 = null;
     ScheduledCourse course1 = new ScheduledCourse("Operating System", "15410", 
@@ -271,7 +271,7 @@ public final class RankTest {
   }
 
   // Creates Schedule 4
-  public static Schedule createSchedule4() {
+  private static Schedule createSchedule4() {
     Section lectureSection1 = new Section("Professor A", createSectionTimes(MON_WED_FRI, 9, 00, DURATION_90_MINUTES));
     Section labSection1 = null;
     ScheduledCourse course1 = new ScheduledCourse("Operating System", "15410", 
@@ -286,146 +286,146 @@ public final class RankTest {
   }
 
   // Big Schedule 1
-  public static Schedule createBigSchedule1() {
+  private static Schedule createBigSchedule1() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course3, course5, course8, course9));
     return schedule;
   }
 
   // Big Schedule 2
-  public static Schedule createBigSchedule2() {
+  private static Schedule createBigSchedule2() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course3, course5, course8, course9));
     return schedule;
   }
 
   // Big Schedule 3
-  public static Schedule createBigSchedule3() {
+  private static Schedule createBigSchedule3() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course4, course5, course8, course9));
     return schedule;
   }
 
   // Big Schedule 4
-  public static Schedule createBigSchedule4() {
+  private static Schedule createBigSchedule4() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course3, course6, course7));
     return schedule;
   }
 
   // Big Schedule 5
-  public static Schedule createBigSchedule5() {
+  private static Schedule createBigSchedule5() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course3, course6, course7));
     return schedule;
   }
 
 
   // Big Schedule 6
-  public static Schedule createBigSchedule6() {
+  private static Schedule createBigSchedule6() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course3, course6, course8));
     return schedule;
   }
 
   // Big Schedule 7
-  public static Schedule createBigSchedule7() {
+  private static Schedule createBigSchedule7() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course4, course5, course8, course9));
     return schedule;
   }
 
   // Big Schedule 8
-  public static Schedule createBigSchedule8() {
+  private static Schedule createBigSchedule8() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course3, course5, course8));
     return schedule;
   }
 
   // Big Schedule 9
-  public static Schedule createBigSchedule9() {
+  private static Schedule createBigSchedule9() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course4, course5, course7, course9));
     return schedule;
   }
 
   // Big Schedule 10
-  public static Schedule createBigSchedule10() {
+  private static Schedule createBigSchedule10() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course3, course5, course7));
     return schedule;
   }
 
   // Big Schedule 11
-  public static Schedule createBigSchedule11() {
+  private static Schedule createBigSchedule11() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course3, course5, course8));
     return schedule;
   }
 
   // Big Schedule 12
-  public static Schedule createBigSchedule12() {
+  private static Schedule createBigSchedule12() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course3, course5, course7));
     return schedule;
   }
 
   // Big Schedule 13
-  public static Schedule createBigSchedule13() {
+  private static Schedule createBigSchedule13() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course4, course6, course7));
     return schedule;
   }
 
   // Big Schedule 14
-  public static Schedule createBigSchedule14() {
+  private static Schedule createBigSchedule14() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course4, course5, course7));
     return schedule;
   }
 
   // Big Schedule 15
-  public static Schedule createBigSchedule15() {
+  private static Schedule createBigSchedule15() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course4, course5, course7));
     return schedule;
   }
 
   // Big Schedule 16
-  public static Schedule createBigSchedule16() {
+  private static Schedule createBigSchedule16() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course4, course5, course7, course9));
     return schedule;
   }
 
   // Big Schedule 17
-  public static Schedule createBigSchedule17() {
+  private static Schedule createBigSchedule17() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course4, course5, course7));
     return schedule;
   }
 
   // Big Schedule 18
-  public static Schedule createBigSchedule18() {
+  private static Schedule createBigSchedule18() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course4, course5, course8));
     return schedule;
   }
 
   // Big Schedule 19
-  public static Schedule createBigSchedule19() {
+  private static Schedule createBigSchedule19() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course3, course5, course7, course9));
     return schedule;
   }
 
   // Big Schedule 20
-  public static Schedule createBigSchedule20() {
+  private static Schedule createBigSchedule20() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course4, course5, course8));
     return schedule;
   }
 
   // Big Schedule 21
-  public static Schedule createBigSchedule21() {
+  private static Schedule createBigSchedule21() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course4, course6, course8));
     return schedule;
   }
 
   // Big Schedule 22
-  public static Schedule createBigSchedule22() {
+  private static Schedule createBigSchedule22() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course3, course6, course8));
     return schedule;
   }
 
   // Big Schedule 23
-  public static Schedule createBigSchedule23() {
+  private static Schedule createBigSchedule23() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course4, course6, course8));
     return schedule;
   }
 
   // Big Schedule 24
-  public static Schedule createBigSchedule24() {
+  private static Schedule createBigSchedule24() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course3, course5, course7, course9));
     return schedule;
   }
@@ -439,9 +439,8 @@ public final class RankTest {
     preferenceList.sortSchedules(schedules);
 
     // Schedules remain in the same order; there are no preferences to sort them
-    List<Schedule> actual = schedules;
     List<Schedule> expected = Arrays.asList(schedule1, schedule2);
-    Assert.assertEquals(expected, actual);
+    Assert.assertEquals(expected, schedules);
   }
 
   @Test
@@ -452,9 +451,8 @@ public final class RankTest {
     List<Schedule> schedules = Arrays.asList(schedule1, schedule2);
     preferenceList.sortSchedules(schedules);
 
-    List<Schedule> actual = schedules;
     List<Schedule> expected = Arrays.asList(schedule2, schedule1);
-    Assert.assertEquals(expected, actual);
+    Assert.assertEquals(expected, schedules);
   }
 
   @Test
@@ -465,9 +463,8 @@ public final class RankTest {
     List<Schedule> schedules = Arrays.asList(schedule1, schedule3);
     preferenceList.sortSchedules(schedules);
 
-    List<Schedule> actual = schedules;
     List<Schedule> expected = Arrays.asList(schedule3, schedule1);
-    Assert.assertEquals(expected, actual);
+    Assert.assertEquals(expected, schedules);
   }
 
   @Test
@@ -478,9 +475,8 @@ public final class RankTest {
     List<Schedule> schedules = Arrays.asList(schedule1, schedule2, schedule3);
     preferenceList.sortSchedules(schedules);
 
-    List<Schedule> actual = schedules;
     List<Schedule> expected = Arrays.asList(schedule3, schedule1, schedule2);
-    Assert.assertEquals(expected, actual);
+    Assert.assertEquals(expected, schedules);
   }
 
   @Test
@@ -493,9 +489,8 @@ public final class RankTest {
     List<Schedule> schedules = Arrays.asList(schedule2, schedule3);
     preferenceList.sortSchedules(schedules);
 
-    List<Schedule> actual = schedules;
     List<Schedule> expected = Arrays.asList(schedule3, schedule2);
-    Assert.assertEquals(expected, actual);
+    Assert.assertEquals(expected, schedules);
   }
 
   @Test
@@ -509,9 +504,8 @@ public final class RankTest {
     List<Schedule> schedules = Arrays.asList(schedule1, schedule2);
     preferenceList.sortSchedules(schedules);
 
-    List<Schedule> actual = schedules;
     List<Schedule> expected = Arrays.asList(schedule2, schedule1);
-    Assert.assertEquals(expected, actual);
+    Assert.assertEquals(expected, schedules);
   }
 
   @Test
@@ -525,9 +519,8 @@ public final class RankTest {
     List<Schedule> schedules = Arrays.asList(schedule3, schedule4);
     preferenceList.sortSchedules(schedules);
 
-    List<Schedule> actual = schedules;
     List<Schedule> expected = Arrays.asList(schedule3, schedule4);
-    Assert.assertEquals(expected, actual);
+    Assert.assertEquals(expected, schedules);
   }
     
   @Test
@@ -539,13 +532,12 @@ public final class RankTest {
                                              bigSchedule19, bigSchedule20, bigSchedule21, bigSchedule22, bigSchedule23, bigSchedule24);
     preferenceList.sortSchedules(schedules);
 
-    List<Schedule> actual = schedules;
     List<Schedule> expected = Arrays.asList(bigSchedule1, bigSchedule2, bigSchedule3, bigSchedule4, bigSchedule5, bigSchedule6,
                                              bigSchedule7, bigSchedule8, bigSchedule9, bigSchedule10, bigSchedule11, bigSchedule12,
                                              bigSchedule13, bigSchedule14, bigSchedule15, bigSchedule16, bigSchedule17, bigSchedule18,
                                              bigSchedule19, bigSchedule20, bigSchedule21, bigSchedule22, bigSchedule23, bigSchedule24);
     
-    Assert.assertEquals(expected, actual);
+    Assert.assertEquals(expected, schedules);
   }
 
   @Test
@@ -558,12 +550,11 @@ public final class RankTest {
                                              bigSchedule19, bigSchedule20, bigSchedule21, bigSchedule22, bigSchedule23, bigSchedule24);
     preferenceList.sortSchedules(schedules);
 
-    List<Schedule> actual = schedules;
     List<Schedule> expected = Arrays.asList(bigSchedule4, bigSchedule5, bigSchedule9, bigSchedule10, bigSchedule12, bigSchedule13,
                                              bigSchedule14, bigSchedule15, bigSchedule16, bigSchedule17, bigSchedule19, bigSchedule24,
                                              bigSchedule1, bigSchedule2, bigSchedule3, bigSchedule6, bigSchedule7, bigSchedule8,
                                              bigSchedule11, bigSchedule18, bigSchedule20, bigSchedule21, bigSchedule22, bigSchedule23);
-    Assert.assertEquals(expected, actual);
+    Assert.assertEquals(expected, schedules);
   }
 
   @Test
@@ -576,13 +567,12 @@ public final class RankTest {
                                              bigSchedule19, bigSchedule20, bigSchedule21, bigSchedule22, bigSchedule23, bigSchedule24);
     preferenceList.sortSchedules(schedules);
 
-    List<Schedule> actual = schedules;
     List<Schedule> expected = Arrays.asList(bigSchedule1, bigSchedule2, bigSchedule3, bigSchedule7, bigSchedule9, bigSchedule16,
                                              bigSchedule19, bigSchedule24, bigSchedule4, bigSchedule5, bigSchedule6, bigSchedule8,
                                              bigSchedule10, bigSchedule11, bigSchedule12, bigSchedule13, bigSchedule14, bigSchedule15,
                                              bigSchedule17, bigSchedule18, bigSchedule20, bigSchedule21, bigSchedule22, bigSchedule23);
     
-    Assert.assertEquals(expected, actual);
+    Assert.assertEquals(expected, schedules);
   }
 
   @Test
@@ -595,13 +585,12 @@ public final class RankTest {
                                              bigSchedule19, bigSchedule20, bigSchedule21, bigSchedule22, bigSchedule23, bigSchedule24);
     preferenceList.sortSchedules(schedules);
     
-    List<Schedule> actual = schedules;
     List<Schedule> expected = Arrays.asList(bigSchedule1, bigSchedule2, bigSchedule3, bigSchedule7, bigSchedule9, bigSchedule16,
                                              bigSchedule19, bigSchedule24, bigSchedule4, bigSchedule5, bigSchedule6, bigSchedule8,
                                              bigSchedule10, bigSchedule11, bigSchedule12, bigSchedule13, bigSchedule14, bigSchedule15,
                                              bigSchedule17, bigSchedule18, bigSchedule20, bigSchedule21, bigSchedule22, bigSchedule23);
 
-    Assert.assertEquals(expected, actual);
+    Assert.assertEquals(expected, schedules);
   }
 
   @Test
@@ -616,12 +605,11 @@ public final class RankTest {
                                              bigSchedule19, bigSchedule20, bigSchedule21, bigSchedule22, bigSchedule23, bigSchedule24);
     preferenceList.sortSchedules(schedules);
 
-    List<Schedule> actual = schedules;
     List<Schedule> expected = Arrays.asList(bigSchedule9, bigSchedule16, bigSchedule19, bigSchedule24, bigSchedule4, bigSchedule5,
                                              bigSchedule10, bigSchedule12, bigSchedule13, bigSchedule14, bigSchedule15, bigSchedule17,
                                              bigSchedule1, bigSchedule2, bigSchedule3, bigSchedule7, bigSchedule6, bigSchedule8,
                                              bigSchedule11, bigSchedule18, bigSchedule20, bigSchedule21, bigSchedule22, bigSchedule23);
-    Assert.assertEquals(expected, actual);
+    Assert.assertEquals(expected, schedules);
   }
 
   @Test
@@ -636,11 +624,10 @@ public final class RankTest {
                                              bigSchedule19, bigSchedule20, bigSchedule21, bigSchedule22, bigSchedule23, bigSchedule24);
     preferenceList.sortSchedules(schedules);
 
-    List<Schedule> actual = schedules;
     List<Schedule> expected = Arrays.asList(bigSchedule9, bigSchedule16, bigSchedule19, bigSchedule24, bigSchedule1, bigSchedule2,
                                              bigSchedule3, bigSchedule7, bigSchedule4, bigSchedule5, bigSchedule10, bigSchedule12,
                                              bigSchedule13, bigSchedule14, bigSchedule15, bigSchedule17, bigSchedule6, bigSchedule8,
                                              bigSchedule11, bigSchedule18, bigSchedule20, bigSchedule21, bigSchedule22, bigSchedule23);
-    Assert.assertEquals(expected, actual);
+    Assert.assertEquals(expected, schedules);
   }
 }
