@@ -1,15 +1,10 @@
 import React from 'react';
 import './App.css';
+import Calendar from './Calendar.js';
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          SchedulR
-        </p>
-      </header>
-    </div>
+    <Calendar />
   );
 }
 

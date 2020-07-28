@@ -17,6 +17,12 @@ frontend/coverage/
 
 # production
 frontend/build
+src/main/webapp/*
+!src/main/webapp/WEB-INF
+!src/main/webapp/WEB-INF/*
+
+# client secrets
+src/main/resources/client_secrets.json
 
 # misc
 .DS_Store

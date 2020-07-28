@@ -127,26 +127,27 @@ class Course extends React.Component {
     return (
       <Card>
         <CardContent>
-          <Input placeholder="Course Name" inputProps={{ 'aria-label': 'description' }} 
-            value={this.props.name} onChange={this.handleNameChange} 
+          <Input placeholder="Course Name" value={this.props.name} onChange={this.handleNameChange} 
           />
-          <Input placeholder="Course ID" inputProps={{ 'aria-label': 'description' }}
-            value={this.props.courseID} onChange={this.handleIDChange} 
+          <Input placeholder="Course ID" value={this.props.courseID} onChange={this.handleIDChange} 
           />
           <IconButton aria-label="delete" onClick={this.handleDeleteCourse}>
             <DeleteIcon />
           </IconButton>
-          <Input placeholder="Subject" inputProps={{ 'aria-label': 'description' }}
-            value={this.props.subject} onChange={this.handleSubjectChange} 
+          <Input placeholder="Subject" value={this.props.subject} onChange={this.handleSubjectChange} 
           />
-          <TextField placeholder="Credits" value={this.props.credits} onChange={this.handleCreditsChange} type="number" 
+          <TextField placeholder="Credits" value={this.props.credits} onChange={this.handleCreditsChange} type="number"
           />
           <br/>
           <FormControl>
-            <InputLabel>Rank</InputLabel>
+            <InputLabel>Score</InputLabel>
             <Select onChange={this.handleRankChange} value={this.props.selected}>
-              <MenuItem key="label" value="label" disabled>order courses by preference</MenuItem>
-              {this.updateRankSelectOptions()}
+              <MenuItem key="label" value="label" disabled>rank how much you'd like to take this course (1=least, 5=most)</MenuItem>
+              <MenuItem value="1">1</MenuItem>
+              <MenuItem value="2">2</MenuItem>
+              <MenuItem value="3">3</MenuItem>
+              <MenuItem value="4">4</MenuItem>
+              <MenuItem value="5">5</MenuItem>
             </Select>
           </FormControl>
           <FormControlLabel

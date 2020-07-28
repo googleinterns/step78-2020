@@ -54,8 +54,10 @@ public class ScheduleCreationHandler extends HttpServlet {
     Invariants invariants = userInput.getCredits();
 
     Scheduler scheduler = new Scheduler();
+
     System.out.printf("Generating Schedules from %d courses", courses.size());
     List<Schedule> schedules = scheduler.generateSchedules(courses, invariants);
+    
     response.setContentType("application/json");
     try {
       response.getWriter().write(gson.toJson(schedules));
@@ -63,6 +65,6 @@ public class ScheduleCreationHandler extends HttpServlet {
     } catch (IOException e) {
       e.printStackTrace();
       System.out.println("Error writing JSON to response! \n" + e.getMessage());
-    } 
+    }
   }
 }
