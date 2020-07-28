@@ -40,6 +40,13 @@ public final class RankTest {
   private static final int DURATION_6_HOUR = 360;
   private static final int DURATION_24_HOUR = 1440;
 
+  // Days of the week
+  private static final int[] MON_WED_FRI = {TimeRange.MONDAY, TimeRange.WEDNESDAY, TimeRange.FRIDAY};
+  private static final int[] MON_FRI = {TimeRange.MONDAY, TimeRange.FRIDAY};
+  private static final int[] WED_FRI = {TimeRange.WEDNESDAY, TimeRange.FRIDAY};
+  private static final int[] MON_WED = {TimeRange.MONDAY, TimeRange.WEDNESDAY};
+  private static final int[] TUES_THURS = {TimeRange.TUESDAY, TimeRange.THURSDAY};
+
   // Small schedule stuff
   private static final Schedule schedule1 = createSchedule1();
   private static final Schedule schedule2 = createSchedule2();
@@ -92,77 +99,40 @@ public final class RankTest {
   private static final Schedule bigSchedule23 = createBigSchedule23();
   private static final Schedule bigSchedule24 = createBigSchedule24();
 
-  private static final List<TimeRange> userNoClassTimesBigTest = tuesThurs(00, 00, DURATION_24_HOUR);
+  private static final List<TimeRange> userNoClassTimesBigTest = createSectionTimes(TUES_THURS, 00, 00, DURATION_24_HOUR);
   private static final List<Course> courseListBigTest = createCoursesPriorityBigTest();
   private static final String preferredSubjectBigTest = "Civil Engineering";
 
-  private static final List<TimeRange> userNoClassTimes = monWedFri(7, 00, DURATION_3_HOUR);
+  private static final List<TimeRange> userNoClassTimes = createSectionTimes(MON_WED_FRI, 7, 00, DURATION_3_HOUR);
   private static final List<Course> courseList = createCoursesPriority();
   private static final String preferredSubject = "Computer Science";
-
-  /**
-   * Returns a list of times on monday, wednesday, and friday, to be used in section constructors.
-   */
-  public static List<TimeRange> monWedFri(int hour, int minute, int durationMinutes) {
-    TimeRange mon = TimeRange.fromStartDuration(TimeRange.MONDAY, hour, minute, durationMinutes);
-    TimeRange wed = TimeRange.fromStartDuration(TimeRange.WEDNESDAY, hour, minute, durationMinutes);
-    TimeRange fri = TimeRange.fromStartDuration(TimeRange.FRIDAY, hour, minute, durationMinutes);
-    return Arrays.asList(mon, wed, fri);
-  }
-
-  /**
-   * Returns a list of times on monday and friday, to be used in section constructors.
-   */
-  public static List<TimeRange> monFri(int hour, int minute, int durationMinutes) {
-    TimeRange mon = TimeRange.fromStartDuration(TimeRange.MONDAY, hour, minute, durationMinutes);
-    TimeRange fri = TimeRange.fromStartDuration(TimeRange.FRIDAY, hour, minute, durationMinutes);
-    return Arrays.asList(mon, fri);
-  }
-
-  /**
-   * Returns a list of times on wednesday and friday, to be used in section constructors.
-   */
-  public static List<TimeRange> wedFri(int hour, int minute, int durationMinutes) {
-    TimeRange wed = TimeRange.fromStartDuration(TimeRange.WEDNESDAY, hour, minute, durationMinutes);
-    TimeRange fri = TimeRange.fromStartDuration(TimeRange.FRIDAY, hour, minute, durationMinutes);
-    return Arrays.asList(wed, fri);
-  }
-
-  /**
-   * Returns a list of times on monday and wednesday to be used in section constructors.
-   */
-  public static List<TimeRange> monWed(int hour, int minute, int durationMinutes) {
-    TimeRange mon = TimeRange.fromStartDuration(TimeRange.MONDAY, hour, minute, durationMinutes);
-    TimeRange wed = TimeRange.fromStartDuration(TimeRange.WEDNESDAY, hour, minute, durationMinutes);
-    return Arrays.asList(mon, wed);
-  }
-
-  /**
-   * Returns a list of times on Tuesday and Thursday, to be used in section constructors.
-   */
-  public static List<TimeRange> tuesThurs(int hour, int minute, int durationMinutes) {
-    TimeRange tues = TimeRange.fromStartDuration(TimeRange.TUESDAY, hour, minute, durationMinutes);
-    TimeRange thurs = TimeRange.fromStartDuration(TimeRange.THURSDAY, hour, minute, durationMinutes);
-    return Arrays.asList(tues, thurs);
+  
+  private static List<TimeRange> createSectionTimes(int[] days, int hour, int minute, int durationMinutes) {
+    List<TimeRange> timeRanges = new ArrayList<>();
+    for (int day : days) {
+      TimeRange timeRange = TimeRange.fromStartDuration(day, hour, minute, durationMinutes);
+      timeRanges.add(timeRange);
+    }
+    return timeRanges;
   }
 
   /**
    * Returns a list of courses in the order of priority that they should be considered
    */
   public static List<Course> createCoursesPriority() {
-    Section section1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
+    Section section1 = new Section("Professor A", createSectionTimes(MON_WED_FRI, 9, 00, DURATION_90_MINUTES));
     Course course1 = new Course("Operating System", "15410", 
         "Computer Science", 15, true, Arrays.asList(section1), Arrays.asList());
     
-    Section section2 = new Section("Professor B", tuesThurs(10, 30, DURATION_90_MINUTES));
+    Section section2 = new Section("Professor B", createSectionTimes(TUES_THURS ,10, 30, DURATION_90_MINUTES));
     Course course2 = new Course("Compilers", "15411", 
         "Computer Science", 15, true, Arrays.asList(section2), Arrays.asList());
 
-    Section section3 = new Section("Professor C", tuesThurs(12, 00, DURATION_90_MINUTES));
+    Section section3 = new Section("Professor C", createSectionTimes(TUES_THURS, 12, 00, DURATION_90_MINUTES));
     Course course3 = new Course("Algorithms", "15210", 
         "Computer Science", 15, true, Arrays.asList(section3), Arrays.asList());
 
-    Section section4 = new Section("Professor D", tuesThurs(13, 30, DURATION_90_MINUTES));
+    Section section4 = new Section("Professor D", createSectionTimes(TUES_THURS, 13, 30, DURATION_90_MINUTES));
     Course course4 = new Course("Experimental Physics", "33104", 
         "Physics", 33, true, Arrays.asList(section4), Arrays.asList());
 
@@ -171,36 +141,36 @@ public final class RankTest {
 
   public static List<Course> createCoursesPriorityBigTest() {
     // PARALLEL ALGORITHMS
-    List<Section> section1 = Arrays.asList(new Section("Professor A", monWedFri(9, 30, DURATION_2_HOUR)));
+    List<Section> section1 = Arrays.asList(new Section("Professor A", createSectionTimes(MON_WED_FRI, 9, 30, DURATION_2_HOUR)));
     List<Section> recitation1 = Arrays.asList(new Section("Professor A", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 10, 30, DURATION_1_HOUR))),
                                               new Section("Professor A", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 11, 30, DURATION_1_HOUR))));
     Course course1 = new Course("Parallel and Sequential Data Structures and Algorithms", 
     "15210", "Computer Science", 12, true, section1, recitation1);
 
     // RESEARCH AND INNOVATION
-    List<Section> section2 = Arrays.asList(new Section("Professor B", monFri(11, 30, DURATION_90_MINUTES)),
-                                           new Section("Professor B", wedFri(11, 30, DURATION_90_MINUTES)));
+    List<Section> section2 = Arrays.asList(new Section("Professor B", createSectionTimes(MON_FRI, 11, 30, DURATION_90_MINUTES)),
+                                           new Section("Professor B", createSectionTimes(WED_FRI, 11, 30, DURATION_90_MINUTES)));
     List<Section> recitation2 = Arrays.asList();
     Course course2 = new Course("Research and Innovation in Computer Science", "15300", 
     "Computer Science", 9, true, section2, recitation2);
 
     // COMPILIERS
-    List<Section> section3 = Arrays.asList(new Section("Professor C", tuesThurs(8, 00, DURATION_90_MINUTES)));
+    List<Section> section3 = Arrays.asList(new Section("Professor C", createSectionTimes(TUES_THURS, 8, 00, DURATION_90_MINUTES)));
     List<Section> recitation3 = Arrays.asList(new Section("Professor C", Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 14, 30, DURATION_1_HOUR))),
                                               new Section("Professor C", Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 16, 00, DURATION_1_HOUR))));
     Course course3 = new Course("Compiler Design", "15411", 
     "Computer Science", 15, true, section3, recitation3);
 
     // ORGANIZATIONAL BEHAVIOR
-    List<Section> section4 = Arrays.asList(new Section("Professor D", monWed(13, 30, DURATION_2_HOUR)),
-                                           new Section("Professor D", tuesThurs(15, 00, DURATION_2_HOUR)));
+    List<Section> section4 = Arrays.asList(new Section("Professor D", createSectionTimes(MON_WED, 13, 30, DURATION_2_HOUR)),
+                                           new Section("Professor D", createSectionTimes(TUES_THURS, 15, 00, DURATION_2_HOUR)));
     List<Section> recitation4 = Arrays.asList();
     Course course4 = new Course("Organizational Behavior", 
     "70311", "Tepper", 9, true, section4, recitation4);
 
     // INTRO TO CIVIL ENGINEERING
     List<Section> section5 = Arrays.asList(new Section("Professor E", Arrays.asList(TimeRange.fromStartDuration(TimeRange.WEDNESDAY, 16, 00, DURATION_2_HOUR))));
-    List<Section> recitation5 = Arrays.asList(new Section("Professor E", monFri(16,00, DURATION_1_HOUR)));
+    List<Section> recitation5 = Arrays.asList(new Section("Professor E", createSectionTimes(MON_FRI, 16,00, DURATION_1_HOUR)));
     Course course5 = new Course("Intro to Civil Engineering", 
     "12100", "Civil Engineering", 12, false, section5, recitation5);
 
@@ -210,7 +180,7 @@ public final class RankTest {
   // Creates the big schedule courses
   public static List<ScheduledCourse> createBigScheduleCourses() {
     // PARALLEL ALGORITHMS
-    Section section1 = new Section("Professor A", monWedFri(9, 30, DURATION_2_HOUR));
+    Section section1 = new Section("Professor A", createSectionTimes(MON_WED_FRI,9, 30, DURATION_2_HOUR));
     List<Section> recitation1 = Arrays.asList(new Section("Professor A", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 10, 30, DURATION_1_HOUR))),
                                               new Section("Professor A", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 11, 30, DURATION_1_HOUR))));
     ScheduledCourse course1_sectionA = new ScheduledCourse("Parallel and Sequential Data Structures and Algorithms", 
@@ -219,8 +189,8 @@ public final class RankTest {
     "15210", "Computer Science", 12, true, section1, recitation1.get(1));
 
     // RESEARCH AND INNOVATION
-    List<Section> section2 = Arrays.asList(new Section("Professor B", monFri(11, 30, DURATION_90_MINUTES)),
-                                           new Section("Professor B", wedFri(11, 30, DURATION_90_MINUTES)));
+    List<Section> section2 = Arrays.asList(new Section("Professor B", createSectionTimes(MON_FRI, 11, 30, DURATION_90_MINUTES)),
+                                           new Section("Professor B", createSectionTimes(WED_FRI ,11, 30, DURATION_90_MINUTES)));
     Section recitation2 = null;
     ScheduledCourse course2_lectureA = new ScheduledCourse("Research and Innovation in Computer Science", "15300", 
     "Computer Science", 9, true, section2.get(0), recitation2);
@@ -228,7 +198,7 @@ public final class RankTest {
     "Computer Science", 9, true, section2.get(1), recitation2);
 
     // COMPILIERS
-    Section section3 = new Section("Professor C", tuesThurs(8, 00, DURATION_90_MINUTES));
+    Section section3 = new Section("Professor C", createSectionTimes(TUES_THURS, 8, 00, DURATION_90_MINUTES));
     List<Section> recitation3 = Arrays.asList(new Section("Professor C", Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 14, 30, DURATION_1_HOUR))),
                                               new Section("Professor C", Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 16, 00, DURATION_1_HOUR))));
     ScheduledCourse course3_sectionA = new ScheduledCourse("Compiler Design", "15411", 
@@ -237,8 +207,8 @@ public final class RankTest {
     "Computer Science", 15, true, section3, recitation3.get(1));
 
     // ORGANIZATIONAL BEHAVIOR
-    List<Section> section4 = Arrays.asList(new Section("Professor D", monWed(13, 30, DURATION_2_HOUR)),
-                                           new Section("Professor D", tuesThurs(15, 00, DURATION_2_HOUR)));
+    List<Section> section4 = Arrays.asList(new Section("Professor D", createSectionTimes(MON_WED, 13, 30, DURATION_2_HOUR)),
+                                           new Section("Professor D", createSectionTimes(TUES_THURS, 15, 00, DURATION_2_HOUR)));
     Section recitation4 = null;
     ScheduledCourse course4_sectionA = new ScheduledCourse("Organizational Behavior", 
     "70311", "Tepper", 9, true, section4.get(0), recitation4);
@@ -247,7 +217,7 @@ public final class RankTest {
 
     // INTRO TO CIVIL ENGINEERING
     Section section5 = new Section("Professor E", Arrays.asList(TimeRange.fromStartDuration(TimeRange.WEDNESDAY, 16, 00, DURATION_2_HOUR)));
-    Section recitation5 = new Section("Professor E", monFri(16,00, DURATION_1_HOUR));
+    Section recitation5 = new Section("Professor E", createSectionTimes(MON_FRI ,16,00, DURATION_1_HOUR));
     ScheduledCourse course5 = new ScheduledCourse("Intro to Civil Engineering", 
     "12100", "Civil Engineering", 12, true, section5, recitation5);
 
@@ -257,12 +227,12 @@ public final class RankTest {
 
   // Creates Schedule 1
   public static Schedule createSchedule1() {
-    Section lectureSection1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
+    Section lectureSection1 = new Section("Professor A", createSectionTimes(MON_WED_FRI, 9, 00, DURATION_90_MINUTES));
     Section labSection1 = null;
     ScheduledCourse course1 = new ScheduledCourse("Operating System", "15410", 
         "Computer Science", 15, true, lectureSection1, labSection1);
 
-    Section lectureSection4 = new Section("Professor D", tuesThurs(13, 30, DURATION_90_MINUTES));
+    Section lectureSection4 = new Section("Professor D", createSectionTimes(TUES_THURS ,13, 30, DURATION_90_MINUTES));
     Section labSection4 = null;
     ScheduledCourse course4 = new ScheduledCourse("Experimental Physics", "33104", 
         "Physics", 33, true, lectureSection4, labSection4);
@@ -272,12 +242,12 @@ public final class RankTest {
 
   // Creates Schedule 2
   public static Schedule createSchedule2() {
-    Section lectureSection2 = new Section("Professor B", tuesThurs(10, 30, DURATION_90_MINUTES));
+    Section lectureSection2 = new Section("Professor B", createSectionTimes(TUES_THURS , 10, 30, DURATION_90_MINUTES));
     Section labSection2 = null;
     ScheduledCourse course2 = new ScheduledCourse("Compilers", "15411", 
         "Computer Science", 15, true, lectureSection2, labSection2);
 
-    Section lectureSection3 = new Section("Professor C", tuesThurs(12, 00, DURATION_90_MINUTES));
+    Section lectureSection3 = new Section("Professor C", createSectionTimes(TUES_THURS, 12, 00, DURATION_90_MINUTES));
     Section labSection3 = null;
     ScheduledCourse course3 = new ScheduledCourse("Algorithms", "15210", 
         "Computer Science", 15, true, lectureSection3, labSection3);
@@ -287,12 +257,12 @@ public final class RankTest {
 
   // Creates Schedule 3
   public static Schedule createSchedule3() {
-    Section lectureSection1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
+    Section lectureSection1 = new Section("Professor A", createSectionTimes(MON_WED_FRI, 9, 00, DURATION_90_MINUTES));
     Section labSection1 = null;
     ScheduledCourse course1 = new ScheduledCourse("Operating System", "15410", 
         "Computer Science", 15, true, lectureSection1, labSection1);
     
-    Section lectureSection2 = new Section("Professor B", tuesThurs(10, 30, DURATION_90_MINUTES));
+    Section lectureSection2 = new Section("Professor B", createSectionTimes(TUES_THURS ,10, 30, DURATION_90_MINUTES));
     Section labSection2 = null;
     ScheduledCourse course2 = new ScheduledCourse("Compilers", "15411", 
         "Computer Science", 15, true, lectureSection2, labSection2);
@@ -302,12 +272,12 @@ public final class RankTest {
 
   // Creates Schedule 4
   public static Schedule createSchedule4() {
-    Section lectureSection1 = new Section("Professor A", monWedFri(9, 00, DURATION_90_MINUTES));
+    Section lectureSection1 = new Section("Professor A", createSectionTimes(MON_WED_FRI, 9, 00, DURATION_90_MINUTES));
     Section labSection1 = null;
     ScheduledCourse course1 = new ScheduledCourse("Operating System", "15410", 
         "Computer Science", 15, true, lectureSection1, labSection1);
     
-    Section lectureSection3 = new Section("Professor C", tuesThurs(12, 00, DURATION_90_MINUTES));
+    Section lectureSection3 = new Section("Professor C", createSectionTimes(TUES_THURS, 12, 00, DURATION_90_MINUTES));
     Section labSection3 = null;
     ScheduledCourse course3 = new ScheduledCourse("Algorithms", "15210", 
         "Computer Science", 15, true, lectureSection3, labSection3);
@@ -315,146 +285,146 @@ public final class RankTest {
     return new Schedule(Arrays.asList(course1, course3));
   }
 
-  // Schedule 1
+  // Big Schedule 1
   public static Schedule createBigSchedule1() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course3, course5, course8, course9));
     return schedule;
   }
 
-  // Schedule 2
+  // Big Schedule 2
   public static Schedule createBigSchedule2() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course3, course5, course8, course9));
     return schedule;
   }
 
-  // Schedule 3
+  // Big Schedule 3
   public static Schedule createBigSchedule3() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course4, course5, course8, course9));
     return schedule;
   }
 
-  // Schedule 4
+  // Big Schedule 4
   public static Schedule createBigSchedule4() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course3, course6, course7));
     return schedule;
   }
 
-  // Schedule 5
+  // Big Schedule 5
   public static Schedule createBigSchedule5() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course3, course6, course7));
     return schedule;
   }
 
 
-  // Schedule 6
+  // Big Schedule 6
   public static Schedule createBigSchedule6() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course3, course6, course8));
     return schedule;
   }
 
-  // Schedule 7
+  // Big Schedule 7
   public static Schedule createBigSchedule7() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course4, course5, course8, course9));
     return schedule;
   }
 
-  // Schedule 8
+  // Big Schedule 8
   public static Schedule createBigSchedule8() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course3, course5, course8));
     return schedule;
   }
 
-  // Schedule 9
+  // Big Schedule 9
   public static Schedule createBigSchedule9() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course4, course5, course7, course9));
     return schedule;
   }
 
-  // Schedule 10
+  // Big Schedule 10
   public static Schedule createBigSchedule10() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course3, course5, course7));
     return schedule;
   }
 
-  // Schedule 11
+  // Big Schedule 11
   public static Schedule createBigSchedule11() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course3, course5, course8));
     return schedule;
   }
 
-  // Schedule 12
+  // Big Schedule 12
   public static Schedule createBigSchedule12() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course3, course5, course7));
     return schedule;
   }
 
-  // Schedule 13
+  // Big Schedule 13
   public static Schedule createBigSchedule13() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course4, course6, course7));
     return schedule;
   }
 
-  // Schedule 14
+  // Big Schedule 14
   public static Schedule createBigSchedule14() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course4, course5, course7));
     return schedule;
   }
 
-  // Schedule 15
+  // Big Schedule 15
   public static Schedule createBigSchedule15() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course4, course5, course7));
     return schedule;
   }
 
-  // Schedule 16
+  // Big Schedule 16
   public static Schedule createBigSchedule16() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course4, course5, course7, course9));
     return schedule;
   }
 
-  // Schedule 17
+  // Big Schedule 17
   public static Schedule createBigSchedule17() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course4, course5, course7));
     return schedule;
   }
 
-  // Schedule 18
+  // Big Schedule 18
   public static Schedule createBigSchedule18() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course4, course5, course8));
     return schedule;
   }
 
-  // Schedule 19
+  // Big Schedule 19
   public static Schedule createBigSchedule19() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course3, course5, course7, course9));
     return schedule;
   }
 
-  // Schedule 20
+  // Big Schedule 20
   public static Schedule createBigSchedule20() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course4, course5, course8));
     return schedule;
   }
 
-  // Schedule 21
+  // Big Schedule 21
   public static Schedule createBigSchedule21() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course4, course6, course8));
     return schedule;
   }
 
-  // Schedule 22
+  // Big Schedule 22
   public static Schedule createBigSchedule22() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course3, course6, course8));
     return schedule;
   }
 
-  // Schedule 23
+  // Big Schedule 23
   public static Schedule createBigSchedule23() {
     Schedule schedule = new Schedule(Arrays.asList(course2, course4, course6, course8));
     return schedule;
   }
 
-  // Schedule 24
+  // Big Schedule 24
   public static Schedule createBigSchedule24() {
     Schedule schedule = new Schedule(Arrays.asList(course1, course3, course5, course7, course9));
     return schedule;
