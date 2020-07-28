@@ -44,6 +44,7 @@ public final class JSONTest {
       
       List<Course> courses = request.getCourses();
       Invariants invariants = request.getCredits();
+
       Scheduler scheduler = new Scheduler();
       List<Schedule> schedules = scheduler.generateSchedules(courses, invariants);
       System.out.println("woo");
