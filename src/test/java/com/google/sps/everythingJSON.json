@@ -1,0 +1,50 @@
+{
+  "courses": [
+    {
+      "name": "TSE",
+      "courseID": "ef",
+      "subject": "tSE",
+      "credits": "2",
+      "isRequired": false,
+      "rank": "",
+      "sections": [
+        {
+          "professor": "fesa",
+          "meetingTimes": [
+            {
+              "start": 1980,
+              "duration": 60
+            },
+            {
+              "start": 4860,
+              "duration": 60
+            },
+            {
+              "start": 7740,
+              "duration": 60
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "criterion": {
+    "timePreferences": [
+      {
+        "start": 480,
+        "duration": 60
+      }
+    ],
+    "preferredSubject": "tSE"
+  },
+  "basicInfo": {
+    "credits": {
+      "minCredits": "1",
+      "maxCredits": "3"
+    },
+    "termDates": {
+      "startDate": "2020-07-27",
+      "endDate": "2020-07-31"
+    }
+  }
+}

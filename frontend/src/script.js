@@ -15,6 +15,7 @@
 // fetch the secondary calendar with the schedule (just one right now, will be multiple later)
 var currCalendarIndex = 0; 
 var idArray;
+
 export async function fetchUserCalendar() {
   // change back to /fullCalendar
   const response = await fetch('/fullCalendar');

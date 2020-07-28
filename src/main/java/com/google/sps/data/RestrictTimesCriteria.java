@@ -42,15 +42,11 @@ public class RestrictTimesCriteria implements Criterion {
   List<TimeRange> getCourseTimes(Collection<ScheduledCourse> courses) {
     List<TimeRange> times = new ArrayList<TimeRange>();
 
-    for(ScheduledCourse course : courses) {
-      times.addAll(course.getlectureSection().getMeetingTimes());
-      if(course.getLabSection() == null){
-        break;
-      } else {
-        times.addAll(course.getLabSection().getMeetingTimes());
+    for (ScheduledCourse course : courses) {
+      times.addAll(course.getLectureSection().getMeetingTimes());
+      if (course.getLabSection() != null) {
+        times.addAll(course.getLabSection().getMeetingTimes());      
       }
-      // bigTests branch
-      //times.addAll(course.getLabSection().getMeetingTimes());
     }
 
     return times;
