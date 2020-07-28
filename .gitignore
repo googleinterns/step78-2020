@@ -6,3 +6,31 @@ target/
 .idea
 node_modules/
 package-lock.json
+
+# dependencies
+frontend/node_modules/
+frontend/.pnp
+frontend/.pnp.js
+
+# testing
+frontend/coverage/
+
+# production
+frontend/build
+src/main/webapp/*
+!src/main/webapp/WEB-INF
+!src/main/webapp/WEB-INF/*
+
+# client secrets
+src/main/resources/client_secrets.json
+
+# misc
+.DS_Store
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
