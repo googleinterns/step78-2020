@@ -58,6 +58,25 @@ public class ScheduleCreationHandler extends HttpServlet {
     System.out.printf("Generating Schedules from %d courses", courses.size());
     List<Schedule> schedules = scheduler.generateSchedules(courses, invariants);
     
+    List<Criterion> userPreferences = new ArrayList<>();
+
+    List<TimeRange> preferredTimes = userInput.getTimePreferences();
+    if (!preferredTimes.isEmpty()) {
+      userPreferences.add(new RestrictTimesCriteria(preferredTimes));
+    }
+
+    String preferredSubject = userInput.getPreferredSubject();
+    if (!preferredSubject.isEmpty()) {
+      userPreferences.add(new SubjectCoursesCriteria(preferredSubject));
+    }
+
+    // Will add PrioritizeCoursesCriteria in a separate branch once changes
+    // have been made to backend logic.
+    if (!userPreferences.isEmpty()) {
+      Preferences sorter = new Preferences(userPreferences);
+      sorter.sortSchedules(schedules);
+    }
+
     response.setContentType("application/json");
     try {
       response.getWriter().write(gson.toJson(schedules));
