@@ -162,13 +162,13 @@ class Course extends React.Component {
               professor={this.props.lectureSections[index].professor}
               startTime={this.props.lectureSections[index].startTime}
               endTime={this.props.lectureSections[index].endTime}
-              sun={this.props.lectureSections[index].days.indexOf(0) !== -1}
-              mon={this.props.lectureSections[index].days.indexOf(1) !== -1}
-              tue={this.props.lectureSections[index].days.indexOf(2) !== -1}
-              wed={this.props.lectureSections[index].days.indexOf(3) !== -1}
-              thur={this.props.lectureSections[index].days.indexOf(4) !== -1}
-              fri={this.props.lectureSections[index].days.indexOf(5) !== -1}
-              sat={this.props.lectureSections[index].days.indexOf(6) !== -1}
+              sun={this.props.lectureSections[index].days.includes(0)}
+              mon={this.props.lectureSections[index].days.includes(1)}
+              tue={this.props.lectureSections[index].days.includes(2)}
+              wed={this.props.lectureSections[index].days.includes(3)}
+              thur={this.props.lectureSections[index].days.includes(4)}
+              fri={this.props.lectureSections[index].days.includes(5)}
+              sat={this.props.lectureSections[index].days.includes(6)}
               updateLectureSectionProfessor={this.updateLectureSectionProfessor}
               updateLectureSectionStartTime={this.updateLectureSectionStartTime}
               updateLectureSectionEndTime={this.updateLectureSectionEndTime}
@@ -185,13 +185,13 @@ class Course extends React.Component {
               professor={this.props.labSections[index].professor}
               startTime={this.props.labSections[index].startTime}
               endTime={this.props.labSections[index].endTime}
-              sun={this.props.labSections[index].days.indexOf(0) !== -1}
-              mon={this.props.labSections[index].days.indexOf(1) !== -1}
-              tue={this.props.labSections[index].days.indexOf(2) !== -1}
-              wed={this.props.labSections[index].days.indexOf(3) !== -1}
-              thur={this.props.labSections[index].days.indexOf(4) !== -1}
-              fri={this.props.labSections[index].days.indexOf(5) !== -1}
-              sat={this.props.labSections[index].days.indexOf(6) !== -1}
+              sun={this.props.labSections[index].days.includes(0)}
+              mon={this.props.labSections[index].days.includes(1)}
+              tue={this.props.labSections[index].days.includes(2)}
+              wed={this.props.labSections[index].days.includes(3)}
+              thur={this.props.labSections[index].days.includes(4)}
+              fri={this.props.labSections[index].days.includes(5)}
+              sat={this.props.labSections[index].days.includes(6)}
               updateLabSectionProfessor={this.updateLabSectionProfessor}
               updateLabSectionStartTime={this.updateLabSectionStartTime}
               updateLabSectionEndTime={this.updateLabSectionEndTime}
