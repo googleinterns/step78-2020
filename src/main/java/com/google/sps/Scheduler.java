@@ -38,13 +38,13 @@ public final class Scheduler {
     float reqCredits = totalCredits(requiredCourses);
     Set<List<ScheduledCourse>> requiredSet = new HashSet<>();
 
-    generateSchedulesHelper(requiredCourses, new ArrayList<>(), 
+    generateSchedulesHelper(0, requiredCourses, new ArrayList<>(), 
         new Invariants(reqCredits, reqCredits), requiredSet);
     
     // Using those Schedules as a building block, generate all valid schedules
     Set<List<ScheduledCourse>> scheduleSet = new HashSet<>();
     for (List<ScheduledCourse> requiredCourseList : requiredSet) {
-      generateSchedulesHelper(nonRequiredCourses, requiredCourseList, invariants, scheduleSet);
+      generateSchedulesHelper(0, nonRequiredCourses, requiredCourseList, invariants, scheduleSet);
     }
 
     List<Schedule> schedules = new ArrayList<>();
@@ -59,12 +59,13 @@ public final class Scheduler {
    * Recursively iterates through a list of courses and adds schedules to the
    * given set.
    * 
-   * @param courses     The list of courses to iterate through
-   * @param currentSchedule  The current scheduled course list to be added/operated on
-   * @param invariants  The invariants that constrain the valid schedules
-   * @param courseLists The set of course lists that is being generated/added to.
+   * @param index                         The index the current course in availableCourses
+   * @param availableCourses              The list of courses to iterate through
+   * @param currentSchedule               The current scheduled course list to be added/operated on
+   * @param invariants                    The invariants that constrain the valid schedules
+   * @param generatedScheduledCourseLists The set of scheduledCourse lists that is being generated/added to.
    */
-  private void generateSchedulesHelper(List<Course> availableCourses, List<ScheduledCourse> currentSchedule,
+  private void generateSchedulesHelper(int index, List<Course> availableCourses, List<ScheduledCourse> currentSchedule,
       Invariants invariants, Set<List<ScheduledCourse>> generatedScheduledCourseLists) {
 
     // This means that we have a valid schedule, and should add it to the list.
@@ -74,18 +75,20 @@ public final class Scheduler {
     }
 
     // We've reached the end of the list or have a full schedule, we are finished.
-    if (availableCourses.isEmpty() || currCredits > invariants.getMaxCredits()) {
+    if (index >= availableCourses.size() || currCredits > invariants.getMaxCredits()) {
       return;
     }
 
-    Course course = availableCourses.remove(0);
+    Course course = availableCourses.get(index);
+    
     List<Section> courseLectureSections = course.getLectureSections();
     List<Section> courseLabSections = course.getLabSections();
     boolean hasLabs = !courseLabSections.isEmpty();
 
     List<Section> scheduleSections = new ArrayList<>();
     for (ScheduledCourse c : currentSchedule) {
-      scheduleSections.add(c.getlectureSection());
+      scheduleSections.add(c.getLectureSection());
+      
       if (c.getLabSection() != null) {
         scheduleSections.add(c.getLabSection());
       }
@@ -106,7 +109,7 @@ public final class Scheduler {
           if (doesNotOverlapSchedule) {
             List<ScheduledCourse> newScheduledCourseList = new ArrayList<>(currentSchedule);
             newScheduledCourseList.add(new ScheduledCourse(course, lectureSection, labSection));
-            generateSchedulesHelper(new ArrayList<>(availableCourses), 
+            generateSchedulesHelper(index + 1, availableCourses, 
                 newScheduledCourseList, invariants, generatedScheduledCourseLists);
           }
         }
@@ -117,7 +120,8 @@ public final class Scheduler {
           if (doesNotOverlapSchedule) {
             List<ScheduledCourse> newScheduledCourseList = new ArrayList<>(currentSchedule);
             newScheduledCourseList.add(new ScheduledCourse(course, lectureSection));
-            generateSchedulesHelper(new ArrayList<>(availableCourses), 
+            
+            generateSchedulesHelper(index + 1, availableCourses, 
                 newScheduledCourseList, invariants, generatedScheduledCourseLists);
           }
         }
@@ -126,7 +130,7 @@ public final class Scheduler {
 
     //If a course is not required, continue permuting with it *not* added to the schedule
     if (!course.isRequired()) {
-      generateSchedulesHelper(new ArrayList<>(availableCourses), 
+      generateSchedulesHelper(index + 1, availableCourses, 
           currentSchedule, invariants, generatedScheduledCourseLists);
     }
   }

@@ -5,7 +5,6 @@ import Calendar from './Calendar.js';
 function App() {
   return (
     <div>
-      
       <Calendar />
     </div>
   );
