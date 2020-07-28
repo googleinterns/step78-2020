@@ -26,7 +26,6 @@ export default class Calendar extends React.Component {
 
   async getAllSchedules() {
     const schedules = await fetchUserCalendar()
-    console.log(schedules)
     for(const schedule of schedules) {
       this.getMeetingTimes(schedule)
     }
