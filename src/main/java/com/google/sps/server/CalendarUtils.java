@@ -14,6 +14,7 @@
 
 package com.google.sps.server;
 
+import java.util.Calendar;
 import com.google.sps.data.*;
 
 public class CalendarUtils {
@@ -24,9 +25,9 @@ public class CalendarUtils {
    * @param calendar an instance of Calendar, so can know the current date
    * @return an int representing the date of next Sunday
    */
-  public static int getDateOfNextSunday(java.util.Calendar calendar) {
-    int currentDay = calendar.get(java.util.Calendar.DAY_OF_MONTH);
-    int currentDayOfWeek = calendar.get(java.util.Calendar.DAY_OF_WEEK);
+  public static int getDateOfNextSunday(Calendar calendar) {
+    int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
+    int currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
     int nextSun = currentDay + 8 - currentDayOfWeek;
     return nextSun;
   }
@@ -37,8 +38,8 @@ public class CalendarUtils {
    * @param calendar an instance of Calendar, so can know the current date
    * @return an int representing the month, adjusted for DateTime's formatting
    */
-  public static int getCurrentMonth(java.util.Calendar calendar) {
-    return calendar.get(java.util.Calendar.MONTH) + 1;
+  public static int getCurrentMonth(Calendar calendar) {
+    return calendar.get(Calendar.MONTH) + 1;
   }
   
    /**
@@ -47,8 +48,8 @@ public class CalendarUtils {
    * @param calendar an instance of Calendar, so can know the current date
    * @return an int representing the current year
    */
-  public static int getCurrentYear(java.util.Calendar calendar) {
-    return calendar.get(java.util.Calendar.YEAR);
+  public static int getCurrentYear(Calendar calendar) {
+    return calendar.get(Calendar.YEAR);
   }
   
    /**
@@ -82,13 +83,15 @@ public class CalendarUtils {
    * Helper function to calculate the properly formatted start time of a course
    *
    * @param timerange the time range for a course's meeting time (ex. 10:30-12:00)
-   * @param month the current month
-   * @param year the current year
-   * @param nextSun the day of the month of the next Sunday
+   * @param calendar an instance of Calendar, so can know the current date
    * 
    * @return a string representing the start time
    */
-  public static String calculateStartTime(TimeRange timerange, int month, int year, int nextSun) {
+  public static String calculateStartTime(TimeRange timerange, Calendar calendar) {
+    int month = getCurrentMonth(calendar);
+    int year = getCurrentYear(calendar);
+    int nextSun = getDateOfNextSunday(calendar);
+
     // user will input their semester / quarter start date
     int startTimeInMin = timerange.start();
     String startTime = calculateDateTime(startTimeInMin, month, year, nextSun);
@@ -99,13 +102,15 @@ public class CalendarUtils {
    * Helper function to calculate the properly formatted end time of a course
    *
    * @param timerange the time range for a course's meeting time (ex. 10:30-12:00)
-   * @param month the current month
-   * @param year the current year
-   * @param nextSun the day of the month of the next Sunday
+   * @param calendar an instance of Calendar, so can know the current date
    * 
    * @return a string representing the end time
    */
-  public static String calculateEndTime(TimeRange timerange, int month, int year, int nextSun) {
+  public static String calculateEndTime(TimeRange timerange, Calendar calendar) {
+    int month = getCurrentMonth(calendar);
+    int year = getCurrentYear(calendar);
+    int nextSun = getDateOfNextSunday(calendar);
+
     int endTimeInMin = timerange.end();
     String endTime = calculateDateTime(endTimeInMin, month, year, nextSun);
     return endTime;

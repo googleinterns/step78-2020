@@ -62,28 +62,43 @@ public class ScheduleCalendar {
    * Puts schedule onto secondary calendar
    * 
    * @param schedule the schedule to add to the calendar 
-   * @param calendarId the id of the secondary calendar to put the schedule on
    */
   public void addSchedule(Schedule schedule) throws IOException {
     try {
-      // get current date, so can add the courses to the appropriate days of the current month 
+      // get current calendar, so can add the courses to the appropriate days of the current month 
       java.util.Calendar calendar = java.util.Calendar.getInstance();
-      int nextSun = CalendarUtils.getDateOfNextSunday(calendar);
-      int month = CalendarUtils.getCurrentMonth(calendar);
-      int year = CalendarUtils.getCurrentYear(calendar);
 
-      // for each course in the schedule, add an event to the calendar
+      // for each course in the schedule, add all section times to calendar
       for (ScheduledCourse currentCourse : schedule.getCourses()) {
-        List<TimeRange> sectionTimes = currentCourse.getSection().getMeetingTimes();
-        for (int i = 0; i < sectionTimes.size(); i++) {
-          String startTime = CalendarUtils.calculateStartTime(sectionTimes.get(i), month, year, nextSun);
-          String endTime = CalendarUtils.calculateEndTime(sectionTimes.get(i), month, year, nextSun);
-          addEvent(currentCourse, startTime, endTime);
+        List<TimeRange> lectureSectionTimes = currentCourse.getLectureSection().getMeetingTimes();
+        addSectionToCalendar(lectureSectionTimes, calendar, currentCourse);
+        if (currentCourse.getLabSection() != null) {
+          List<TimeRange> labSectionTimes = currentCourse.getLabSection().getMeetingTimes();
+          addSectionToCalendar(labSectionTimes, calendar, currentCourse);
         }
       } 
     } catch (IOException e) {
       System.out.println("Couldn't add schedule");
     }   
+  }
+
+   /**
+   * Helper function to turn all meeting times for a course section into calendar events
+   *
+   * @param sectionTimes
+   * @param calendar
+   * @param currentCourse 
+   */
+  private void addSectionToCalendar(List<TimeRange> sectionTimes, java.util.Calendar calendar, ScheduledCourse currentCourse) throws IOException {
+    try {
+      for (int i = 0; i < sectionTimes.size(); i++) {
+        String startTime = CalendarUtils.calculateStartTime(sectionTimes.get(i), calendar);
+        String endTime = CalendarUtils.calculateEndTime(sectionTimes.get(i), calendar);
+        addEvent(currentCourse, startTime, endTime);
+      }
+    } catch (IOException e) {
+      System.out.println("Couldn't add course section to the calendar");
+    }
   }
 
    /**
@@ -99,11 +114,10 @@ public class ScheduleCalendar {
    * Helper function to add a course in the schedule to the calendar, as an event. 
    *
    * @param course the course being added 
-   * @param calendarId the id of the secondary calendar to add the course to
-   * @param startTime the start time of the course
-   * @param endTime the end time of the course
+   * @param startTime the start time for the calendar event
+   * @param endTime the end time for the calendar event
    */
-  private void addEvent(Course course, String startTime, String endTime) throws IOException {
+  private void addEvent(ScheduledCourse course, String startTime, String endTime) throws IOException {
     try {  
       /* Get an event from the primary calendar to get the timezone offset from the 
        event (to use for properly adjusting the start and end times to the correct timezone) */

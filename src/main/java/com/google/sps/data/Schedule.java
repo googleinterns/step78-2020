@@ -15,7 +15,7 @@ public class Schedule {
 
   @Override
   public int hashCode() {
-    HashSet<Course> courseSet = new HashSet<>(courses);
+    HashSet<ScheduledCourse> courseSet = new HashSet<>(courses);
     return Objects.hash(courseSet, weight);
   }
 

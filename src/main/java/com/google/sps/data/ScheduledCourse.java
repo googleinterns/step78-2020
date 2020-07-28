@@ -15,6 +15,7 @@
 package com.google.sps.data;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Objects;
 
 /**
@@ -22,7 +23,8 @@ import java.util.Objects;
  */
 public class ScheduledCourse extends Course {
 
-  private Section section;
+  private Section lectureSection;
+  private Section labSection;
 
   /**
    * Constructor for the Scheduled Course object.
@@ -34,9 +36,39 @@ public class ScheduledCourse extends Course {
    * @param section The course's section (professor and times).
    */
   public ScheduledCourse(String name, String courseID, String subject, float credits, 
-      boolean isRequired, Section section) {
-    super(name, courseID, subject, credits, isRequired, Arrays.asList(section));
-    this.section = section;
+      boolean isRequired, Section lectureSection, Section labSection) {
+    super(name, courseID, subject, credits, isRequired, Collections.emptyList(), Collections.emptyList());
+    this.lectureSection = lectureSection;
+    this.labSection = labSection;
+  }
+
+    /**
+   * Constructor for the Scheduled Course object.
+   * @param name The course name.
+   * @param courseID The course ID.
+   * @param subject The course subject.
+   * @param credits The number of credits the course is worth.
+   * @param isRequired Whether or not the course is required.
+   * @param section The course's section (professor and times).
+   */
+  public ScheduledCourse(String name, String courseID, String subject, float credits, 
+      boolean isRequired, Section lectureSection) {
+    super(name, courseID, subject, credits, isRequired, Collections.emptyList(), Collections.emptyList());
+    this.lectureSection = lectureSection;
+    this.labSection = null;
+  }
+
+    /**
+   * Constructor for the Scheduled course object.
+   * @param course The course to add to a schedule
+   * @param lectureSection The course's lecture Section (professor and times)
+   * @param labSection The course's lab Section
+   */
+  public ScheduledCourse(Course course, Section lectureSection, Section labSection) {
+    super(course.getName(), course.getCourseID(), course.getSubject(), course.getCredits(), 
+        course.isRequired(), Collections.emptyList(), Collections.emptyList());
+    this.lectureSection = lectureSection;
+    this.labSection = labSection;
   }
 
   /**
@@ -44,16 +76,28 @@ public class ScheduledCourse extends Course {
    * @param course The course to add to a schedule
    * @param section The course's section (professor and times)
    */
-  public ScheduledCourse(Course course, Section section) {
+  public ScheduledCourse(Course course, Section lectureSection) {
     super(course.getName(), course.getCourseID(), course.getSubject(), course.getCredits(), 
-        course.isRequired(), Arrays.asList(section));
-    this.section = section;
+        course.isRequired(), Collections.emptyList(), Collections.emptyList());
+    this.lectureSection = lectureSection;
+    this.labSection = null;
   }
 
   @Override
   public boolean equals(Object other) {
     if (other instanceof ScheduledCourse) {
-      return super.equals(other) && this.section.equals(((ScheduledCourse) other).getSection());
+      ScheduledCourse otherCourse = (ScheduledCourse) other;
+      
+      boolean labsEqual = false;
+      if(this.labSection != null && otherCourse.labSection != null) {
+        labsEqual = otherCourse.labSection.equals(this.labSection);
+      } else {
+        labsEqual = (this.labSection == null && otherCourse.labSection == null);
+      }
+
+      return super.equals(other) 
+        && this.lectureSection.equals(otherCourse.lectureSection)
+        && labsEqual;
     }
 
     return false;
@@ -61,11 +105,15 @@ public class ScheduledCourse extends Course {
 
   @Override
   public int hashCode() {
-    return super.hashCode() * Objects.hashCode(section);
+    return super.hashCode() * Objects.hash(lectureSection, labSection);
   }
 
-  public Section getSection() {
-    return this.section;
+  public Section getLectureSection() {
+    return this.lectureSection;
+  }
+
+  public Section getLabSection() {
+    return this.labSection;
   }
 
 }

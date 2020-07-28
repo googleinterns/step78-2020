@@ -26,15 +26,18 @@ public class Course {
   private String subject;
   private float credits;
   private boolean isRequired;
-  private List<Section> sections;
+  private List<Section> lectureSections;
+  private List<Section> labSections;
 
-  public Course(String name, String courseID, String subject, float credits, boolean isRequired, List<Section> sections) {
+  public Course(String name, String courseID, String subject, float credits, boolean isRequired, 
+      List<Section> lectureSections, List<Section> labSections) {
     this.name = name;
     this.courseID = courseID;
     this.subject = subject;
     this.credits = credits;
     this.isRequired = isRequired;
-    this.sections = sections;
+    this.lectureSections = lectureSections;
+    this.labSections = labSections;
   }
 
   public String getName() {
@@ -57,8 +60,12 @@ public class Course {
     return this.isRequired;
   }
 
-  public List<Section> getSections() {
-    return this.sections;
+  public List<Section> getLectureSections() {
+    return this.lectureSections;
+  }
+
+  public List<Section> getLabSections() {
+    return this.labSections;
   }
 
   @Override
@@ -77,12 +84,13 @@ public class Course {
         && otherCourse.subject.equals(this.subject) 
         && Math.abs(otherCourse.credits - this.credits) < 0.01
         && otherCourse.isRequired == this.isRequired 
-        && otherCourse.sections.equals(this.sections);
+        && otherCourse.lectureSections.equals(this.lectureSections)
+        && otherCourse.labSections.equals(this.labSections);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(name, courseID, subject, credits, isRequired, sections);
+    return Objects.hash(name, courseID, subject, credits, isRequired, lectureSections, labSections);
   }
 
 }
