@@ -20,14 +20,15 @@ class Schedulr extends React.Component {
     this.setScheduleList = this.setScheduleList.bind(this);
   }
 
-  getStepContent(step) {
+  getStepContent() {
+    let step = this.state.activeStep;
     switch (step) {
     case 0:
       return (<InputForm
         handleNext={this.handleNext}
         setScheduleList={this.setScheduleList}/>);
     case 1:
-      return (<p>{JSON.stringify(this.state.scheduleList)}</p>);
+      return (<p>{JSON.stringify(this.state.scheduleList, null, 2)}</p>);
     case 2:
       return 'This is the bit I really care about!';
     default:
@@ -52,17 +53,15 @@ class Schedulr extends React.Component {
       <div>
         <Stepper activeStep={this.state.activeStep}>
           {this.state.steps.map((label, index) => {
-            const stepProps = {};
-            const labelProps = {};
             return (
-              <Step key={label} {...stepProps}>
-                <StepLabel {...labelProps}>{label}</StepLabel>
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
               </Step>
             );
           })}
         </Stepper>
         <div>
-          <Typography>{this.getStepContent(this.state.activeStep)}</Typography>
+          <Typography>{this.getStepContent()}</Typography>
           <div>
             {(this.state.activeStep === 1 || this.state.activeStep === 2) && (
               <Button onClick={this.handleBack}>
