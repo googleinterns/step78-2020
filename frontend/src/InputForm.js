@@ -620,6 +620,12 @@ class InputForm extends React.Component {
   submit() {
     let submitState = JSON.parse(JSON.stringify(this.state));
     submitState.courses = submitState.courses.map((course) => this.convertCourseSections(course));
+    
+    let inputtedCourseScores = {}; 
+    submitState.courses.forEach((course) => {
+      inputtedCourseScores[course.name] = course.rank;
+    });
+    submitState.criterion['courseScores'] = inputtedCourseScores;
 
     submitState.criterion.timePreferences = submitState.criterion.timePreferences.map((times) => 
         this.timeToTimeRange(0, times.startTime, times.endTime));
