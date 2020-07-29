@@ -14,9 +14,8 @@ export default class Calendar extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      fetchDone: false,
       schedulesTimes: [],
-      scheduleIdx: 0     // Current schedule
+      selectedScheduleId: 0     // Current schedule
     }
   }
 
@@ -27,46 +26,43 @@ export default class Calendar extends React.Component {
   async getAllSchedules() {
     const schedules = await fetchUserCalendar()
     for(const schedule of schedules) {
-      this.getMeetingTimes(schedule)
-    }
-    
-    this.setState({
-      fetchDone: true
-    })
-  }
-
-  getNextSchedule() {
-    if(this.state.scheduleIdx < this.state.schedulesTimes.length - 1) {
-      this.setState({scheduleIdx : this.state.scheduleIdx + 1})
+      this.generateScheduleMeetingTimes(schedule)
     }
   }
 
-  getPrevSchedule() {
-    if(this.state.scheduleIdx > 0) {
-      this.setState({scheduleIdx : this.state.scheduleIdx - 1})
+  selectNextSchedule() {
+    if(this.state.selectedScheduleId < this.state.schedulesTimes.length - 1) {
+      this.setState({selectedScheduleId : this.state.selectedScheduleId + 1})
     }
   }
 
-  getMeetingTimes(schedule) {
+  selectPreviousSchedule() {
+    if(this.state.selectedScheduleId > 0) {
+      this.setState({selectedScheduleId : this.state.selectedScheduleId - 1})
+    }
+  }
+
+  generateScheduleMeetingTimes(schedule) {
     let combinedMeetingTimes = []
 
     for (const course of schedule.courses) {
       // Lecture Sections
-      const lectureTime = this.getScheduleSections(course.name, course.lectureSection.meetingTimes)
+      const lectureTime = this.generateCourseMeetingTimes(course.name, course.lectureSection.meetingTimes)
       // Lab Sections
       if (course.labSection) {
-        const labTime = this.getScheduleSections(course.name, course.labSection.meetingTimes)
+        const labTime = this.generateCourseMeetingTimes(course.name, course.labSection.meetingTimes)
         combinedMeetingTimes = combinedMeetingTimes.concat(labTime)
       }
       combinedMeetingTimes = combinedMeetingTimes.concat(lectureTime)
     }
 
     this.setState({
-      schedulesTimes:  [...this.state.schedulesTimes, combinedMeetingTimes]
+      //schedulesTimes:  [...this.state.schedulesTimes, combinedMeetingTimes]
+      schedulesTimes: this.state.schedulesTimes.concat(combinedMeetingTimes)
     })
   }
   
-  getScheduleSections(courseName, meetingTimes) {
+  generateCourseMeetingTimes(courseName, meetingTimes) {
     const lastSunday = this.getLastSunday(Date.now())
     const courseMeetingTimes = []
 
@@ -93,16 +89,20 @@ export default class Calendar extends React.Component {
   render() {
     return (
       <div>
-        <button onClick = {() => {this.getPrevSchedule()}}>Previous Schedule</button>
-        <button onClick = {() => {this.getNextSchedule()}}>Next Schedule</button>
-        {this.state.fetchDone &&
-        (<FullCalendar
-          plugins={[ dayGridPlugin, timeGridPlugin ]}
-          initialView="timeGridWeek"
-          events={
-            this.state.schedulesTimes[this.state.scheduleIdx]      
-          }
-        />)}
+        <button onClick={() => {this.selectPreviousSchedule()}}>Previous Schedule</button>
+        <button onClick={() => {this.selectNextSchedule()}}>Next Schedule</button>
+        {
+          this.state.selectedScheduleId < this.state.schedulesTimes.length &&
+          (
+            <FullCalendar
+              plugins={[ dayGridPlugin, timeGridPlugin ]}
+              initialView="timeGridWeek"
+              events={
+                this.state.schedulesTimes[this.state.selectedScheduleId]      
+              }
+            />
+          )
+        }
       </div>
     )
   }

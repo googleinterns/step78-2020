@@ -15,5 +15,5 @@
 export async function fetchUserCalendar() {
   const response = await fetch('/displayFullCalendar');
   const responseJson = await response.json();
-  return responseJson;
+  return responseJson   ;
 }
