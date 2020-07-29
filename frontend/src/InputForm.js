@@ -82,8 +82,6 @@ class InputForm extends React.Component {
     this.updateTermStartDate = this.updateTermStartDate.bind(this);
     this.updateTermEndDate = this.updateTermEndDate.bind(this);
 
-    this.convertCourseLectureSections = this.convertCourseLectureSections.bind(this);
-    this.convertCourseLabSections = this.convertCourseLabSections.bind(this);
     this.submit = this.submit.bind(this);
   }
 
@@ -621,8 +619,7 @@ class InputForm extends React.Component {
 
   submit() {
     let submitState = JSON.parse(JSON.stringify(this.state));
-    submitState.courses = submitState.courses.map((course) => this.convertCourseLectureSections(course));
-    submitState.courses = submitState.courses.map((course) => this.convertCourseLabSections(course));
+    submitState.courses = submitState.courses.map((course) => this.convertCourseSections(course));
 
     submitState.criterion.timePreferences = submitState.criterion.timePreferences.map((times) => 
         this.timeToTimeRange(0, times.startTime, times.endTime));
@@ -639,7 +636,7 @@ class InputForm extends React.Component {
       });
   }
 
-  convertCourseLectureSections(course) {
+  convertCourseSections(course) {
     course['lectureSections'] = course.lectureSections.map((lectureSection) => {
       let newSection = {professor: lectureSection['professor'], meetingTimes: []};
 
@@ -648,11 +645,7 @@ class InputForm extends React.Component {
       });
       return newSection;
     });
-    
-    return course;
-  }
 
-  convertCourseLabSections(course) {
     course['labSections'] = course.labSections.map((labSection) => {
       let newSection = {professor: labSection['professor'], meetingTimes: []};
       labSection.days.forEach(day => {
