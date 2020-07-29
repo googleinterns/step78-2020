@@ -630,15 +630,14 @@ class InputForm extends React.Component {
     submitState.criterion.timePreferences = submitState.criterion.timePreferences.map((times) =>
       this.timeToTimeRange(0, times.startTime, times.endTime));
 
-    let scheduleList;
     fetch('/handleUserInput', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(submitState),
     }).then((response) => response.json())
       .then((responseSchedules) => {
-        scheduleList = responseSchedules;
-        console.log(JSON.stringify(scheduleList));
+        this.props.setScheduleList(responseSchedules);
+        this.props.handleNext();
       });
   }
 
