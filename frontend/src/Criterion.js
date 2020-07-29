@@ -14,6 +14,8 @@ export default class Criterion extends PureComponent {
               id={index}
               key={index}
               timePreference={timePreference}
+              startTime={this.props.times[index].startTime}
+              endTime={this.props.times[index].endTime}
               updateTimeStartPreference={this.props.updateTimeStartPreference}
               updateTimeEndPreference={this.props.updateTimeEndPreference}
               deleteTimePreference={this.props.deleteTimePreference}

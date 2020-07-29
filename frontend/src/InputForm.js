@@ -12,15 +12,16 @@ class InputForm extends React.Component {
         name: "",
         courseID: "",
         subject: "",
-        credits: 0,
+        credits: "",
         isRequired: false,
         rank: "",
-        sections: [{
+        lectureSections: [{
           professor: "",
           startTime: "",
           endTime: "",
           days: []
-        }]
+        }],
+        labSections: []
       }],
       criterion: {
         timePreferences: [{
@@ -42,10 +43,12 @@ class InputForm extends React.Component {
     };
 
     this.createNewCourse = this.createNewCourse.bind(this);
-    this.createNewSection = this.createNewSection.bind(this);
+    this.createNewLectureSection = this.createNewLectureSection.bind(this);
+    this.createNewLabSection = this.createNewLabSection.bind(this);
     this.createNewTimePreference = this.createNewTimePreference.bind(this);
     this.deleteCourse = this.deleteCourse.bind(this);
-    this.deleteSection = this.deleteSection.bind(this);
+    this.deleteLectureSection = this.deleteLectureSection.bind(this);
+    this.deleteLabSection = this.deleteLabSection.bind(this);
     this.deleteTimePreference = this.deleteTimePreference.bind(this);
     
     // courses
@@ -56,11 +59,17 @@ class InputForm extends React.Component {
     this.updateCourseIsRequired = this.updateCourseIsRequired.bind(this);
     this.updateCourseRank = this.updateCourseRank.bind(this);
     
-    // sections
-    this.updateSectionProfessor = this.updateSectionProfessor.bind(this);
-    this.updateSectionStartTime = this.updateSectionStartTime.bind(this);
-    this.updateSectionEndTime = this.updateSectionEndTime.bind(this);
-    this.updateSectionDays = this.updateSectionDays.bind(this);
+    // lecture sections
+    this.updateLectureSectionProfessor = this.updateLectureSectionProfessor.bind(this);
+    this.updateLectureSectionStartTime = this.updateLectureSectionStartTime.bind(this);
+    this.updateLectureSectionEndTime = this.updateLectureSectionEndTime.bind(this);
+    this.updateLectureSectionDays = this.updateLectureSectionDays.bind(this);
+
+    // lab sections
+    this.updateLabSectionProfessor = this.updateLabSectionProfessor.bind(this);
+    this.updateLabSectionStartTime = this.updateLabSectionStartTime.bind(this);
+    this.updateLabSectionEndTime = this.updateLabSectionEndTime.bind(this);
+    this.updateLabSectionDays = this.updateLabSectionDays.bind(this);
 
     // criterion
     this.updateTimeStartPreference = this.updateTimeStartPreference.bind(this);
@@ -73,7 +82,8 @@ class InputForm extends React.Component {
     this.updateTermStartDate = this.updateTermStartDate.bind(this);
     this.updateTermEndDate = this.updateTermEndDate.bind(this);
 
-    this.convertCourseSections = this.convertCourseSections.bind(this);
+    this.convertCourseLectureSections = this.convertCourseLectureSections.bind(this);
+    this.convertCourseLabSections = this.convertCourseLabSections.bind(this);
     this.submit = this.submit.bind(this);
   }
 
@@ -137,78 +147,232 @@ class InputForm extends React.Component {
     });   
   }
 
-  updateSectionProfessor(courseID, sectionID, sectionProfessor) {
+  updateLectureSectionProfessor(courseID, sectionID, sectionProfessor) {
     this.setState(state => ({
       ...this.state,
-      courses: state.courses.map((course, courseIndex) =>
-        courseIndex === courseID
-          ? ({ ...course, sections: state.courses[courseIndex].sections.map((section, sectionIndex) =>
-            sectionIndex === sectionID
-              ? ({...section, professor: sectionProfessor})
-              : section)})
-          : course)
-    }))
+      courses: state.courses.map((course, courseIndex) => {
+        if (courseIndex !== courseID) {
+          return {...course};
+        }
+
+        return {
+          ...course,
+          lectureSections: state.courses[courseIndex].lectureSections.map((lectureSection, sectionIndex) => {
+            if (sectionIndex !== sectionID) {
+              return {...lectureSection};
+            }
+
+            return {...lectureSection, professor: sectionProfessor};
+          })
+        }
+      })
+    }));
   }
 
-  updateSectionStartTime(courseID, sectionID, sectionStartTime) {
+  updateLectureSectionStartTime(courseID, sectionID, sectionStartTime) {
     this.setState(state => ({
       ...this.state,
-      courses: state.courses.map((course, courseIndex) =>
-        courseIndex === courseID
-          ? ({ ...course, sections: state.courses[courseIndex].sections.map((section, sectionIndex) =>
-            sectionIndex === sectionID
-              ? ({...section, startTime: sectionStartTime})
-              : section)})
-          : course)
-    }))
+      courses: state.courses.map((course, courseIndex) => {
+        if (courseIndex !== courseID) {
+          return {...course};
+        }
+
+        return {
+          ...course,
+          lectureSections: state.courses[courseIndex].lectureSections.map((lectureSection, sectionIndex) => {
+            if (sectionIndex !== sectionID) {
+              return {...lectureSection};
+            }
+
+            return {...lectureSection, startTime: sectionStartTime};
+          })
+        }
+      })
+    }));
   }
 
-  updateSectionEndTime(courseID, sectionID, sectionEndTime) {
+  updateLectureSectionEndTime(courseID, sectionID, sectionEndTime) {
     this.setState(state => ({
       ...this.state,
-      courses: state.courses.map((course, courseIndex) =>
-        courseIndex === courseID
-          ? ({ ...course, sections: state.courses[courseIndex].sections.map((section, sectionIndex) =>
-            sectionIndex === sectionID
-              ? ({...section, endTime: sectionEndTime})
-              : section)})
-          : course)
-    }))
+      courses: state.courses.map((course, courseIndex) => {
+        if (courseIndex !== courseID) {
+          return {...course};
+        }
+
+        return {
+          ...course,
+          lectureSections: state.courses[courseIndex].lectureSections.map((lectureSection, sectionIndex) => {
+            if (sectionIndex !== sectionID) {
+              return {...lectureSection};
+            }
+
+            return {...lectureSection, endTime: sectionEndTime};
+          })
+        }
+      })
+    }));
   }
 
-  updateSectionDays(courseID, sectionID, day) {
+  updateLectureSectionDays(courseID, sectionID, day) {
     var days = [];
     var index = 0;
-    this.state.courses.map((course, courseIndex) =>
-      courseIndex === courseID
-        ? ({...course, sections: this.state.courses[courseIndex].sections.map((section, sectionIndex) =>
-          sectionIndex === sectionID
-            ? (
-              days = [...this.state.courses[courseIndex].sections[sectionIndex].days],
-              days.includes(day)
-                ? (
-                  index = days.indexOf(day),
-                  days.splice(index, 1)
-                )
-                : days = []
-            )
-            : section)})
-        : course)
+
+    this.state.courses.map((course, courseIndex) => {
+      if (courseIndex !== courseID) {
+        return {...course};
+      }
+
+      return {
+        ...course,
+        lectureSections: this.state.courses[courseIndex].lectureSections.map((lectureSection, sectionIndex) => {
+          if (sectionIndex !== sectionID) {
+            return {...lectureSection};
+          }
+
+          days = [...this.state.courses[courseIndex].lectureSections[sectionIndex].days];
+          if (days.includes(day)) {
+            index = days.indexOf(day);
+            return days.splice(index, 1);
+          }
+
+          return days.push(day);
+        })
+      }
+    });
 
     this.setState(state => ({
       ...this.state,
-      courses: state.courses.map((course, courseIndex) =>
-        courseIndex === courseID
-          ? ({ ...course, sections: state.courses[courseIndex].sections.map((section, sectionIndex) =>
-            sectionIndex === sectionID
-              ? (
-                days.length > 0 
-                  ? ({ ...section, days: days})
-                  : ({ ...section, days: state.courses[courseIndex].sections[sectionIndex].days.concat(day)})
-              )
-              : section)})
-          : course)
-    }))
+      courses: state.courses.map((course, courseIndex) => {
+        if (courseIndex !== courseID) {
+          return {...course};
+        }
+
+        return {
+          ...course,
+          lectureSections: state.courses[courseIndex].lectureSections.map((lectureSection, sectionIndex) => {
+            if (sectionIndex !== sectionID) {
+              return {...lectureSection};
+            }
+
+            return {...lectureSection, days: days}
+          })
+        }
+      })
+    }));
+  }
+
+  updateLabSectionProfessor(courseID, sectionID, sectionProfessor) {
+    this.setState(state => ({
+      ...this.state,
+      courses: state.courses.map((course, courseIndex) => {
+        if (courseIndex !== courseID) {
+          return {...course};
+        }
+
+        return {
+          ...course,
+          labSections: state.courses[courseIndex].labSections.map((labSection, sectionIndex) => {
+            if (sectionIndex !== sectionID) {
+              return {...labSection};
+            }
+
+            return {...labSection, professor: sectionProfessor};
+          })
+        }
+      })
+    }));
+  }
+
+  updateLabSectionStartTime(courseID, sectionID, sectionStartTime) {
+    this.setState(state => ({
+      ...this.state,
+      courses: state.courses.map((course, courseIndex) => {
+        if (courseIndex !== courseID) {
+          return {...course};
+        }
+
+        return {
+          ...course,
+          labSections: state.courses[courseIndex].labSections.map((labSection, sectionIndex) => {
+            if (sectionIndex !== sectionID) {
+              return {...labSection};
+            }
+
+            return {...labSection, startTime: sectionStartTime};
+          })
+        }
+      })
+    }));
+  }
+
+  updateLabSectionEndTime(courseID, sectionID, sectionEndTime) {
+    this.setState(state => ({
+      ...this.state,
+      courses: state.courses.map((course, courseIndex) => {
+        if (courseIndex !== courseID) {
+          return {...course};
+        }
+
+        return {
+          ...course,
+          labSections: state.courses[courseIndex].labSections.map((labSection, sectionIndex) => {
+            if (sectionIndex !== sectionID) {
+              return {...labSection};
+            }
+
+            return {...labSection, endTime: sectionEndTime};
+          })
+        }
+      })
+    }));
+  }
+
+  updateLabSectionDays(courseID, sectionID, day) {
+    var days = [];
+    var index = 0;
+
+    this.state.courses.map((course, courseIndex) => {
+      if (courseIndex !== courseID) {
+        return {...course};
+      }
+
+      return {
+        ...course,
+        labSections: this.state.courses[courseIndex].labSections.map((labSection, sectionIndex) => {
+          if (sectionIndex !== sectionID) {
+            return {...labSection};
+          }
+
+          days = [...this.state.courses[courseIndex].labSections[sectionIndex].days];
+          if (days.includes(day)) {
+            index = days.indexOf(day);
+            return days.splice(index, 1);
+          }
+
+          return days.push(day);
+        })
+      }
+    });
+
+    this.setState(state => ({
+      ...this.state,
+      courses: state.courses.map((course, courseIndex) => {
+        if (courseIndex !== courseID) {
+          return {...course};
+        }
+
+        return {
+          ...course,
+          labSections: state.courses[courseIndex].labSections.map((labSection, sectionIndex) => {
+            if (sectionIndex !== sectionID) {
+              return {...labSection};
+            }
+
+            return {...labSection, days: days}
+          })
+        }
+      })
+    }));
   }
 
   updateTimeStartPreference(id, timePreferenceStartTime) {
@@ -221,7 +385,7 @@ class InputForm extends React.Component {
             ? ({...timePreference, startTime: timePreferenceStartTime})
             : timePreference)
       }
-    }))
+    }));
   }
 
   updateTimeEndPreference(id, timePreferenceEndTime) {
@@ -234,7 +398,7 @@ class InputForm extends React.Component {
             ? ({...timePreference, endTime: timePreferenceEndTime})
             : timePreference)
       }
-    }))
+    }));
   }
 
   updateSubjectPreference(preferredSubject) {
@@ -244,7 +408,7 @@ class InputForm extends React.Component {
         ...state.criterion,
         preferredSubject: preferredSubject
       }
-    }))
+    }));
   }
   
   updateMinCredits(minCredits) {
@@ -257,7 +421,7 @@ class InputForm extends React.Component {
           minCredits: minCredits
         }
       }
-    }))
+    }));
   }
 
   updateMaxCredits(maxCredits) {
@@ -270,7 +434,7 @@ class InputForm extends React.Component {
           maxCredits: maxCredits
         }
       }
-    }))
+    }));
   }
 
   updateTermStartDate(termStartDate) {
@@ -283,7 +447,7 @@ class InputForm extends React.Component {
           startDate: termStartDate
         }
       }
-    }))
+    }));
   }
 
   updateTermEndDate(termEndDate) {
@@ -296,23 +460,24 @@ class InputForm extends React.Component {
           endDate: termEndDate
         }
       }
-    }))
+    }));
   }
 
   createNewCourse() {
     const defaultCourse = {
-      name: "course name",
+      name: "",
       courseID: "",
       subject: "",
-      credits: 0,
+      credits: "",
       isRequired: false,
       rank: "",
-      sections: [{
+      lectureSections: [{
         professor: "",
         startTime: "",
         endTime: "",
         days: []
-      }]
+      }],
+      labSections: []
     }
 
     this.setState({
@@ -321,19 +486,35 @@ class InputForm extends React.Component {
     });
   }
 
-  createNewSection(id) {
+  createNewLectureSection(id) {
     const defaultSection = {
       professor: "",
       startTime: "",
       endTime: "",
       days: []
-    }
+    }; 
+    this.setState({
+      ...this.state,
+      courses: this.state.courses.map((course, index) =>
+        index === id
+          ? ({...course, lectureSections: this.state.courses[index].lectureSections.concat(defaultSection)})
+          : course)
+    });
+  }
+
+  createNewLabSection(id) {
+    const defaultSection = {
+      professor: "",
+      startTime: "",
+      endTime: "",
+      days: []
+    };
 
     this.setState({
       ...this.state,
       courses: this.state.courses.map((course, index) =>
         index === id
-          ? ({...course, sections: this.state.courses[index].sections.concat(defaultSection)})
+          ? ({...course, labSections: this.state.courses[index].labSections.concat(defaultSection)})
           : course)
     });
   }
@@ -350,7 +531,7 @@ class InputForm extends React.Component {
         ...state.criterion,
         timePreferences: this.state.criterion.timePreferences.concat(defaultTimePreference)
       }
-    }))
+    }));
   }
 
   deleteCourse(id) {
@@ -362,25 +543,64 @@ class InputForm extends React.Component {
         : course)
   }
 
-  deleteSection(courseID, sectionID) {
-    var sections = [];
-    this.state.courses.map((course, courseIndex) =>
-      courseIndex === courseID
-        ? (sections = [...this.state.courses[courseIndex].sections],
-          this.state.courses[courseIndex].sections.map((section, sectionIndex) =>
-            sectionIndex === sectionID
-              ? (sections.splice(sectionIndex, 1))
-              : section)
-        )
-        : course)
+  deleteLectureSection(courseID, sectionID) {
+    var lectureSections = [];
+
+    this.state.courses.map((course, courseIndex) => {
+      if (courseIndex !== courseID) {
+        return {...course};
+      }
+
+      lectureSections = [...this.state.courses[courseIndex].lectureSections];
+      return {
+        ...course, 
+        lectureSections: this.state.courses[courseIndex].lectureSections.map((lectureSection, sectionIndex) => {
+          if (sectionIndex !== sectionID) {
+            return {...lectureSection};
+          }
+        
+          return lectureSections.splice(sectionIndex, 1);
+        })
+      }
+    });
 
     this.setState({
       ...this.state,
         courses: this.state.courses.map((course, index) =>
           index === courseID
-            ? ({...course, sections: sections})
+            ? ({...course, lectureSections: lectureSections})
             : course)
-    })
+    });
+  }
+
+  deleteLabSection(courseID, sectionID) {
+    var labSections = [];
+
+    this.state.courses.map((course, courseIndex) => {
+      if (courseIndex !== courseID) {
+        return {...course};
+      }
+
+      labSections = [...this.state.courses[courseIndex].labSections];
+      return {
+        ...course, 
+        labSections: this.state.courses[courseIndex].labSections.map((labSection, sectionIndex) => {
+          if (sectionIndex !== sectionID) {
+            return {...labSection};
+          }
+        
+          return labSections.splice(sectionIndex, 1);
+        })
+      }
+    });
+    
+    this.setState({
+      ...this.state,
+        courses: this.state.courses.map((course, index) =>
+          index === courseID
+            ? ({...course, labSections: labSections})
+            : course)
+    });
   }
 
   deleteTimePreference(id) {
@@ -388,7 +608,7 @@ class InputForm extends React.Component {
     this.state.criterion.timePreferences.map((timePreference, index) =>
       index === id
         ? (timePreferences.splice(index, 1))
-        : timePreference)
+        : timePreference);
 
     this.setState(state => ({
       ...this.state,
@@ -396,12 +616,13 @@ class InputForm extends React.Component {
         ...state.criterion,
         timePreferences: timePreferences
       }
-    }))
+    }));
   }
 
   submit() {
     let submitState = JSON.parse(JSON.stringify(this.state));
-    submitState.courses = submitState.courses.map((course) => this.convertCourseSections(course));
+    submitState.courses = submitState.courses.map((course) => this.convertCourseLectureSections(course));
+    submitState.courses = submitState.courses.map((course) => this.convertCourseLabSections(course));
 
     submitState.criterion.timePreferences = submitState.criterion.timePreferences.map((times) => 
         this.timeToTimeRange(0, times.startTime, times.endTime));
@@ -418,11 +639,24 @@ class InputForm extends React.Component {
       });
   }
 
-  convertCourseSections(course) {
-    course['sections'] = course.sections.map((section) => {
-      let newSection = {professor: section['professor'], meetingTimes: []};
-      section.days.forEach(day => {
-        newSection.meetingTimes.push(this.timeToTimeRange(day, section.startTime, section.endTime));
+  convertCourseLectureSections(course) {
+    course['lectureSections'] = course.lectureSections.map((lectureSection) => {
+      let newSection = {professor: lectureSection['professor'], meetingTimes: []};
+
+      lectureSection.days.forEach(day => {
+        newSection.meetingTimes.push(this.timeToTimeRange(day, lectureSection.startTime, lectureSection.endTime));
+      });
+      return newSection;
+    });
+    
+    return course;
+  }
+
+  convertCourseLabSections(course) {
+    course['labSections'] = course.labSections.map((labSection) => {
+      let newSection = {professor: labSection['professor'], meetingTimes: []};
+      labSection.days.forEach(day => {
+        newSection.meetingTimes.push(this.timeToTimeRange(day, labSection.startTime, labSection.endTime));
       });
       return newSection;
     });
@@ -458,9 +692,14 @@ class InputForm extends React.Component {
             id={index}
             key={index}
             course={course}
-            sections={this.state.courses[index].sections}
-            isRequired={this.state.courses[index].isRequired}
+            name={this.state.courses[index].name}
+            courseID={this.state.courses[index].courseID}
+            subject={this.state.courses[index].subject}
+            credits={this.state.courses[index].credits}
             selected={this.state.courses[index].rank}
+            isRequired={this.state.courses[index].isRequired}
+            lectureSections={this.state.courses[index].lectureSections}
+            labSections={this.state.courses[index].labSections}
             
             updateCourseName={this.updateCourseName}
             updateCourseID={this.updateCourseID}
@@ -469,13 +708,21 @@ class InputForm extends React.Component {
             updateCourseIsRequired={this.updateCourseIsRequired}
             updateCourseRank={this.updateCourseRank}
             
-            updateSectionProfessor={this.updateSectionProfessor}
-            updateSectionStartTime={this.updateSectionStartTime}
-            updateSectionEndTime={this.updateSectionEndTime}
-            updateSectionDays={this.updateSectionDays}
-            createNewSection={this.createNewSection}
+            updateLectureSectionProfessor={this.updateLectureSectionProfessor}
+            updateLectureSectionStartTime={this.updateLectureSectionStartTime}
+            updateLectureSectionEndTime={this.updateLectureSectionEndTime}
+            updateLectureSectionDays={this.updateLectureSectionDays}
+            createNewLectureSection={this.createNewLectureSection}
+
+            updateLabSectionProfessor={this.updateLabSectionProfessor}
+            updateLabSectionStartTime={this.updateLabSectionStartTime}
+            updateLabSectionEndTime={this.updateLabSectionEndTime}
+            updateLabSectionDays={this.updateLabSectionDays}
+            createNewLabSection={this.createNewLabSection}
+            
             deleteCourse={this.deleteCourse}
-            deleteSection={this.deleteSection}
+            deleteLectureSection={this.deleteLectureSection}
+            deleteLabSection={this.deleteLabSection}
           />))}
         <Button onClick={this.createNewCourse}>+ Course</Button>
         <h2>Preferences</h2>
