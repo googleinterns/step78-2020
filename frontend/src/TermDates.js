@@ -1,6 +1,6 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { CardContent } from '@material-ui/core';
+import {CardContent} from '@material-ui/core';
 
 class TermDates extends React.Component {
   constructor(props) {
@@ -20,12 +20,12 @@ class TermDates extends React.Component {
 
   render() {
     return (
-      <CardContent>    
+      <CardContent>
         <TextField label="Term start date:" type="date" onChange={this.handleStartDateChange}
-          value={this.props.startDate} InputLabelProps={{ shrink: true, }}
+          value={this.props.startDate} InputLabelProps={{shrink: true}}
         />
         <TextField label="Term end date:" type="date" onChange={this.handleEndDateChange}
-          value={this.props.endDate} InputLabelProps={{ shrink: true, }}
+          value={this.props.endDate} InputLabelProps={{shrink: true}}
         />
       </CardContent>
     );

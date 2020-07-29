@@ -1,5 +1,5 @@
 import React from 'react';
-import { CardContent, Input } from '@material-ui/core';
+import {CardContent, Input} from '@material-ui/core';
 
 class SubjectPreference extends React.Component {
   constructor(props) {
@@ -9,14 +9,14 @@ class SubjectPreference extends React.Component {
   }
 
   handleSubjectChange(event) {
-    this.props.updateSubjectPreference(event.target.value)
+    this.props.updateSubjectPreference(event.target.value);
   }
 
   render() {
     return (
       <CardContent>
         <div id="label">Preferred subject: </div>
-        <Input placeholder="Subject" value={this.props.subject} onChange={this.handleSubjectChange} 
+        <Input placeholder="Subject" value={this.props.subject} onChange={this.handleSubjectChange}
         />
       </CardContent>
     );

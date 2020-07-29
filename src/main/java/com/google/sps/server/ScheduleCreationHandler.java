@@ -23,6 +23,7 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
+import java.util.HashMap;
 
 import com.google.sps.data.*;
 import com.google.sps.Scheduler;
@@ -58,6 +59,27 @@ public class ScheduleCreationHandler extends HttpServlet {
     System.out.printf("Generating Schedules from %d courses", courses.size());
     List<Schedule> schedules = scheduler.generateSchedules(courses, invariants);
     
+    List<Criterion> userPreferences = new ArrayList<>();
+
+    HashMap<String, Integer> courseScores = userInput.getCourseScores();
+    // Will add PrioritizeCoursesCriteria in a separate branch once changes
+    // have been made to backend logic. For now, just storing the hashmap
+
+    List<TimeRange> preferredTimes = userInput.getTimePreferences();
+    if (!preferredTimes.isEmpty()) {
+      userPreferences.add(new RestrictTimesCriteria(preferredTimes));
+    }
+    
+    String preferredSubject = userInput.getPreferredSubject();
+    if (!preferredSubject.isEmpty()) {
+      userPreferences.add(new SubjectCoursesCriteria(preferredSubject));
+    }
+
+    if (!userPreferences.isEmpty()) {
+      Preferences sorter = new Preferences(userPreferences);
+      sorter.sortSchedules(schedules);
+    }
+
     response.setContentType("application/json");
     try {
       response.getWriter().write(gson.toJson(schedules));

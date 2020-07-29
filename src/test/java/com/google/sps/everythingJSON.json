@@ -1,41 +1,70 @@
 {
   "courses": [
     {
-      "name": "TSE",
-      "courseID": "ef",
-      "subject": "tSE",
-      "credits": "2",
+      "name": "math",
+      "courseID": "math3000",
+      "subject": "Math",
+      "credits": "1",
       "isRequired": false,
-      "rank": "",
-      "sections": [
+      "rank": "5",
+      "lectureSections": [
         {
-          "professor": "fesa",
+          "professor": "Joe",
           "meetingTimes": [
             {
-              "start": 1980,
-              "duration": 60
+              "start": 2040,
+              "duration": 90
             },
             {
-              "start": 4860,
-              "duration": 60
+              "start": 4920,
+              "duration": 90
             },
             {
-              "start": 7740,
-              "duration": 60
+              "start": 7800,
+              "duration": 90
             }
           ]
         }
-      ]
+      ],
+      "labSections": []
+    },
+    {
+      "name": "art",
+      "courseID": "art200",
+      "subject": "Art",
+      "credits": "2",
+      "isRequired": true,
+      "rank": "4",
+      "lectureSections": [
+        {
+          "professor": "Ella",
+          "meetingTimes": [
+            {
+              "start": 3480,
+              "duration": 70
+            },
+            {
+              "start": 6360,
+              "duration": 70
+            }
+          ]
+        }
+      ],
+      "labSections": []
     }
   ],
   "criterion": {
     "timePreferences": [
       {
-        "start": 480,
-        "duration": 60
+        "start": 60,
+        "duration": 1200
       }
     ],
-    "preferredSubject": "tSE"
+    "preferredSubject": "",
+    "courseScores": {
+      "math": "5",
+      "art": "4"
+    }
   },
   "basicInfo": {
     "credits": {
@@ -43,8 +72,8 @@
       "maxCredits": "3"
     },
     "termDates": {
-      "startDate": "2020-07-27",
-      "endDate": "2020-07-31"
+      "startDate": "2020-08-03",
+      "endDate": "2020-08-07"
     }
   }
 }

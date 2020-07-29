@@ -1,6 +1,6 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
-import { Input, Card, CardContent } from '@material-ui/core';
+import {Input, Card, CardContent} from '@material-ui/core';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch from '@material-ui/core/Switch';
 import Select from '@material-ui/core/Select';
@@ -13,10 +13,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import LectureSection from './LectureSection';
 import LabSection from './LabSection';
 
-class Course extends React.Component {  
+class Course extends React.Component {
   constructor(props) {
     super(props);
-    
+
     this.handleNameChange = this.handleNameChange.bind(this);
     this.handleIDChange = this.handleIDChange.bind(this);
     this.handleSubjectChange = this.handleSubjectChange.bind(this);
@@ -127,14 +127,14 @@ class Course extends React.Component {
     return (
       <Card>
         <CardContent>
-          <Input placeholder="Course Name" value={this.props.name} onChange={this.handleNameChange} 
+          <Input placeholder="Course Name" value={this.props.name} onChange={this.handleNameChange}
           />
-          <Input placeholder="Course ID" value={this.props.courseID} onChange={this.handleIDChange} 
+          <Input placeholder="Course ID" value={this.props.courseID} onChange={this.handleIDChange}
           />
           <IconButton aria-label="delete" onClick={this.handleDeleteCourse}>
             <DeleteIcon />
           </IconButton>
-          <Input placeholder="Subject" value={this.props.subject} onChange={this.handleSubjectChange} 
+          <Input placeholder="Subject" value={this.props.subject} onChange={this.handleSubjectChange}
           />
           <TextField placeholder="Credits" value={this.props.credits} onChange={this.handleCreditsChange} type="number"
           />
