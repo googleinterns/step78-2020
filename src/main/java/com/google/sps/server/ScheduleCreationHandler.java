@@ -39,6 +39,7 @@ import com.google.gson.reflect.TypeToken;
 @WebServlet("/handleUserInput")
 public class ScheduleCreationHandler extends HttpServlet {
   
+
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) {
     Gson gson = new Gson();
