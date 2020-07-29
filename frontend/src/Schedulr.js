@@ -63,18 +63,18 @@ class Schedulr extends React.Component {
         </Stepper>
         <div>
           <Typography>{this.getStepContent(this.state.activeStep)}</Typography>
-          {(this.state.activeStep === 1 || this.state.activeStep === 2) && (
-            <div>
+          <div>
+            {(this.state.activeStep === 1 || this.state.activeStep === 2) && (
               <Button onClick={this.handleBack}>
                 Back
               </Button>
-            </div>)}
-          {(this.state.activeStep === 1) && (
-            <div>
+            )}
+            {(this.state.activeStep === 1) && (
               <Button onClick={this.handleNext}>
                 Next
               </Button>
-            </div>)}
+            )}
+          </div>
         </div>
       </div>);
   }
