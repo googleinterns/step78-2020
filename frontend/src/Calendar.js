@@ -13,6 +13,10 @@ const MIN_TO_MS = 60000;
 export default class Calendar extends React.Component {
   constructor(props) {
     super(props);
+
+    this.selectPreviousSchedule = this.selectPreviousSchedule.bind(this);
+    this.selectNextSchedule = this.selectNextSchedule.bind(this);
+
     this.state = {
       schedulesTimes: [],
       selectedScheduleId: 0, // Current schedule
@@ -89,12 +93,12 @@ export default class Calendar extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={() => {
-          this.selectPreviousSchedule();
-        }}>Previous Schedule</button>
-        <button onClick={() => {
-          this.selectNextSchedule();
-        }}>Next Schedule</button>
+        <button onClick={
+          this.selectPreviousSchedule
+        }>Previous Schedule</button>
+        <button onClick={
+          this.selectNextSchedule
+        }>Next Schedule</button>
         {
           this.state.selectedScheduleId < this.state.schedulesTimes.length &&
           (
