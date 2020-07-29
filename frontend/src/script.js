@@ -13,7 +13,7 @@
 // limitations under the License.
 
 export async function fetchUserCalendar() {
-  const response = await fetch('/fullCalendar');
+  const response = await fetch('/displayFullCalendar');
   const responseJson = await response.json();
   return responseJson;
 }

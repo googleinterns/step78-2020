@@ -67,7 +67,7 @@ export default class Calendar extends React.Component {
   }
   
   getScheduleSections(courseName, meetingTimes) {
-    const lastSunday = this.getLastMonday(Date.now())
+    const lastSunday = this.getLastSunday(Date.now())
     const courseMeetingTimes = []
 
     for (const meetingTime of meetingTimes) {
@@ -83,7 +83,7 @@ export default class Calendar extends React.Component {
     return courseMeetingTimes
   }
 
-  getLastMonday(d) {
+  getLastSunday(d) {
     var t = new Date(d);
     t.setDate(t.getDate() - t.getDay());
     t.setHours(0,0,0,0);

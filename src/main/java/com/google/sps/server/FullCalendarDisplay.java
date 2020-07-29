@@ -45,7 +45,6 @@ public class FullCalendarDisplay extends HttpServlet {
       response.setContentType("application/json");
       response.getWriter().println(gson.toJson(schedules));
     } catch (IOException e) {
-      // RENAME
       System.out.println("Couldn't display schedules on FullCalendar");
     }
   }
