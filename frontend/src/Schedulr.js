@@ -43,7 +43,7 @@ class Schedulr extends React.Component {
           handleNext={this.handleNext}
           setScheduleList={this.setScheduleList}/>);
       case 1:
-        return 'Schedules!!!';
+        return (<p>{JSON.stringify(this.state.scheduleList)}</p>);
       case 2:
         return 'This is the bit I really care about!';
       default:
