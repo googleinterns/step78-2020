@@ -1,5 +1,5 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
+//import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import InputForm from './InputForm';
 
-const useStyles = makeStyles((theme) => ({
+/*const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
   },
@@ -18,24 +18,7 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(1),
     marginBottom: theme.spacing(1),
   },
-}));
-
-function getSteps() {
-  return ['Input Courses and Preferences', 'View Schedules', 'Export to Google Calendar'];
-}
-
-function getStepContent(step) {
-  switch (step) {
-    case 0:
-      return (<InputForm />);
-    case 1:
-      return 'Schedules!!!';
-    case 2:
-      return 'This is the bit I really care about!';
-    default:
-      return 'Unknown step';
-  }
-}
+}));*/
 
 class Schedulr extends React.Component {
 
@@ -43,34 +26,48 @@ class Schedulr extends React.Component {
     super(props);
     this.state = {
       activeStep: 0,
-      scheduledCourses: {}
+      steps: ['Input Courses and Preferences', 'View Schedules', 'Export to Google Calendar'],
+      scheduleList: {}
+    }
+
+    this.handleNext = this.handleNext.bind(this);
+    this.handleBack = this.handleBack.bind(this);
+    this.setScheduleList = this.setScheduleList.bind(this);
+  }
+
+
+  getStepContent(step) {
+    switch (step) {
+      case 0:
+        return (<InputForm 
+          handleNext={this.handleNext}
+          setScheduleList={this.setScheduleList}/>);
+      case 1:
+        return 'Schedules!!!';
+      case 2:
+        return 'This is the bit I really care about!';
+      default:
+        return 'Unknown step';
     }
   }
 
-  handleNext = () => {
-    let newSkipped = skipped;
-    if (isStepSkipped(activeStep)) {
-      newSkipped = new Set(newSkipped.values());
-      newSkipped.delete(activeStep);
-    }
+  handleNext() {
+    this.setState({...this.state, activeStep: this.state.activeStep + 1});
+  }
 
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
-    setSkipped(newSkipped);
-  };
+  handleBack() {
+    this.setState({...this.state, activeStep: this.state.activeStep - 1});
+  }
 
-  handleBack = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  };
-
-  handleReset = () => {
-    setActiveStep(0);
-  };
+  setScheduleList(listOfSchedules) {
+    this.setState({...this.state, scheduleList: listOfSchedules})
+  }
 
   render() {
     return (
-      <div className={classes.root}>
+      <div>
         <Stepper activeStep={this.state.activeStep}>
-          {steps.map((label, index) => {
+          {this.state.steps.map((label, index) => {
             const stepProps = {};
             const labelProps = {};
             return (
@@ -81,49 +78,22 @@ class Schedulr extends React.Component {
           })}
         </Stepper>
         <div>
-          {/* TODO: Streamline everything*/}
-        </div>
-        
-        <div>
-          {activeStep === steps.length ? (
+          <Typography>{this.getStepContent(this.state.activeStep)}</Typography>
+          {(this.state.activeStep === 1 || this.state.activeStep === 2) && (
             <div>
-              <Typography className={classes.instructions}>
-                All steps completed - you&apos;re finished
-              </Typography>
-              <Button onClick={handleReset} className={classes.button}>
-                Reset
+              <Button onclick={this.handleBack}>
+                Back
               </Button>
-            </div>
-          ) : (
-              <div>
-                <Typography className={classes.instructions}>{getStepContent(this.activeStep)}</Typography>
-                <div>
-                  <Button disabled={activeStep === 0} onClick={handleBack} className={classes.button}>
-                    Back
-                </Button>
-                  {isStepOptional(activeStep) && (
-                    <Button
-                      variant="contained"
-                      color="primary"
-                      onClick={handleSkip}
-                      className={classes.button}
-                    >
-                      Skip
-                    </Button>
-                  )}
-
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleNext}
-                    className={classes.button}
-                  >
-                    {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
-                  </Button>
-                </div>
-              </div>
-            )}
+            </div>)}
+          {(this.state.activeStep === 1) && (
+            <div>
+              <Button onclick={this.handleNext}>
+                Next
+              </Button>
+            </div>)}
         </div>
       </div>);
   }
 }
+
+export default Schedulr;
