@@ -1,7 +1,6 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import { CardContent } from '@material-ui/core';
-import { NumberFormatCustom } from './NumberFormat';
 
 class Credits extends React.Component {
   constructor(props) {
@@ -23,10 +22,10 @@ class Credits extends React.Component {
     return (
       <CardContent>
         <TextField label="Minimum credits:" value={this.props.minCredits} 
-          onChange={this.handleMinCreditsChange} InputProps={{ inputComponent: NumberFormatCustom }} 
+          onChange={this.handleMinCreditsChange} type="number"
         />
         <TextField label="Maximum credits:" value={this.props.maxCredits} 
-          onChange={this.handleMaxCreditsChange} InputProps={{ inputComponent: NumberFormatCustom }} 
+          onChange={this.handleMaxCreditsChange} type="number" 
         />
       </CardContent>
     );
