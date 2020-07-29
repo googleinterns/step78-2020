@@ -636,7 +636,7 @@ class InputForm extends React.Component {
       body: JSON.stringify(submitState),
     }).then((response) => response.json())
       .then((responseSchedules) => {
-        this.props.setScheduleList(responseSchedules)
+        this.props.setScheduleList(responseSchedules);
         console.log(JSON.stringify(responseSchedules));
         this.props.handleNext();
       });

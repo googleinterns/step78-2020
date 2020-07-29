@@ -1,5 +1,5 @@
 import React from 'react';
-//import { makeStyles } from '@material-ui/core/styles';
+// import { makeStyles } from '@material-ui/core/styles';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import InputForm from './InputForm';
 
-/*const useStyles = makeStyles((theme) => ({
+/* const useStyles = makeStyles((theme) => ({
   root: {
     width: '100%',
   },
@@ -21,14 +21,13 @@ import InputForm from './InputForm';
 }));*/
 
 class Schedulr extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       activeStep: 0,
       steps: ['Input Courses and Preferences', 'View Schedules', 'Export to Google Calendar'],
-      scheduleList: {}
-    }
+      scheduleList: {},
+    };
 
     this.handleNext = this.handleNext.bind(this);
     this.handleBack = this.handleBack.bind(this);
@@ -38,16 +37,16 @@ class Schedulr extends React.Component {
 
   getStepContent(step) {
     switch (step) {
-      case 0:
-        return (<InputForm 
-          handleNext={this.handleNext}
-          setScheduleList={this.setScheduleList}/>);
-      case 1:
-        return (<p>{JSON.stringify(this.state.scheduleList)}</p>);
-      case 2:
-        return 'This is the bit I really care about!';
-      default:
-        return 'Unknown step';
+    case 0:
+      return (<InputForm
+        handleNext={this.handleNext}
+        setScheduleList={this.setScheduleList}/>);
+    case 1:
+      return (<p>{JSON.stringify(this.state.scheduleList)}</p>);
+    case 2:
+      return 'This is the bit I really care about!';
+    default:
+      return 'Unknown step';
     }
   }
 
@@ -60,7 +59,7 @@ class Schedulr extends React.Component {
   }
 
   setScheduleList(listOfSchedules) {
-    this.setState({...this.state, scheduleList: listOfSchedules})
+    this.setState({...this.state, scheduleList: listOfSchedules});
   }
 
   render() {
