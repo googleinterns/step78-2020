@@ -13,14 +13,14 @@
 // limitations under the License.
 
 // fetch the secondary calendar with the schedule (just one right now, will be multiple later)
-var currCalendarIndex = 0; 
-var idArray;
+let currCalendarIndex = 0;
+let idArray;
 function fetchUserCalendar() {
-  document.getElementById("loading").style.display = "block";
-  fetch('/handleSchedules').then(response => response.json()).then((calIds) => {
+  document.getElementById('loading').style.display = 'block';
+  fetch('/handleSchedules').then((response) => response.json()).then((calIds) => {
     idArray = calIds;
     if (idArray.length === 0) {
-      document.getElementById("loading").innerText = "Sorry, looks like there are no possible schedules!"
+      document.getElementById('loading').innerText = 'Sorry, looks like there are no possible schedules!';
     } else {
       displayCalendar(calIds[0]);
       showButtons();
@@ -28,13 +28,13 @@ function fetchUserCalendar() {
   });
 }
 
-// hide / show the appropriate elements on the page 
+// hide / show the appropriate elements on the page
 function showButtons() {
-  document.getElementById("schedules").style.display = "none";
-  document.getElementById("previous").style.display = "inline-block";
-  document.getElementById("next").style.display = "inline-block";
-  document.getElementById("loading").style.display = "none";
-  document.getElementById("chosenCal").style.display = "block";
+  document.getElementById('schedules').style.display = 'none';
+  document.getElementById('previous').style.display = 'inline-block';
+  document.getElementById('next').style.display = 'inline-block';
+  document.getElementById('loading').style.display = 'none';
+  document.getElementById('chosenCal').style.display = 'block';
 }
 
 // display the next calendar schedule
@@ -53,17 +53,17 @@ function displayPreviousCalendar() {
   }
 }
 
-// display the secondary calendar 
+// display the secondary calendar
 function displayCalendar(calId) {
-  const url = "https://calendar.google.com/calendar/embed?src=" + calId;
-  document.getElementById("calendar").src = url;
+  const url = 'https://calendar.google.com/calendar/embed?src=' + calId;
+  document.getElementById('calendar').src = url;
 }
 
-// delete all secondary calendars created, except for the chosen one 
+// delete all secondary calendars created, except for the chosen one
 function deleteUnchosenCalendars() {
   idArray
-      .filter((id, index) => index !== currCalendarIndex)
-      .forEach(id => deleteCalendar(id));
+    .filter((id, index) => index !== currCalendarIndex)
+    .forEach((id) => deleteCalendar(id));
 
   const chosenCalendarId = idArray[currCalendarIndex];
   currCalendarIndex = 0;
@@ -73,9 +73,9 @@ function deleteUnchosenCalendars() {
 }
 
 function deleteCalendar(calendarId) {
-  fetch("/deleteCalendar?calId=" + calendarId, { method: 'POST' });
+  fetch('/deleteCalendar?calId=' + calendarId, {method: 'POST'});
 }
 
 function login() {
-  window.location.href = "/auth";
+  window.location.href = '/auth';
 }
