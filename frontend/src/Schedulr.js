@@ -7,14 +7,13 @@ import Typography from '@material-ui/core/Typography';
 import InputForm from './InputForm';
 
 class Schedulr extends React.Component {
-
   constructor(props) {
     super(props);
     this.state = {
       activeStep: 0,
       steps: ['Input Courses and Preferences', 'View Schedules', 'Export to Google Calendar'],
       scheduleList: {}
-    }
+    };
 
     this.handleNext = this.handleNext.bind(this);
     this.handleBack = this.handleBack.bind(this);
@@ -23,16 +22,16 @@ class Schedulr extends React.Component {
 
   getStepContent(step) {
     switch (step) {
-      case 0:
-        return (<InputForm 
-          handleNext={this.handleNext}
-          setScheduleList={this.setScheduleList}/>);
-      case 1:
-        return 'Schedules!!!';
-      case 2:
-        return 'This is the bit I really care about!';
-      default:
-        return 'Unknown step';
+    case 0:
+      return (<InputForm
+        handleNext={this.handleNext}
+        setScheduleList={this.setScheduleList}/>);
+    case 1:
+      return (<p>{JSON.stringify(this.state.scheduleList)}</p>);
+    case 2:
+      return 'This is the bit I really care about!';
+    default:
+      return 'Unknown step';
     }
   }
 
@@ -45,7 +44,7 @@ class Schedulr extends React.Component {
   }
 
   setScheduleList(listOfSchedules) {
-    this.setState({...this.state, scheduleList: listOfSchedules})
+    this.setState({...this.state, scheduleList: listOfSchedules});
   }
 
   render() {
