@@ -71,6 +71,7 @@ public class ScheduleCalendar {
       // for each course in the schedule, add all section times to calendar
       for (ScheduledCourse currentCourse : schedule.getCourses()) {
         List<TimeRange> lectureSectionTimes = currentCourse.getLectureSection().getMeetingTimes();
+        
         addSectionToCalendar(lectureSectionTimes, calendar, currentCourse);
         if (currentCourse.getLabSection() != null) {
           List<TimeRange> labSectionTimes = currentCourse.getLabSection().getMeetingTimes();

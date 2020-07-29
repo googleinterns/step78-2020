@@ -80,6 +80,7 @@ public final class Scheduler {
     }
 
     Course course = availableCourses.get(index);
+    
     List<Section> courseLectureSections = course.getLectureSections();
     List<Section> courseLabSections = course.getLabSections();
     boolean hasLabs = !courseLabSections.isEmpty();
@@ -87,6 +88,7 @@ public final class Scheduler {
     List<Section> scheduleSections = new ArrayList<>();
     for (ScheduledCourse c : currentSchedule) {
       scheduleSections.add(c.getLectureSection());
+      
       if (c.getLabSection() != null) {
         scheduleSections.add(c.getLabSection());
       }
@@ -118,6 +120,7 @@ public final class Scheduler {
           if (doesNotOverlapSchedule) {
             List<ScheduledCourse> newScheduledCourseList = new ArrayList<>(currentSchedule);
             newScheduledCourseList.add(new ScheduledCourse(course, lectureSection));
+            
             generateSchedulesHelper(index + 1, availableCourses, 
                 newScheduledCourseList, invariants, generatedScheduledCourseLists);
           }

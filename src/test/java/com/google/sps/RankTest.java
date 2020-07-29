@@ -630,4 +630,93 @@ public final class RankTest {
                                              bigSchedule11, bigSchedule18, bigSchedule20, bigSchedule21, bigSchedule22, bigSchedule23);
     Assert.assertEquals(expected, schedules);
   }
+
+  // TODO: Add all the tests for the big schedules, once merged into HandleRecitations branch
+
+  @Test
+  public void bigTestEmptyPreference() {
+    // RESTORE AFTER PRINTING 
+    // Preferences preferenceList = new Preferences(Arrays.asList());
+
+    // List<Schedule> schedules = Arrays.asList(bigSchedule1, bigSchedule2, bigSchedule3, bigSchedule4);
+    // preferenceList.sortSchedules(schedules);
+
+    // List<Schedule> actual = schedules;
+    // List<Schedule> expected = Arrays.asList(bigSchedule1, bigSchedule2, bigSchedule3, bigSchedule4);
+    // Assert.assertEquals(expected, actual);
+
+    // For printing purposes, will remove when merged into HandleRecitations branch
+    List<Course> courses1 = createBigScheduleCourses1();
+    Scheduler scheduler = new Scheduler();
+    List<Schedule> schedules1 = scheduler.generateSchedules(courses1, new Invariants(36, 60));
+    System.out.println(schedules1.size());
+
+    for (Schedule schedule : schedules1) {
+      printSchedule(schedule);
+    }
+  }
+
+  // Creates the big schedule courses
+  public static List<Course> createBigScheduleCourses1() {
+    Section section1 = new Section("Professor A", monWedFri(10, 30, DURATION_90_MINUTES));
+    //Recitation recitation1 = new Recitation(Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 13, 30, DURATION_1_HOUR)));
+    Section recitation1 = new Section("Professsor A", Arrays.asList(TimeRange.fromStartDuration(TimeRange.TUESDAY, 13, 30, DURATION_1_HOUR)));
+    Course course1 = new Course("Parallel and Sequential Data Structures and Algorithms", 
+    "15210", "Computer Science", 12, true, Arrays.asList(section1), Arrays.asList(recitation1));
+
+    Section section2 = new Section("Professor B", monFri(12, 00, DURATION_90_MINUTES));
+    //Recitation recitation2 = new Recitation(Arrays.asList());
+    Section recitation2 = new Section("Professor B", Arrays.asList());
+    Course course2 = new Course("Research and Innovation in Computer Science", "15300", 
+    "Computer Science", 9, true, Arrays.asList(section2), Arrays.asList(recitation2));
+
+    Section section3 = new Section("Professor C", tuesThurs(9, 00, DURATION_90_MINUTES));
+    //Recitation recitation3 = new Recitation(Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 13, 30, DURATION_1_HOUR)));
+    Section recitation3 = new Section("Professor C", Arrays.asList(TimeRange.fromStartDuration(TimeRange.FRIDAY, 13, 30, DURATION_1_HOUR)));
+    Course course3 = new Course("Compiler Design", "15411", 
+    "Computer Science", 15, true, Arrays.asList(section3), Arrays.asList(recitation3));
+
+    Section section4 = new Section("Professor D", tuesThurs(15, 00, DURATION_90_MINUTES));
+    //Recitation recitation4 = new Recitation(Arrays.asList());
+    Section recitation4 = new Section("Professor D", Arrays.asList());
+    Course course4 = new Course("Organizational Behavior", 
+    "70311", "Tepper", 9, false, Arrays.asList(section4), Arrays.asList(recitation4));
+
+    Section section5 = new Section("Professor E", Arrays.asList(TimeRange.fromStartDuration(TimeRange.WEDNESDAY, 14, 30, DURATION_90_MINUTES)));
+    //Recitation recitation5 = new Recitation(Arrays.asList(monFri(14, 30, DURATION_60_MINUTES)));
+    Section recitation5 = new Section("Professor E", monFri(14, 30, DURATION_60_MINUTES));
+    Course course5 = new Course("Intro to Civil Engineering", 
+    "12100", "Civil Engineering", 12, false, Arrays.asList(section5), Arrays.asList(recitation5));
+
+    return Arrays.asList(course1, course2, course3, course4, course5);
+  }
+
+  public void printSchedule(Schedule schedule) {
+    float creditCount = 0;
+    Collection<ScheduledCourse> courses = schedule.getCourses();
+    System.out.println(schedule);
+    for (ScheduledCourse course : courses) {
+      creditCount += course.getCredits();
+      System.out.println(course.getName() + course.getlectureSection().getMeetingTimes() + course.getLabSection().getMeetingTimes());
+    }
+    System.out.println(creditCount);
+    System.out.println("======================================");
+  }
+
+
+  // More Tests with criteria now
+  @Test
+  public void restrictTimesPreferenceBigTest() {
+    RestrictTimesCriteria restrictCriteria = new RestrictTimesCriteria(userNoClassTimesNEW);
+    Preferences preferenceList = new Preferences(Arrays.asList(restrictCriteria));
+
+    // restrictCriteria becomes a tie => subjectCourses becomes a tie => sort by coursePriority
+    List<Schedule> schedules = Arrays.asList(schedule3, schedule4);
+    preferenceList.sortSchedules(schedules);
+
+    List<Schedule> actual = schedules;
+    List<Schedule> expected = Arrays.asList(schedule3, schedule4);
+    Assert.assertEquals(expected, actual);
+  }
+
 }
