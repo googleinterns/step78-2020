@@ -7,5 +7,5 @@ ReactDOM.render(
   <React.StrictMode>
     <InputForm />
   </React.StrictMode>,
-  document.getElementById('root')
-)
+  document.getElementById('root'),
+);
