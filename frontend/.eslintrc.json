@@ -18,5 +18,10 @@
         "react"
     ],
     "rules": {
+      "require-jsdoc": "off",
+      "max-len": [
+        "warn", {"code": 90}
+      ],
+      "react/prop-types": "off" 
     }
 }
