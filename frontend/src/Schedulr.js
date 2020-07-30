@@ -5,7 +5,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import InputForm from './InputForm';
-import Calendar from './Calendar'
+import Calendar from './Calendar';
 import moment from 'moment';
 
 // the conversion of one minute to 60000 milliseconds
@@ -18,7 +18,7 @@ class Schedulr extends React.Component {
       activeStep: 0,
       steps: ['Input Courses and Preferences', 'View Schedules', 'Export to Google Calendar'],
       scheduleList: [],
-      schedulesTimes: []
+      schedulesTimes: [],
     };
 
     this.handleNext = this.handleNext.bind(this);
@@ -28,14 +28,14 @@ class Schedulr extends React.Component {
   }
 
   getStepContent() {
-    let step = this.state.activeStep;
+    const step = this.state.activeStep;
     switch (step) {
     case 0:
       return (<InputForm
         handleNext={this.handleNext}
         setScheduleList={this.setScheduleList}/>);
     case 1:
-      return (<Calendar 
+      return (<Calendar
         scheduleList={this.state.scheduleList}
         schedulesTimes={this.state.schedulesTimes}/>);
     case 2:
@@ -61,9 +61,7 @@ class Schedulr extends React.Component {
   }
 
   generateSchedulesTimes() {
-    //TODO: This is currently broken. Figure out why.
-    //console.log('generating schedules: ${JSON.stringify(this.props.scheduleList)}');
-    this.state.scheduleList.forEach(schedule => {
+    this.state.scheduleList.forEach((schedule) => {
       this.generateScheduleMeetingTimes(schedule);
     });
     return true;
@@ -84,7 +82,7 @@ class Schedulr extends React.Component {
     }
 
     this.setState({
-      ...this.state, schedulesTimes:  [...this.state.schedulesTimes, combinedMeetingTimes],
+      ...this.state, schedulesTimes: [...this.state.schedulesTimes, combinedMeetingTimes],
     });
   }
 
