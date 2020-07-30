@@ -13,7 +13,7 @@ class Schedulr extends React.Component {
     this.state = {
       activeStep: 0,
       steps: ['Input Courses and Preferences', 'View Schedules', 'Export to Google Calendar'],
-      scheduleList: {}
+      scheduleList: []
     };
 
     this.handleNext = this.handleNext.bind(this);
