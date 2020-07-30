@@ -23,6 +23,7 @@ export default class Calendar extends React.Component {
 
   generateSchedulesTimes() {
     //TODO: This is currently broken. Figure out why.
+    console.log('generating schedules: ${JSON.stringify(this.props.scheduleList)}');
     this.props.scheduleList.forEach(schedule => {
       this.generateScheduleMeetingTimes(schedule);
     });
@@ -96,7 +97,7 @@ export default class Calendar extends React.Component {
         }>Next Schedule</button>
         {
           this.state.selectedScheduleId < this.props.scheduleList.length
-          && this.generateCourseMeetingTimes() && //yes this is ugly... sorry
+          && this.generateSchedulesTimes() && //yes this is ugly... sorry
           (
             <FullCalendar
               plugins={[dayGridPlugin, timeGridPlugin]}
