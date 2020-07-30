@@ -6,6 +6,10 @@ import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import InputForm from './InputForm';
 import Calendar from './Calendar'
+import moment from 'moment';
+
+// the conversion of one minute to 60000 milliseconds
+const MIN_TO_MS = 60000;
 
 class Schedulr extends React.Component {
   constructor(props) {
@@ -13,12 +17,14 @@ class Schedulr extends React.Component {
     this.state = {
       activeStep: 0,
       steps: ['Input Courses and Preferences', 'View Schedules', 'Export to Google Calendar'],
-      scheduleList: []
+      scheduleList: [],
+      schedulesTimes: []
     };
 
     this.handleNext = this.handleNext.bind(this);
     this.handleBack = this.handleBack.bind(this);
     this.setScheduleList = this.setScheduleList.bind(this);
+    this.generateScheduleMeetingTimes = this.generateScheduleMeetingTimes.bind(this);
   }
 
   getStepContent() {
@@ -29,7 +35,9 @@ class Schedulr extends React.Component {
         handleNext={this.handleNext}
         setScheduleList={this.setScheduleList}/>);
     case 1:
-      return (<Calendar scheduleList={this.state.scheduleList}></Calendar>);
+      return (<Calendar 
+        scheduleList={this.state.scheduleList}
+        schedulesTimes={this.state.schedulesTimes}/>);
     case 2:
       return 'Export to google calendar: coming soon ;)';
     default:
@@ -38,6 +46,9 @@ class Schedulr extends React.Component {
   }
 
   handleNext() {
+    if (this.state.activeStep === 0) {
+      this.generateSchedulesTimes();
+    }
     this.setState({...this.state, activeStep: this.state.activeStep + 1});
   }
 
@@ -47,6 +58,59 @@ class Schedulr extends React.Component {
 
   setScheduleList(listOfSchedules) {
     this.setState({...this.state, scheduleList: listOfSchedules});
+  }
+
+  generateSchedulesTimes() {
+    //TODO: This is currently broken. Figure out why.
+    //console.log('generating schedules: ${JSON.stringify(this.props.scheduleList)}');
+    this.state.scheduleList.forEach(schedule => {
+      this.generateScheduleMeetingTimes(schedule);
+    });
+    return true;
+  }
+
+  generateScheduleMeetingTimes(schedule) {
+    let combinedMeetingTimes = [];
+
+    for (const course of schedule.courses) {
+      // Lecture Sections
+      const lectureTime = this.generateCourseMeetingTimes(course.name, course.lectureSection.meetingTimes);
+      // Lab Sections
+      if (course.labSection) {
+        const labTime = this.generateCourseMeetingTimes(course.name, course.labSection.meetingTimes);
+        combinedMeetingTimes = combinedMeetingTimes.concat(labTime);
+      }
+      combinedMeetingTimes = combinedMeetingTimes.concat(lectureTime);
+    }
+
+    this.setState({
+      // schedulesTimes:  [...this.state.schedulesTimes, combinedMeetingTimes]
+      ...this.state, schedulesTimes: this.state.schedulesTimes.concat(combinedMeetingTimes),
+    });
+  }
+
+  generateCourseMeetingTimes(courseName, meetingTimes) {
+    const lastSunday = this.getLastSunday(Date.now());
+    const courseMeetingTimes = [];
+
+    for (const meetingTime of meetingTimes) {
+      const startTime = new Date(lastSunday.getTime() + meetingTime.start*MIN_TO_MS);
+      const endTime = new Date(startTime.getTime() + meetingTime.duration*MIN_TO_MS);
+
+      courseMeetingTimes.push({
+        title: courseName,
+        start: moment(startTime).format('YYYY-MM-DD HH:mm'),
+        end: moment(endTime).format('YYYY-MM-DD HH:mm'),
+      });
+    }
+    return courseMeetingTimes;
+  }
+
+  getLastSunday(d) {
+    const t = new Date(d);
+    t.setDate(t.getDate() - t.getDay());
+    t.setHours(0, 0, 0, 0);
+    return t;
   }
 
   render() {

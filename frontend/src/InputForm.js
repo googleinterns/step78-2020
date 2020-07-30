@@ -24,10 +24,7 @@ class InputForm extends React.Component {
         labSections: [],
       }],
       criterion: {
-        timePreferences: [{
-          startTime: '',
-          endTime: '',
-        }],
+        timePreferences: [],
         preferredSubject: '',
       },
       basicInfo: {
