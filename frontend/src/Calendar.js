@@ -5,8 +5,6 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import moment from 'moment';
 import timeGridPlugin from '@fullcalendar/timegrid';
 
-import {fetchUserCalendar} from './script';
-
 // the conversion of one minute to 60000 milliseconds
 const MIN_TO_MS = 60000;
 
@@ -23,15 +21,12 @@ export default class Calendar extends React.Component {
     };
   }
 
-  componentDidMount() {
-    this.getAllSchedules();
-  }
-
-  async getAllSchedules() {
-    const schedules = await fetchUserCalendar();
-    for (const schedule of schedules) {
+  generateSchedulesTimes() {
+    //TODO: This is currently broken. Figure out why.
+    this.props.scheduleList.forEach(schedule => {
       this.generateScheduleMeetingTimes(schedule);
-    }
+    });
+    return true;
   }
 
   selectNextSchedule() {
@@ -100,7 +95,8 @@ export default class Calendar extends React.Component {
           this.selectNextSchedule
         }>Next Schedule</button>
         {
-          this.state.selectedScheduleId < this.state.schedulesTimes.length &&
+          this.state.selectedScheduleId < this.props.scheduleList.length
+          && this.generateCourseMeetingTimes() && //yes this is ugly... sorry
           (
             <FullCalendar
               plugins={[dayGridPlugin, timeGridPlugin]}
