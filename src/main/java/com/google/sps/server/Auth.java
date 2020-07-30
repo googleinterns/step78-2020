@@ -33,7 +33,7 @@ public class Auth extends AbstractAppEngineAuthorizationCodeServlet {
   @Override
   protected void doGet(HttpServletRequest request, HttpServletResponse response)
       throws IOException {
-    response.sendRedirect("/course-form.html");
+    response.sendRedirect("/?signedIn=true");
   }
 
   @Override

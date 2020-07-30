@@ -20,16 +20,22 @@ import com.google.api.services.calendar.model.Event;
 import com.google.api.services.calendar.model.Events;
 import com.google.api.services.calendar.model.EventDateTime;
 import com.google.api.client.util.DateTime;
+import org.joda.time.Weeks;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Arrays;
+
+import java.time.LocalDate;
+import java.time.ZonedDateTime;
+import java.util.TimeZone;
 import java.io.IOException;
 
 import com.google.sps.data.*;
 
 public class ScheduleCalendar {
   private String calendarId;
+  private String calendarTimeZone;
   private com.google.api.services.calendar.Calendar client;
 
    /**
@@ -43,12 +49,12 @@ public class ScheduleCalendar {
 
       // Get the timezone of the user's primary calendar
       CalendarListEntry calendarListEntry = client.calendarList().get("primary").execute();
-      String calendarTimeZone = calendarListEntry.getTimeZone();
+      this.calendarTimeZone = calendarListEntry.getTimeZone();
 
       // Create a new calendar
       com.google.api.services.calendar.model.Calendar newCalendar = new com.google.api.services.calendar.model.Calendar();
       newCalendar.setSummary("class schedule");
-      newCalendar.setTimeZone(calendarTimeZone);
+      newCalendar.setTimeZone(this.calendarTimeZone);
 
       // Insert the new calendar
       com.google.api.services.calendar.model.Calendar createdCalendar = client.calendars().insert(newCalendar).execute();
@@ -62,44 +68,29 @@ public class ScheduleCalendar {
    * Puts schedule onto secondary calendar
    * 
    * @param schedule the schedule to add to the calendar 
+   * @param calendarId the id of the secondary calendar to put the schedule on
    */
-  public void addSchedule(Schedule schedule) throws IOException {
+  public void addSchedule(Schedule schedule, String startDateString, String endDateString) throws IOException {
     try {
-      // get current calendar, so can add the courses to the appropriate days of the current month 
-      java.util.Calendar calendar = java.util.Calendar.getInstance();
+      // calculate the number of weeks in their term, to set recurrence for calendar event
+      org.joda.time.LocalDate termStart = org.joda.time.LocalDate.parse(startDateString);
+      org.joda.time.LocalDate termEnd = org.joda.time.LocalDate.parse(endDateString);
+      int termLength = Weeks.weeksBetween(termStart, termEnd).getWeeks();
 
-      // for each course in the schedule, add all section times to calendar
+      LocalDate startDate = LocalDate.parse(startDateString);
+
+      // for each course in the schedule, add an event to the calendar
       for (ScheduledCourse currentCourse : schedule.getCourses()) {
-        List<TimeRange> lectureSectionTimes = currentCourse.getLectureSection().getMeetingTimes();
-        
-        addSectionToCalendar(lectureSectionTimes, calendar, currentCourse);
-        if (currentCourse.getLabSection() != null) {
-          List<TimeRange> labSectionTimes = currentCourse.getLabSection().getMeetingTimes();
-          addSectionToCalendar(labSectionTimes, calendar, currentCourse);
+        List<TimeRange> sectionTimes = currentCourse.getLectureSection().getMeetingTimes();
+        for (int i = 0; i < sectionTimes.size(); i++) {
+          ZonedDateTime startTime = CalendarUtils.calculateDateTime(this.client, startDate, sectionTimes.get(i).start());
+          ZonedDateTime endTime = CalendarUtils.calculateDateTime(this.client, startDate, sectionTimes.get(i).end());
+          addEvent(currentCourse, startTime, endTime, termLength);
         }
       } 
     } catch (IOException e) {
       System.out.println("Couldn't add schedule");
     }   
-  }
-
-   /**
-   * Helper function to turn all meeting times for a course section into calendar events
-   *
-   * @param sectionTimes
-   * @param calendar
-   * @param currentCourse 
-   */
-  private void addSectionToCalendar(List<TimeRange> sectionTimes, java.util.Calendar calendar, ScheduledCourse currentCourse) throws IOException {
-    try {
-      for (int i = 0; i < sectionTimes.size(); i++) {
-        String startTime = CalendarUtils.calculateStartTime(sectionTimes.get(i), calendar);
-        String endTime = CalendarUtils.calculateEndTime(sectionTimes.get(i), calendar);
-        addEvent(currentCourse, startTime, endTime);
-      }
-    } catch (IOException e) {
-      System.out.println("Couldn't add course section to the calendar");
-    }
   }
 
    /**
@@ -115,46 +106,33 @@ public class ScheduleCalendar {
    * Helper function to add a course in the schedule to the calendar, as an event. 
    *
    * @param course the course being added 
-   * @param startTime the start time for the calendar event
-   * @param endTime the end time for the calendar event
+   * @param calendarId the id of the secondary calendar to add the course to
+   * @param startTime the start time of the course
+   * @param endTime the end time of the course
    */
-  private void addEvent(ScheduledCourse course, String startTime, String endTime) throws IOException {
+  private void addEvent(Course course, ZonedDateTime startTime, ZonedDateTime endTime, int termLength) throws IOException {
     try {  
-      /* Get an event from the primary calendar to get the timezone offset from the 
-       event (to use for properly adjusting the start and end times to the correct timezone) */
-      Events events = this.client.events().list("primary").execute();
-      List<Event> items = events.getItems();
-      String existingDateTime = items.get(0).getStart().getDateTime().toString();
-      String[] dateTimeParts = existingDateTime.split("-");
-      if (dateTimeParts.length == 4) {
-        String offset = dateTimeParts[3];
-        startTime = startTime + "-" + offset;
-        endTime = endTime + "-" + offset;
-      }
-
       com.google.api.services.calendar.model.Calendar currentCalendar = this.client.calendars().get(this.calendarId).execute();
-
-      CalendarListEntry calendarListEntry = this.client.calendarList().get("primary").execute();
-      String calendarTimeZone = calendarListEntry.getTimeZone();
 
       String courseName = course.getName();
       Event event = new Event()
           .setSummary(courseName);
 
-      DateTime startDateTime = new DateTime(startTime);
+      TimeZone zoneId = TimeZone.getTimeZone(startTime.getZone());
+      DateTime startDateTime = new DateTime(Date.from(startTime.toInstant()), zoneId);
       EventDateTime start = new EventDateTime()
           .setDateTime(startDateTime)
-          .setTimeZone(calendarTimeZone);
+          .setTimeZone(this.calendarTimeZone);
       event.setStart(start);
-      
-      DateTime endDateTime = new DateTime(endTime);
+
+      DateTime endDateTime = new DateTime(Date.from(endTime.toInstant()), zoneId);
       EventDateTime end = new EventDateTime()
           .setDateTime(endDateTime)
-          .setTimeZone(calendarTimeZone);
+          .setTimeZone(this.calendarTimeZone);
       event.setEnd(end);
 
-      // will recur as long as their semester / quarter 
-      String[] recurrence = new String[] {"RRULE:FREQ=WEEKLY;COUNT=4"};
+      // recurs as long as their semester / quarter 
+      String[] recurrence = new String[] {"RRULE:FREQ=WEEKLY;COUNT="+Integer.toString(termLength)};
       event.setRecurrence(Arrays.asList(recurrence));
 
       event = this.client.events().insert(this.calendarId, event).execute();

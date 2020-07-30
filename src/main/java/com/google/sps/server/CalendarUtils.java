@@ -14,105 +14,85 @@
 
 package com.google.sps.server;
 
-import java.util.Calendar;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+
+import com.google.api.services.calendar.Calendar;
+import com.google.api.services.calendar.model.CalendarListEntry;
+
 import com.google.sps.data.*;
 
 public class CalendarUtils {
    /**
-   * Helper function to calculate the day of the month of the next Sunday,
-   * to know when to start the schedule. 
+   * Helper function to get the date for the calendar event
    *
-   * @param calendar an instance of Calendar, so can know the current date
-   * @return an int representing the date of next Sunday
+   * @param startDate the start date of the user's college term
+   * @param timeInMin the time, in minutes of the week, for an event (either the start or end time) 
+   * @param courseDayOfWeek the day of week the current course section starts on 
+   * @return a LocalDate representing the date to put the course on the calendar
    */
-  public static int getDateOfNextSunday(Calendar calendar) {
-    int currentDay = calendar.get(Calendar.DAY_OF_MONTH);
-    int currentDayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
-    int nextSun = currentDay + 8 - currentDayOfWeek;
-    return nextSun;
+  private static LocalDate getCourseDate(LocalDate startDate, int timeInMin, int courseDayOfWeek) {
+    int startDateDayOfWeek = startDate.getDayOfWeek().getValue();
+    long daysToAdd = 0;
+    if (courseDayOfWeek > startDateDayOfWeek) {
+      daysToAdd = courseDayOfWeek - startDateDayOfWeek;
+    } else {
+      daysToAdd = courseDayOfWeek + 7 - startDateDayOfWeek;
+    }
+    LocalDate courseDate = startDate.plusDays(daysToAdd);
+    return courseDate;
   }
 
    /**
-   * Helper function to know the current month. 
+   * Helper function to get the time (start or end) for the calendar event
    *
-   * @param calendar an instance of Calendar, so can know the current date
-   * @return an int representing the month, adjusted for DateTime's formatting
+   * @param timeInMin the time, in minutes of the week, for an event (either the start or end time) 
+   * @param courseDayOfWeek the day of week the current course section starts on 
+   * @return a LocalTime representing the time for creating the calendar event for the current course
    */
-  public static int getCurrentMonth(Calendar calendar) {
-    return calendar.get(Calendar.MONTH) + 1;
-  }
-  
+  private static LocalTime getCourseTime(int timeInMin, int courseDayOfWeek) {
+    int dayInHours = courseDayOfWeek * 24;
+    int hour = (int) Math.floor((timeInMin / 60) - dayInHours);
+    int minute = (int) (60 * (((timeInMin / 60.0) - dayInHours) - hour));
+    LocalTime courseTime = LocalTime.of(hour, minute);
+    return courseTime;
+  } 
+
    /**
-   * Helper function to know the current year. 
+   * Helper function to get the zoneId for the calendar event
    *
-   * @param calendar an instance of Calendar, so can know the current date
-   * @return an int representing the current year
+   * @param client the user's Google calendar
+   * @return a ZoneId representing the timezone for the calendar event for the current course
    */
-  public static int getCurrentYear(Calendar calendar) {
-    return calendar.get(Calendar.YEAR);
+  private static ZoneId getZoneId(Calendar client) {
+    ZoneId zoneId = null;
+    try {
+      CalendarListEntry calendarListEntry = client.calendarList().get("primary").execute();
+      String calendarTimeZone = calendarListEntry.getTimeZone();
+      zoneId = ZoneId.of(calendarTimeZone);
+    } catch (Exception e) {
+      System.out.println("Error getting ZoneId: " + e.getMessage());
+    }
+    return zoneId;
   }
   
    /**
    * Helper function to format the relevant times (start or end) for a course 
    * being converted into a calendar event. 
    *
+   * @param client the user's Google calendar
+   * @param startDate the start date of the user's college term
    * @param timeInMin the time, in minutes of the week, for an event (either the start or end time)
-   * @param month the current month
-   * @param year the current year
-   * @param nextSun the day of the month of the next Sunday
-   * 
-   * @return a String formatted for DateTime, to be used in creating a calendar event 
+   * @return a ZonedDateTime, to be used in creating a calendar event 
    */
-  public static String calculateDateTime(int timeInMin, int month, int year, int nextSun) {
-    int dayOfWeek = (int) Math.floorDiv(timeInMin, 24 * 60);
-    int dayInHours = dayOfWeek * 24;
-    int hour = (int) Math.floor((timeInMin / 60) - dayInHours);
-    int minute = (int) (60 * (((timeInMin / 60.0) - dayInHours) - hour));
-    int day = dayOfWeek + nextSun;
-     
-    String dayString = day > 9 ? Integer.toString(day) : "0" + Integer.toString(day);
-    String monthString = month > 9 ? Integer.toString(month) : "0" + Integer.toString(month);
-    String hourString = hour > 9 ? Integer.toString(hour) : "0" + Integer.toString(hour);     
-    String minuteString = minute > 9 ? Integer.toString(minute) : "0" + Integer.toString(minute);
-
-    String dateTime = year + "-" + monthString + "-" + dayString + "T" + hourString + ":" + minuteString + ":00";
+  public static ZonedDateTime calculateDateTime(Calendar client, LocalDate startDate, int timeInMin) { 
+    int courseDayOfWeek = (int) Math.floorDiv(timeInMin, 24*60);
+    LocalDate courseDate = getCourseDate(startDate, timeInMin, courseDayOfWeek);
+    LocalTime courseTime = getCourseTime(timeInMin, courseDayOfWeek);
+    ZoneId zoneId = getZoneId(client);
+    ZonedDateTime dateTime = ZonedDateTime.of(courseDate, courseTime, zoneId);
     return dateTime;
-  }
-
-   /**
-   * Helper function to calculate the properly formatted start time of a course
-   *
-   * @param timerange the time range for a course's meeting time (ex. 10:30-12:00)
-   * @param calendar an instance of Calendar, so can know the current date
-   * 
-   * @return a string representing the start time
-   */
-  public static String calculateStartTime(TimeRange timerange, Calendar calendar) {
-    int month = getCurrentMonth(calendar);
-    int year = getCurrentYear(calendar);
-    int nextSun = getDateOfNextSunday(calendar);
-
-    // user will input their semester / quarter start date
-    int startTimeInMin = timerange.start();
-    String startTime = calculateDateTime(startTimeInMin, month, year, nextSun);
-    return startTime;
-  }
-
-   /**
-   * Helper function to calculate the properly formatted end time of a course
-   *
-   * @param timerange the time range for a course's meeting time (ex. 10:30-12:00)
-   * @param calendar an instance of Calendar, so can know the current date
-   * 
-   * @return a string representing the end time
-   */
-  public static String calculateEndTime(TimeRange timerange, Calendar calendar) {
-    int month = getCurrentMonth(calendar);
-    int year = getCurrentYear(calendar);
-    int nextSun = getDateOfNextSunday(calendar);
-
-    int endTimeInMin = timerange.end();
-    String endTime = calculateDateTime(endTimeInMin, month, year, nextSun);
-    return endTime;
   }
 }

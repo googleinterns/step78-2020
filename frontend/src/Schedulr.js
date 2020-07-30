@@ -15,38 +15,56 @@ class Schedulr extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeStep: 0,
-      steps: ['Input Courses and Preferences', 'View Schedules', 'Export to Google Calendar'],
+      activeStep: (new URLSearchParams(window.location.search).get('signedIn') === "true") ? 1 : 0,
+      steps: ['Sign In', 'Input Courses and Preferences', 'View Schedules', 'Export to Google Calendar'],
       scheduleList: [],
       schedulesTimes: [],
+      calId: "",
+      termDates: {
+        startDate: '',
+        endDate: '',
+      }
     };
 
     this.handleNext = this.handleNext.bind(this);
     this.handleBack = this.handleBack.bind(this);
     this.setScheduleList = this.setScheduleList.bind(this);
     this.generateScheduleMeetingTimes = this.generateScheduleMeetingTimes.bind(this);
+    this.exportToGoogleCalendar = this.exportToGoogleCalendar.bind(this);
+    this.setTermDates = this.setTermDates.bind(this);
   }
 
   getStepContent() {
     const step = this.state.activeStep;
     switch (step) {
-    case 0:
+    case 0: 
+      return (
+        <Button onClick={this.signIn}>Get Started</Button>
+      );
+    case 1:
       return (<InputForm
         handleNext={this.handleNext}
-        setScheduleList={this.setScheduleList}/>);
-    case 1:
+        setScheduleList={this.setScheduleList}
+        setTermDates={this.setTermDates}/>);
+    case 2:
       return (<Calendar
         scheduleList={this.state.scheduleList}
-        schedulesTimes={this.state.schedulesTimes}/>);
-    case 2:
-      return 'Export to google calendar: coming soon ;)';
+        schedulesTimes={this.state.schedulesTimes}
+        exportToGoogleCalendar={this.exportToGoogleCalendar}/>);
+    case 3:
+      return (<iframe title="google calendar" id="calendar" src={this.state.calId} width="800" height="600" frameborder="0" scrolling="no"></iframe>);
     default:
       return 'Unknown step';
     }
   }
 
+  signIn() { 
+    window.sessionStorage.setItem("signedIn", 1);
+    window.location.assign("https://course-scheduler-step-2020.uc.r.appspot.com/auth");
+  }
+
   handleNext() {
-    if (this.state.activeStep === 0) {
+    if (this.state.activeStep === 1) {
       this.generateSchedulesTimes();
     }
     this.setState({...this.state, activeStep: this.state.activeStep + 1});
@@ -110,6 +128,42 @@ class Schedulr extends React.Component {
     return t;
   }
 
+  setCalId(calId) {
+    const url = "https://calendar.google.com/calendar/embed?src=" + calId;
+    this.setState({...this.state, calId: url});
+  }
+
+  exportToGoogleCalendar(scheduleId) {
+    const scheduleToExport = this.state.scheduleList[scheduleId];
+    var schedule = {
+        "schedule": scheduleToExport, 
+        "termDates": {
+            "startDate": this.state.termDates.startDate, 
+            "endDate": this.state.termDates.endDate
+        }
+    };
+    fetch('/handleSchedules', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(schedule),
+    }).then((response) => response.text())
+      .then((calId) => {
+        this.setCalId(calId);
+        this.handleNext();
+      });
+  }
+
+  setTermDates(startDate, endDate) {
+    this.setState((state) => ({
+      ...this.state,
+      termDates: {
+        ...state.termDates,
+        startDate: startDate,
+        endDate: endDate
+      },
+    }));
+  }
+
   render() {
     return (
       <div>
@@ -125,12 +179,12 @@ class Schedulr extends React.Component {
         <div>
           <Typography>{this.getStepContent()}</Typography>
           <div>
-            {(this.state.activeStep === 1 || this.state.activeStep === 2) && (
+            {(this.state.activeStep === 2 || this.state.activeStep === 3) && (
               <Button onClick={this.handleBack}>
                 Back
               </Button>
             )}
-            {(this.state.activeStep === 1) && (
+            {(this.state.activeStep === 2) && (
               <Button onClick={this.handleNext}>
                 Next
               </Button>

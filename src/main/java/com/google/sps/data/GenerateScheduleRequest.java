@@ -30,13 +30,6 @@ public class GenerateScheduleRequest {
     return this.basicInfo.credits;
   }
 
-  public String getTermStartDate() {
-    return this.basicInfo.termDates.startDate;
-  }
-
-  public String getTermEndDate() {
-    return this.basicInfo.termDates.endDate;
-  }
 }
 
 class InputCriterion {
@@ -48,9 +41,4 @@ class InputCriterion {
 class BasicInfo {
   Invariants credits;
   TermDates termDates;
-}
-
-class TermDates {
-  String startDate;
-  String endDate;
 }
