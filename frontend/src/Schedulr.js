@@ -5,6 +5,7 @@ import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import InputForm from './InputForm';
+import Calendar from './Calendar'
 
 class Schedulr extends React.Component {
   constructor(props) {
@@ -28,9 +29,9 @@ class Schedulr extends React.Component {
         handleNext={this.handleNext}
         setScheduleList={this.setScheduleList}/>);
     case 1:
-      return (<p>{JSON.stringify(this.state.scheduleList, null, 2)}</p>);
+      return (<Calendar scheduleList={this.state.scheduleList}></Calendar>);
     case 2:
-      return 'This is the bit I really care about!';
+      return 'Export to google calendar: coming soon ;)';
     default:
       return 'Unknown step';
     }
