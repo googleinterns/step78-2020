@@ -84,8 +84,7 @@ class Schedulr extends React.Component {
     }
 
     this.setState({
-      // schedulesTimes:  [...this.state.schedulesTimes, combinedMeetingTimes]
-      ...this.state, schedulesTimes: this.state.schedulesTimes.concat(combinedMeetingTimes),
+      ...this.state, schedulesTimes:  [...this.state.schedulesTimes, combinedMeetingTimes],
     });
   }
 
