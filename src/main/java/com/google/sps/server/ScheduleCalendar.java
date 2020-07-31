@@ -68,7 +68,8 @@ public class ScheduleCalendar {
    * Puts schedule onto secondary calendar
    * 
    * @param schedule the schedule to add to the calendar 
-   * @param calendarId the id of the secondary calendar to put the schedule on
+   * @param startDateString the user's college term start date 
+   * @param endDateString the user's college term end date
    */
   public void addSchedule(Schedule schedule, String startDateString, String endDateString) throws IOException {
     try {
@@ -106,9 +107,9 @@ public class ScheduleCalendar {
    * Helper function to add a course in the schedule to the calendar, as an event. 
    *
    * @param course the course being added 
-   * @param calendarId the id of the secondary calendar to add the course to
    * @param startTime the start time of the course
    * @param endTime the end time of the course
+   * @param termLength the number of weeks in the user's college term
    */
   private void addEvent(Course course, ZonedDateTime startTime, ZonedDateTime endTime, int termLength) throws IOException {
     try {  
