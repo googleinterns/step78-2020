@@ -59,7 +59,6 @@ class Schedulr extends React.Component {
   }
 
   signIn() { 
-    window.sessionStorage.setItem("signedIn", 1);
     window.location.assign("https://course-scheduler-step-2020.uc.r.appspot.com/auth");
   }
 
