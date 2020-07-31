@@ -23,6 +23,11 @@
         "warn", {"code": 90}
       ],
       "indent": ["error", 2],
-      "react/prop-types": "off" 
+      "react/prop-types": "off",
+      "padding-line-between-statements": [
+        "warn",
+        { "blankLine": "always", "prev": "block-like", "next": "*" },
+        { "blankLine": "always", "prev": "*", "next": "block-like" }
+      ]
     }
 }
