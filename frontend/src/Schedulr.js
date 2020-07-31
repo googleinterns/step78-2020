@@ -15,15 +15,15 @@ class Schedulr extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeStep: (new URLSearchParams(window.location.search).get('signedIn') === "true") ? 1 : 0,
+      activeStep: (new URLSearchParams(window.location.search).get('signedIn') === 'true') ? 1 : 0,
       steps: ['Sign In', 'Input Courses and Preferences', 'View Schedules', 'Export to Google Calendar'],
       scheduleList: [],
       schedulesTimes: [],
-      calId: "",
+      calId: '',
       termDates: {
         startDate: '',
         endDate: '',
-      }
+      },
     };
 
     this.handleNext = this.handleNext.bind(this);
@@ -37,7 +37,7 @@ class Schedulr extends React.Component {
   getStepContent() {
     const step = this.state.activeStep;
     switch (step) {
-    case 0: 
+    case 0:
       return (
         <Button onClick={this.signIn}>Get Started</Button>
       );
@@ -52,14 +52,14 @@ class Schedulr extends React.Component {
         schedulesTimes={this.state.schedulesTimes}
         exportToGoogleCalendar={this.exportToGoogleCalendar}/>);
     case 3:
-      return (<iframe title="google calendar" id="calendar" src={this.state.calId} width="800" height="600" frameborder="0" scrolling="no"></iframe>);
+      return (<iframe title="google calendar" id="calendar" src={this.state.calId} width="800" height="600" frameBorder="0" scrolling="no"></iframe>);
     default:
       return 'Unknown step';
     }
   }
 
-  signIn() { 
-    window.location.assign("https://course-scheduler-step-2020.uc.r.appspot.com/auth");
+  signIn() {
+    window.location.assign('https://course-scheduler-step-2020.uc.r.appspot.com/auth');
   }
 
   handleNext() {
@@ -128,18 +128,18 @@ class Schedulr extends React.Component {
   }
 
   setCalId(calId) {
-    const url = "https://calendar.google.com/calendar/embed?src=" + calId;
+    const url = 'https://calendar.google.com/calendar/embed?src=' + calId;
     this.setState({...this.state, calId: url});
   }
 
   exportToGoogleCalendar(scheduleId) {
     const scheduleToExport = this.state.scheduleList[scheduleId];
-    var schedule = {
-        "schedule": scheduleToExport, 
-        "termDates": {
-            "startDate": this.state.termDates.startDate, 
-            "endDate": this.state.termDates.endDate
-        }
+    const schedule = {
+      'schedule': scheduleToExport,
+      'termDates': {
+        'startDate': this.state.termDates.startDate,
+        'endDate': this.state.termDates.endDate,
+      },
     };
     fetch('/handleSchedules', {
       method: 'POST',
@@ -158,7 +158,7 @@ class Schedulr extends React.Component {
       termDates: {
         ...state.termDates,
         startDate: startDate,
-        endDate: endDate
+        endDate: endDate,
       },
     }));
   }
