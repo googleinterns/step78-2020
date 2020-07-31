@@ -82,16 +82,36 @@ public class ScheduleCalendar {
 
       // for each course in the schedule, add an event to the calendar
       for (ScheduledCourse currentCourse : schedule.getCourses()) {
-        List<TimeRange> sectionTimes = currentCourse.getLectureSection().getMeetingTimes();
-        for (int i = 0; i < sectionTimes.size(); i++) {
-          ZonedDateTime startTime = CalendarUtils.calculateDateTime(this.client, startDate, sectionTimes.get(i).start());
-          ZonedDateTime endTime = CalendarUtils.calculateDateTime(this.client, startDate, sectionTimes.get(i).end());
-          addEvent(currentCourse, startTime, endTime, termLength);
+        List<TimeRange> lectureSectionTimes = currentCourse.getLectureSection().getMeetingTimes();
+        addSectionToCalendar(currentCourse, lectureSectionTimes, startDate, termLength);
+        if (currentCourse.getLabSection() != null) {
+          List<TimeRange> labSectionTimes = currentCourse.getLabSection().getMeetingTimes();
+          addSectionToCalendar(currentCourse, labSectionTimes, startDate, termLength);
         }
       } 
     } catch (IOException e) {
       System.out.println("Couldn't add schedule");
     }   
+  }
+
+     /**
+   * Helper function to turn all meeting times for a course section into calendar events
+   *
+   * @param currentCourse the current course being added 
+   * @param sectionTimes all of the meeting times for the current course's lecture or lab section
+   * @param startDate the user's college term start date
+   * @param termLength the number of weeks in the user's college term
+   */
+  private void addSectionToCalendar(ScheduledCourse currentCourse, List<TimeRange> sectionTimes, LocalDate startDate, int termLength) throws IOException {
+    try {
+      for (int i = 0; i < sectionTimes.size(); i++) {
+        ZonedDateTime startTime = CalendarUtils.calculateDateTime(this.client, startDate, sectionTimes.get(i).start());
+        ZonedDateTime endTime = CalendarUtils.calculateDateTime(this.client, startDate, sectionTimes.get(i).end());
+        addEvent(currentCourse, startTime, endTime, termLength); 
+      }
+    } catch (IOException e) {
+      System.out.println("Couldn't add course section to the calendar");
+    }
   }
 
    /**
