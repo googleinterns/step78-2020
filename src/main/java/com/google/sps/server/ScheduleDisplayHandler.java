@@ -33,7 +33,7 @@ import com.google.sps.data.*;
 /**
  * Exports the ordered schedules to secondary calendars on the user's Google calendar    
  */
-@WebServlet("/handleSchedules")
+@WebServlet("/exportToGoogleCalendar")
 public class ScheduleDisplayHandler extends HttpServlet {
 
   @Override

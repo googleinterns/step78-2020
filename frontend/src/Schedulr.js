@@ -141,7 +141,7 @@ class Schedulr extends React.Component {
             "endDate": this.state.termDates.endDate
         }
     };
-    fetch('/handleSchedules', {
+    fetch('/exportToGoogleCalendar', {
       method: 'POST',
       headers: {'Content-Type': 'application/json'},
       body: JSON.stringify(schedule),

@@ -36,13 +36,13 @@ http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
   </servlet-mapping>
 
   <servlet>
-    <servlet-name>handleSchedules</servlet-name>
+    <servlet-name>exportToGoogleCalendar</servlet-name>
     <servlet-class>com.google.sps.server.ScheduleDisplayHandler</servlet-class>
   </servlet>
 
   <servlet-mapping>
-    <servlet-name>handleSchedules</servlet-name>
-    <url-pattern>/handleSchedules/*</url-pattern>
+    <servlet-name>exportToGoogleCalendar</servlet-name>
+    <url-pattern>/exportToGoogleCalendar/*</url-pattern>
   </servlet-mapping>
 
   <servlet>
