@@ -54,8 +54,8 @@ public class CalendarUtils {
    */
   private static LocalTime getCourseTime(int timeInMin, int courseDayOfWeek) {
     int dayInHours = courseDayOfWeek * 24;
-    int hour = (int) Math.floor((timeInMin / 60) - dayInHours);
-    int minute = (int) (60 * (((timeInMin / 60.0) - dayInHours) - hour));
+    int hour = (int) ((timeInMin / 60) % 24);
+    int minute = (int) (timeInMin % 60);
     LocalTime courseTime = LocalTime.of(hour, minute);
     return courseTime;
   } 
@@ -88,7 +88,7 @@ public class CalendarUtils {
    * @return a ZonedDateTime, to be used in creating a calendar event 
    */
   public static ZonedDateTime calculateDateTime(Calendar client, LocalDate startDate, int timeInMin) { 
-    int courseDayOfWeek = (int) Math.floorDiv(timeInMin, 24*60);
+    int courseDayOfWeek = (int) (timeInMin / (24 * 60));
     LocalDate courseDate = getCourseDate(startDate, timeInMin, courseDayOfWeek);
     LocalTime courseTime = getCourseTime(timeInMin, courseDayOfWeek);
     ZoneId zoneId = getZoneId(client);

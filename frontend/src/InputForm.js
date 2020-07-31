@@ -634,7 +634,8 @@ class InputForm extends React.Component {
     }).then((response) => response.json())
       .then((responseSchedules) => {
         this.props.setScheduleList(responseSchedules);
-        this.props.setTermDates(this.state.basicInfo.termDates.startDate, this.state.basicInfo.termDates.endDate);
+        const { startDate, endDate } = this.state.basicInfo.termDates;
+        this.props.setTermDates(startDate, endDate);
         this.props.handleNext();
       });
   }

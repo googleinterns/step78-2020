@@ -39,8 +39,11 @@ class Schedulr extends React.Component {
     switch (step) {
     case 0:
       return (
-        <Button onClick={this.signIn}>Get Started</Button>
-      );
+        <div>
+          <h2>Welcome to SchedulR</h2>
+          <p>To get started, sign in so that we can export your perfect class schedule to your Google Calendar!</p>
+          <Button onClick={this.signIn}>Sign In</Button>
+        </div>);
     case 1:
       return (<InputForm
         handleNext={this.handleNext}
@@ -52,14 +55,23 @@ class Schedulr extends React.Component {
         schedulesTimes={this.state.schedulesTimes}
         exportToGoogleCalendar={this.exportToGoogleCalendar}/>);
     case 3:
-      return (<iframe title="google calendar" id="calendar" src={this.state.calId} width="800" height="600" frameBorder="0" scrolling="no"></iframe>);
+      return (
+        <iframe 
+          title="google calendar" 
+          id="calendar" 
+          src={this.state.calId} 
+          width="800" 
+          height="600" 
+          frameBorder="0" 
+          scrolling="no">
+        </iframe>);
     default:
       return 'Unknown step';
     }
   }
 
   signIn() {
-    window.location.assign('https://course-scheduler-step-2020.uc.r.appspot.com/auth');
+    window.location.assign('/auth');
   }
 
   handleNext() {
