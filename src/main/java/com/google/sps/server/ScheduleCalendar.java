@@ -82,11 +82,13 @@ public class ScheduleCalendar {
 
       // for each course in the schedule, add an event to the calendar
       for (ScheduledCourse currentCourse : schedule.getCourses()) {
+        String professor = currentCourse.getLectureSection().getProfessor();
         List<TimeRange> lectureSectionTimes = currentCourse.getLectureSection().getMeetingTimes();
-        addSectionToCalendar(currentCourse, lectureSectionTimes, startDate, termLength);
+        addSectionToCalendar(currentCourse, lectureSectionTimes, startDate, termLength, professor);
         if (currentCourse.getLabSection() != null) {
+          professor = currentCourse.getLabSection().getProfessor();
           List<TimeRange> labSectionTimes = currentCourse.getLabSection().getMeetingTimes();
-          addSectionToCalendar(currentCourse, labSectionTimes, startDate, termLength);
+          addSectionToCalendar(currentCourse, labSectionTimes, startDate, termLength, professor);
         }
       } 
     } catch (IOException e) {
@@ -101,13 +103,14 @@ public class ScheduleCalendar {
    * @param sectionTimes all of the meeting times for the current course's lecture or lab section
    * @param startDate the user's college term start date
    * @param termLength the number of weeks in the user's college term
+   * @param professor the current course's professor
    */
-  private void addSectionToCalendar(ScheduledCourse currentCourse, List<TimeRange> sectionTimes, LocalDate startDate, int termLength) throws IOException {
+  private void addSectionToCalendar(ScheduledCourse currentCourse, List<TimeRange> sectionTimes, LocalDate startDate, int termLength, String professor) throws IOException {
     try {
       for (int i = 0; i < sectionTimes.size(); i++) {
         ZonedDateTime startTime = CalendarUtils.calculateDateTime(this.client, startDate, sectionTimes.get(i).start());
         ZonedDateTime endTime = CalendarUtils.calculateDateTime(this.client, startDate, sectionTimes.get(i).end());
-        addEvent(currentCourse, startTime, endTime, termLength); 
+        addEvent(currentCourse, startTime, endTime, termLength, professor); 
       }
     } catch (IOException e) {
       System.out.println("Couldn't add course section to the calendar");
@@ -130,14 +133,19 @@ public class ScheduleCalendar {
    * @param startTime the start time of the course
    * @param endTime the end time of the course
    * @param termLength the number of weeks in the user's college term
+   * @param professor the course's professor
    */
-  private void addEvent(Course course, ZonedDateTime startTime, ZonedDateTime endTime, int termLength) throws IOException {
+  private void addEvent(Course course, ZonedDateTime startTime, ZonedDateTime endTime, int termLength, String professor) throws IOException {
     try {  
       com.google.api.services.calendar.model.Calendar currentCalendar = this.client.calendars().get(this.calendarId).execute();
 
       String courseName = course.getName();
+      String courseID = course.getCourseID();
+      String subject = course.getSubject();
+      float credits = course.getCredits();
       Event event = new Event()
-          .setSummary(courseName);
+          .setSummary(courseName)
+          .setDescription("Course ID: " + courseID + "\nProfessor: " + professor + "\nSubject: " + subject + "\nCredits: " + String.valueOf(credits));
 
       TimeZone zoneId = TimeZone.getTimeZone(startTime.getZone());
       DateTime startDateTime = new DateTime(Date.from(startTime.toInstant()), zoneId);
