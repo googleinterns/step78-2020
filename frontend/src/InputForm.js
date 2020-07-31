@@ -225,6 +225,7 @@ class InputForm extends React.Component {
           }
 
           days = [...this.state.courses[courseIndex].lectureSections[sectionIndex].days];
+
           if (days.includes(day)) {
             index = days.indexOf(day);
             return days.splice(index, 1);
@@ -339,6 +340,7 @@ class InputForm extends React.Component {
           }
 
           days = [...this.state.courses[courseIndex].labSections[sectionIndex].days];
+
           if (days.includes(day)) {
             index = days.indexOf(day);
             return days.splice(index, 1);
