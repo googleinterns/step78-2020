@@ -37,6 +37,7 @@ class Schedulr extends React.Component {
 
   getStepContent() {
     const step = this.state.activeStep;
+
     switch (step) {
     case 0:
       return (
@@ -79,6 +80,7 @@ class Schedulr extends React.Component {
     if (this.state.activeStep === 1) {
       this.generateSchedulesTimes();
     }
+
     this.setState({...this.state, activeStep: this.state.activeStep + 1});
   }
 
@@ -103,11 +105,13 @@ class Schedulr extends React.Component {
     for (const course of schedule.courses) {
       // Lecture Sections
       const lectureTime = this.generateCourseMeetingTimes(course.name, course.lectureSection.meetingTimes);
+
       // Lab Sections
       if (course.labSection) {
         const labTime = this.generateCourseMeetingTimes(course.name, course.labSection.meetingTimes);
         combinedMeetingTimes = combinedMeetingTimes.concat(labTime);
       }
+
       combinedMeetingTimes = combinedMeetingTimes.concat(lectureTime);
     }
 
@@ -130,6 +134,7 @@ class Schedulr extends React.Component {
         end: moment(endTime).format('YYYY-MM-DD HH:mm'),
       });
     }
+
     return courseMeetingTimes;
   }
 

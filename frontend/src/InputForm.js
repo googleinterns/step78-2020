@@ -7,37 +7,39 @@ import BasicInfo from './BasicInfo';
 class InputForm extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      courses: [{
-        name: '',
-        courseID: '',
-        subject: '',
-        credits: '',
-        isRequired: false,
-        rank: '',
-        lectureSections: [{
-          professor: '',
-          startTime: '',
-          endTime: '',
-          days: [],
+    this.state =
+      JSON.parse(window.localStorage.getItem('inputFormState')) ||
+      {
+        courses: [{
+          name: '',
+          courseID: '',
+          subject: '',
+          credits: '',
+          isRequired: false,
+          rank: '',
+          lectureSections: [{
+            professor: '',
+            startTime: '',
+            endTime: '',
+            days: [],
+          }],
+          labSections: [],
         }],
-        labSections: [],
-      }],
-      criterion: {
-        timePreferences: [],
-        preferredSubject: '',
-      },
-      basicInfo: {
-        credits: {
-          minCredits: 12,
-          maxCredits: 18,
+        criterion: {
+          timePreferences: [],
+          preferredSubject: '',
         },
-        termDates: {
-          startDate: '',
-          endDate: '',
+        basicInfo: {
+          credits: {
+            minCredits: 12,
+            maxCredits: 18,
+          },
+          termDates: {
+            startDate: '',
+            endDate: '',
+          },
         },
-      },
-    };
+      };
 
     this.createNewCourse = this.createNewCourse.bind(this);
     this.createNewLectureSection = this.createNewLectureSection.bind(this);
@@ -80,6 +82,13 @@ class InputForm extends React.Component {
     this.updateTermEndDate = this.updateTermEndDate.bind(this);
 
     this.submit = this.submit.bind(this);
+  }
+
+  componentDidUpdate() {
+    window.localStorage.setItem(
+      'inputFormState',
+      JSON.stringify(this.state),
+    );
   }
 
   updateCourseName(id, courseName) {
@@ -225,6 +234,7 @@ class InputForm extends React.Component {
           }
 
           days = [...this.state.courses[courseIndex].lectureSections[sectionIndex].days];
+
           if (days.includes(day)) {
             index = days.indexOf(day);
             return days.splice(index, 1);
@@ -339,6 +349,7 @@ class InputForm extends React.Component {
           }
 
           days = [...this.state.courses[courseIndex].labSections[sectionIndex].days];
+
           if (days.includes(day)) {
             index = days.indexOf(day);
             return days.splice(index, 1);
