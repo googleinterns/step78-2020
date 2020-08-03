@@ -606,8 +606,8 @@ class InputForm extends React.Component {
     });
     submitState.criterion['courseScores'] = inputtedCourseScores;
 
-    submitState.criterion.timePreferences.timeBefore = this.timeToTimeRange(0, "24:00", submitState.criterion.timePreferences.timeAfter);
-    submitState.criterion.timePreferences.timeAfter = this.timeToTimeRange(0, submitState.criterion.timePreferences.timeAfter, "24:00");
+    submitState.criterion.timePreferences.timeBefore = this.timeToTimeRange(0, "00:01", submitState.criterion.timePreferences.timeBefore);
+    submitState.criterion.timePreferences.timeAfter = this.timeToTimeRange(0, submitState.criterion.timePreferences.timeAfter, "23:59");
 
     fetch('/handleUserInput', {
       method: 'POST',
