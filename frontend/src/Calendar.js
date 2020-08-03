@@ -2,6 +2,7 @@ import React from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import Button from '@material-ui/core/Button';
 
 export default class Calendar extends React.Component {
   constructor(props) {
@@ -35,15 +36,15 @@ export default class Calendar extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={
+        <Button onClick={
           this.selectPreviousSchedule
-        }>Previous Schedule</button>
-        <button onClick={
+        }>Previous Schedule</Button>
+        <Button onClick={
           this.selectNextSchedule
-        }>Next Schedule</button>
-        <button onClick={
+        }>Next Schedule</Button>
+        <Button onClick={
           this.exportToGoogleCalendar
-        }>Export to Google Calendar</button>
+        }>Export to Google Calendar</Button>
         {
           this.state.selectedScheduleId < this.props.scheduleList.length &&
           (

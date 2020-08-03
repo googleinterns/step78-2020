@@ -10,6 +10,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Typography from '@material-ui/core/Typography';
 import LectureSection from './LectureSection';
 import LabSection from './LabSection';
 
@@ -154,7 +155,9 @@ class Course extends React.Component {
             control={<Switch checked={this.props.isRequired} onChange={this.handleIsRequiredChange} />}
             label="Required"
           />
-          <p>Lecture Sections</p>
+          <Typography variant="subtitle1" gutterBottom>
+            Lecture Sections: 
+          </Typography>
           {this.props.lectureSections.map((lectureSection, index) => (
             <LectureSection
               id={index}
@@ -177,7 +180,9 @@ class Course extends React.Component {
               deleteLectureSection={this.deleteLectureSection}
             />))}
           <Button onClick={this.createNewLectureSection}>+ section</Button>
-          <p>Lab / Recitation Sections (optional)</p>
+          <Typography variant="subtitle1" gutterBottom>
+            Lab / Recitation Sections (optional): 
+          </Typography>
           {this.props.labSections.map((labSection, index) => (
             <LabSection
               id={index}

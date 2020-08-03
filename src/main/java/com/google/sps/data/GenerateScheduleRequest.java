@@ -1,6 +1,7 @@
 package com.google.sps.data;
 
 import java.util.List;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class GenerateScheduleRequest {
@@ -15,7 +16,10 @@ public class GenerateScheduleRequest {
   }
 
   public List<TimeRange> getTimePreferences() {
-    return this.criterion.timePreferences;
+    List<TimeRange> timePreferences = new ArrayList<>();
+    timePreferences.add(this.criterion.timePreferences.timeBefore);
+    timePreferences.add(this.criterion.timePreferences.timeAfter);
+    return timePreferences;
   }
 
   public String getPreferredSubject() {
@@ -33,7 +37,7 @@ public class GenerateScheduleRequest {
 }
 
 class InputCriterion {
-  List<TimeRange> timePreferences;
+  TimePreferences timePreferences;
   String preferredSubject;
   HashMap<String, Integer> courseScores;
 }
@@ -41,4 +45,14 @@ class InputCriterion {
 class BasicInfo {
   Invariants credits;
   TermDates termDates;
+}
+
+class TermDates {
+  String startDate;
+  String endDate;
+}
+
+class TimePreferences {
+  TimeRange timeBefore;
+  TimeRange timeAfter;
 }

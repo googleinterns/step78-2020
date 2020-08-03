@@ -1,5 +1,6 @@
 import React from 'react';
 import {CardContent, Input} from '@material-ui/core';
+import Typography from '@material-ui/core/Typography';
 
 class SubjectPreference extends React.Component {
   constructor(props) {
@@ -15,7 +16,9 @@ class SubjectPreference extends React.Component {
   render() {
     return (
       <CardContent>
-        <div id="label">Preferred subject: </div>
+        <Typography variant="subtitle1" gutterBottom>
+          Preferred Subject: 
+        </Typography>
         <Input placeholder="Subject" value={this.props.subject} onChange={this.handleSubjectChange}
         />
       </CardContent>

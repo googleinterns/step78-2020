@@ -1,5 +1,6 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
 import Course from './Course';
 import Criterion from './Criterion';
 import BasicInfo from './BasicInfo';
@@ -26,7 +27,10 @@ class InputForm extends React.Component {
           labSections: [],
         }],
         criterion: {
-          timePreferences: [],
+          timePreferences: {
+            timeBefore: '',
+            timeAfter: '',
+          },
           preferredSubject: '',
         },
         basicInfo: {
@@ -44,11 +48,9 @@ class InputForm extends React.Component {
     this.createNewCourse = this.createNewCourse.bind(this);
     this.createNewLectureSection = this.createNewLectureSection.bind(this);
     this.createNewLabSection = this.createNewLabSection.bind(this);
-    this.createNewTimePreference = this.createNewTimePreference.bind(this);
     this.deleteCourse = this.deleteCourse.bind(this);
     this.deleteLectureSection = this.deleteLectureSection.bind(this);
     this.deleteLabSection = this.deleteLabSection.bind(this);
-    this.deleteTimePreference = this.deleteTimePreference.bind(this);
 
     // courses
     this.updateCourseName = this.updateCourseName.bind(this);
@@ -71,8 +73,8 @@ class InputForm extends React.Component {
     this.updateLabSectionDays = this.updateLabSectionDays.bind(this);
 
     // criterion
-    this.updateTimeStartPreference = this.updateTimeStartPreference.bind(this);
-    this.updateTimeEndPreference = this.updateTimeEndPreference.bind(this);
+    this.updateTimeBeforePreference = this.updateTimeBeforePreference.bind(this);
+    this.updateTimeAfterPreference = this.updateTimeAfterPreference.bind(this);
     this.updateSubjectPreference = this.updateSubjectPreference.bind(this);
 
     // basic info
@@ -381,28 +383,28 @@ class InputForm extends React.Component {
     }));
   }
 
-  updateTimeStartPreference(id, timePreferenceStartTime) {
+  updateTimeBeforePreference(timeBeforePreference) {
     this.setState((state) => ({
       ...this.state,
       criterion: {
         ...state.criterion,
-        timePreferences: this.state.criterion.timePreferences.map((timePreference, index) =>
-          index === id ?
-            ({...timePreference, startTime: timePreferenceStartTime}) :
-            timePreference),
+        timePreferences: {
+          ...state.criterion.timePreferences,
+          timeBefore: timeBeforePreference,
+        },
       },
     }));
   }
 
-  updateTimeEndPreference(id, timePreferenceEndTime) {
+  updateTimeAfterPreference(timeAfterPreference) {
     this.setState((state) => ({
       ...this.state,
       criterion: {
         ...state.criterion,
-        timePreferences: this.state.criterion.timePreferences.map((timePreference, index) =>
-          index === id ?
-            ({...timePreference, endTime: timePreferenceEndTime}) :
-            timePreference),
+        timePreferences: {
+          ...state.criterion.timePreferences,
+          timeAfter: timeAfterPreference,
+        },
       },
     }));
   }
@@ -525,21 +527,6 @@ class InputForm extends React.Component {
     });
   }
 
-  createNewTimePreference() {
-    const defaultTimePreference = {
-      startTime: '',
-      endTime: '',
-    };
-
-    this.setState((state) => ({
-      ...this.state,
-      criterion: {
-        ...state.criterion,
-        timePreferences: this.state.criterion.timePreferences.concat(defaultTimePreference),
-      },
-    }));
-  }
-
   deleteCourse(id) {
     const courses = [...this.state.courses];
     this.state.courses.map((course, index) =>
@@ -609,22 +596,6 @@ class InputForm extends React.Component {
     });
   }
 
-  deleteTimePreference(id) {
-    const timePreferences = [...this.state.criterion.timePreferences];
-    this.state.criterion.timePreferences.map((timePreference, index) =>
-      index === id ?
-        (timePreferences.splice(index, 1)) :
-        timePreference);
-
-    this.setState((state) => ({
-      ...this.state,
-      criterion: {
-        ...state.criterion,
-        timePreferences: timePreferences,
-      },
-    }));
-  }
-
   submit() {
     const submitState = JSON.parse(JSON.stringify(this.state));
     submitState.courses = submitState.courses.map((course) => this.convertCourseSections(course));
@@ -635,8 +606,8 @@ class InputForm extends React.Component {
     });
     submitState.criterion['courseScores'] = inputtedCourseScores;
 
-    submitState.criterion.timePreferences = submitState.criterion.timePreferences.map((times) =>
-      this.timeToTimeRange(0, times.startTime, times.endTime));
+    submitState.criterion.timePreferences.timeBefore = this.timeToTimeRange(0, "00:01", submitState.criterion.timePreferences.timeBefore);
+    submitState.criterion.timePreferences.timeAfter = this.timeToTimeRange(0, submitState.criterion.timePreferences.timeAfter, "23:59");
 
     fetch('/handleUserInput', {
       method: 'POST',
@@ -694,7 +665,9 @@ class InputForm extends React.Component {
   render() {
     return (
       <div>
-        <h2>Courses</h2>
+        <Typography variant="h5" gutterBottom>
+          Courses: 
+        </Typography>
         {this.state.courses.map((course, index) => (
           <Course
             id={index}
@@ -733,17 +706,19 @@ class InputForm extends React.Component {
             deleteLabSection={this.deleteLabSection}
           />))}
         <Button onClick={this.createNewCourse}>+ Course</Button>
-        <h2>Preferences</h2>
+        <Typography variant="h5" gutterBottom>
+          Preferences: 
+        </Typography>
         <Criterion
           times={this.state.criterion.timePreferences}
           subject={this.state.criterion.preferredSubject}
-          createNewTimePreference={this.createNewTimePreference}
           updateSubjectPreference={this.updateSubjectPreference}
-          updateTimeStartPreference={this.updateTimeStartPreference}
-          updateTimeEndPreference={this.updateTimeEndPreference}
-          deleteTimePreference={this.deleteTimePreference}
+          updateTimeBeforePreference={this.updateTimeBeforePreference}
+          updateTimeAfterPreference={this.updateTimeAfterPreference}
         />
-        <h2>Other info</h2>
+        <Typography variant="h5" gutterBottom>
+          Other Info: 
+        </Typography>
         <BasicInfo
           minCredits={this.state.basicInfo.credits.minCredits}
           maxCredits={this.state.basicInfo.credits.maxCredits}

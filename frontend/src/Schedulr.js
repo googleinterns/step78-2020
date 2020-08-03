@@ -4,7 +4,6 @@ import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
 import StepLabel from '@material-ui/core/StepLabel';
 import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
 import InputForm from './InputForm';
 import Calendar from './Calendar';
 import moment from 'moment';
@@ -208,7 +207,7 @@ class Schedulr extends React.Component {
           })}
         </Stepper>
         <div>
-          <Typography>{this.getStepContent()}</Typography>
+          {this.getStepContent()}
           <div>
             {(this.state.activeStep === 2 || this.state.activeStep === 3) && (
               <Button onClick={this.handleBack}>

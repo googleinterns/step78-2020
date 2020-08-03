@@ -1,45 +1,39 @@
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
+import Typography from '@material-ui/core/Typography';
 import {Card, CardContent} from '@material-ui/core';
-import IconButton from '@material-ui/core/IconButton';
-import DeleteIcon from '@material-ui/icons/Delete';
 
 class TimePreference extends React.Component {
   constructor(props) {
     super(props);
 
-    this.handleStartTimeChange = this.handleStartTimeChange.bind(this);
-    this.handleEndTimeChange = this.handleEndTimeChange.bind(this);
-    this.handleDeleteTimePreference = this.handleDeleteTimePreference.bind(this);
+    this.handleTimeBeforeChange = this.handleTimeBeforeChange.bind(this);
+    this.handleTimeAfterChange = this.handleTimeAfterChange.bind(this);
   }
 
-  handleStartTimeChange(event) {
-    this.props.updateTimeStartPreference(this.props.id, event.target.value);
+  handleTimeBeforeChange(event) {
+    this.props.updateTimeBeforePreference(event.target.value);
   }
 
-  handleEndTimeChange(event) {
-    this.props.updateTimeEndPreference(this.props.id, event.target.value);
-  }
-
-  handleDeleteTimePreference() {
-    this.props.deleteTimePreference(this.props.id);
+  handleTimeAfterChange(event) {
+    this.props.updateTimeAfterPreference(event.target.value);
   }
 
   render() {
     return (
       <Card>
         <CardContent>
+          <Typography variant="subtitle1" gutterBottom>
+            When would you not like class?
+          </Typography>
           <TextField
-            label="Start time: " type="time" onChange={this.handleStartTimeChange}
-            value={this.props.startTime} InputLabelProps={{shrink: true}} inputProps={{step: 300}}
+            label="Before: " type="time" onChange={this.handleTimeBeforeChange}
+            value={this.props.timeBefore} InputLabelProps={{shrink: true}} inputProps={{step: 300}}
           />
           <TextField
-            label="End time: " type="time" onChange={this.handleEndTimeChange}
-            value={this.props.endTime} InputLabelProps={{shrink: true}} inputProps={{step: 300}}
+            label="After: " type="time" onChange={this.handleTimeAfterChange}
+            value={this.props.timeAfter} InputLabelProps={{shrink: true}} inputProps={{step: 300}}
           />
-          <IconButton aria-label="delete" onClick={this.handleDeleteTimePreference}>
-            <DeleteIcon />
-          </IconButton>
         </CardContent>
       </Card>
     );
