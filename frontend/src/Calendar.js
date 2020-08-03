@@ -9,6 +9,7 @@ export default class Calendar extends React.Component {
 
     this.selectPreviousSchedule = this.selectPreviousSchedule.bind(this);
     this.selectNextSchedule = this.selectNextSchedule.bind(this);
+    this.exportToGoogleCalendar = this.exportToGoogleCalendar.bind(this);
 
     this.state = {
       selectedScheduleId: 0, // Current schedule
@@ -27,6 +28,10 @@ export default class Calendar extends React.Component {
     }
   }
 
+  exportToGoogleCalendar() {
+    this.props.exportToGoogleCalendar(this.state.selectedScheduleId);
+  }
+
   render() {
     return (
       <div>
@@ -36,6 +41,9 @@ export default class Calendar extends React.Component {
         <button onClick={
           this.selectNextSchedule
         }>Next Schedule</button>
+        <button onClick={
+          this.exportToGoogleCalendar
+        }>Export to Google Calendar</button>
         {
           this.state.selectedScheduleId < this.props.scheduleList.length &&
           (

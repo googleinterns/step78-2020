@@ -26,36 +26,42 @@ import java.util.Collection;
 
 import com.google.api.services.calendar.Calendar;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.google.sps.data.*;
 
 /**
  * Exports the ordered schedules to secondary calendars on the user's Google calendar    
  */
-@WebServlet("/handleSchedules")
+@WebServlet("/exportToGoogleCalendar")
 public class ScheduleDisplayHandler extends HttpServlet {
-  
+
   @Override
-  public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
+  public void doPost(HttpServletRequest request, HttpServletResponse response) {
     try {
       Calendar client = Utils.loadCalendarClient();
-
-      // Get the ordered schedules
-      List<Schedule> schedules = new ArrayList<>();
-
-      List<String> calIds = new ArrayList<>();
-
-      //for each schedule, create new secondary calendary and put schedule on it
-      for (Schedule currentSchedule : schedules) {
-        ScheduleCalendar cal = new ScheduleCalendar(client);
-        cal.addSchedule(currentSchedule);
-        calIds.add(cal.getCalendarId());
-      }
-
       Gson gson = new Gson();
-      response.setContentType("application/json");
-      response.getWriter().println(gson.toJson(calIds));
-    } catch (IOException e) {
-      System.out.println("Couldn't iterate through the given schedules.");
+      GenerateGoogleCalendarRequest scheduleInfo;
+
+      JsonObject wholeJSON = JsonParser.parseReader(request.getReader()).getAsJsonObject();
+      scheduleInfo = gson.fromJson(wholeJSON, GenerateGoogleCalendarRequest.class);
+
+      Schedule schedule = scheduleInfo.getSchedule();
+      String startDate = scheduleInfo.getStartDate();
+      String endDate = scheduleInfo.getEndDate();
+
+      String calId;
+
+      //create new secondary calendary and put schedule on it
+      ScheduleCalendar cal = new ScheduleCalendar(client);
+      cal.addSchedule(schedule, startDate, endDate);
+      calId = cal.getCalendarId();
+
+      response.setContentType("text/plain");
+      response.getWriter().println(calId);
+    } catch (Exception e) {
+      System.out.println("Error reading JSON: " + e.getMessage());
+      return;
     }
   }
 }
