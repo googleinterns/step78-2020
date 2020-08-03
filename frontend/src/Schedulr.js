@@ -1,3 +1,4 @@
+/* global gapi */
 import React from 'react';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -15,15 +16,22 @@ class Schedulr extends React.Component {
     super(props);
     this.state = {
       activeStep: 0,
-      steps: ['Input Courses and Preferences', 'View Schedules', 'Export to Google Calendar'],
+      steps: ['Sign In', 'Input Courses and Preferences', 'View Schedules', 'Export to Google Calendar'],
       scheduleList: [],
       schedulesTimes: [],
+      calId: '',
+      termDates: {
+        startDate: '',
+        endDate: '',
+      },
     };
 
     this.handleNext = this.handleNext.bind(this);
     this.handleBack = this.handleBack.bind(this);
     this.setScheduleList = this.setScheduleList.bind(this);
     this.generateScheduleMeetingTimes = this.generateScheduleMeetingTimes.bind(this);
+    this.exportToGoogleCalendar = this.exportToGoogleCalendar.bind(this);
+    this.setTermDates = this.setTermDates.bind(this);
   }
 
   getStepContent() {
@@ -31,22 +39,44 @@ class Schedulr extends React.Component {
 
     switch (step) {
     case 0:
+      return (
+        <div>
+          <h2>Welcome to SchedulR</h2>
+          <p>To get started, sign in so that we can export your perfect class schedule to your Google Calendar!</p>
+          <Button onClick={this.signIn}>Sign In</Button>
+        </div>);
+    case 1:
       return (<InputForm
         handleNext={this.handleNext}
-        setScheduleList={this.setScheduleList}/>);
-    case 1:
+        setScheduleList={this.setScheduleList}
+        setTermDates={this.setTermDates}/>);
+    case 2:
       return (<Calendar
         scheduleList={this.state.scheduleList}
-        schedulesTimes={this.state.schedulesTimes}/>);
-    case 2:
-      return 'Export to google calendar: coming soon ;)';
+        schedulesTimes={this.state.schedulesTimes}
+        exportToGoogleCalendar={this.exportToGoogleCalendar}/>);
+    case 3:
+      return (
+        <iframe 
+          title="google calendar" 
+          id="calendar" 
+          src={this.state.calId} 
+          width="800" 
+          height="600" 
+          frameBorder="0" 
+          scrolling="no">
+        </iframe>);
     default:
       return 'Unknown step';
     }
   }
 
+  signIn() {
+    window.location.assign('/auth');
+  }
+
   handleNext() {
-    if (this.state.activeStep === 0) {
+    if (this.state.activeStep === 1) {
       this.generateSchedulesTimes();
     }
 
@@ -114,6 +144,56 @@ class Schedulr extends React.Component {
     return t;
   }
 
+  setCalId(calId) {
+    const url = 'https://calendar.google.com/calendar/embed?src=' + calId;
+    this.setState({...this.state, calId: url});
+  }
+
+  exportToGoogleCalendar(scheduleId) {
+    const scheduleToExport = this.state.scheduleList[scheduleId];
+    const schedule = {
+      'schedule': scheduleToExport,
+      'termDates': {
+        'startDate': this.state.termDates.startDate,
+        'endDate': this.state.termDates.endDate,
+      },
+    };
+    fetch('/exportToGoogleCalendar', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(schedule),
+    }).then((response) => response.text())
+      .then((calId) => {
+        this.setCalId(calId);
+        this.handleNext();
+      });
+  }
+
+  setTermDates(startDate, endDate) {
+    this.setState((state) => ({
+      ...this.state,
+      termDates: {
+        ...state.termDates,
+        startDate: startDate,
+        endDate: endDate,
+      },
+    }));
+  }
+
+  componentDidMount() {   
+    window.gapi.load('auth2', () => {
+      this.auth2 = gapi.auth2.init({
+        client_id: '119851197452-crnk45b5i6gsi5povitstfpd203n7j6b.apps.googleusercontent.com',
+      })
+
+      this.auth2.then(() => {
+        if (this.auth2.isSignedIn.get()) {
+          this.setState({...this.state, activeStep: 1})
+        }
+      });
+    });    
+  }
+
   render() {
     return (
       <div>
@@ -129,12 +209,12 @@ class Schedulr extends React.Component {
         <div>
           {this.getStepContent()}
           <div>
-            {(this.state.activeStep === 1 || this.state.activeStep === 2) && (
+            {(this.state.activeStep === 2 || this.state.activeStep === 3) && (
               <Button onClick={this.handleBack}>
                 Back
               </Button>
             )}
-            {(this.state.activeStep === 1) && (
+            {(this.state.activeStep === 2) && (
               <Button onClick={this.handleNext}>
                 Next
               </Button>
