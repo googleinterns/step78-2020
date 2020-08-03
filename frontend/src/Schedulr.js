@@ -1,3 +1,4 @@
+/* global gapi */
 import React from 'react';
 import Stepper from '@material-ui/core/Stepper';
 import Step from '@material-ui/core/Step';
@@ -15,7 +16,7 @@ class Schedulr extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      activeStep: (new URLSearchParams(window.location.search).get('signedIn') === 'true') ? 1 : 0,
+      activeStep: 0,
       steps: ['Sign In', 'Input Courses and Preferences', 'View Schedules', 'Export to Google Calendar'],
       scheduleList: [],
       schedulesTimes: [],
@@ -178,6 +179,20 @@ class Schedulr extends React.Component {
         endDate: endDate,
       },
     }));
+  }
+
+  componentDidMount() {   
+    window.gapi.load('auth2', () => {
+      this.auth2 = gapi.auth2.init({
+        client_id: '119851197452-crnk45b5i6gsi5povitstfpd203n7j6b.apps.googleusercontent.com',
+      })
+
+      this.auth2.then(() => {
+        if (this.auth2.isSignedIn.get()) {
+          this.setState({...this.state, activeStep: 1})
+        }
+      });
+    });    
   }
 
   render() {
