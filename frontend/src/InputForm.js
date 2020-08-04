@@ -666,83 +666,88 @@ class InputForm extends React.Component {
 
   render() {
     return (
-      <div className="gridRoot">
+      <div>
         <Typography variant="h5" gutterBottom>
           Courses:
         </Typography>
+        
+        <div className="gridRoot">
+          <Grid container direction="row" justify="flex-start" alignItems="flex-start">
+            {this.state.courses.map((course, index) => (
+              <Grid item xs>
+                <Course
+                  id={index}
+                  key={index}
+                  course={course}
+                  name={this.state.courses[index].name}
+                  courseID={this.state.courses[index].courseID}
+                  subject={this.state.courses[index].subject}
+                  credits={this.state.courses[index].credits}
+                  selected={this.state.courses[index].rank}
+                  isRequired={this.state.courses[index].isRequired}
+                  lectureSections={this.state.courses[index].lectureSections}
+                  labSections={this.state.courses[index].labSections}
 
-        <Grid container direction="row" justify="flex-start" alignItems="flex-start">
-          {this.state.courses.map((course, index) => (
+                  updateCourseName={this.updateCourseName}
+                  updateCourseID={this.updateCourseID}
+                  updateCourseSubject={this.updateCourseSubject}
+                  updateCourseCredits={this.updateCourseCredits}
+                  updateCourseIsRequired={this.updateCourseIsRequired}
+                  updateCourseRank={this.updateCourseRank}
+
+                  updateLectureSectionProfessor={this.updateLectureSectionProfessor}
+                  updateLectureSectionStartTime={this.updateLectureSectionStartTime}
+                  updateLectureSectionEndTime={this.updateLectureSectionEndTime}
+                  updateLectureSectionDays={this.updateLectureSectionDays}
+                  createNewLectureSection={this.createNewLectureSection}
+
+                  updateLabSectionProfessor={this.updateLabSectionProfessor}
+                  updateLabSectionStartTime={this.updateLabSectionStartTime}
+                  updateLabSectionEndTime={this.updateLabSectionEndTime}
+                  updateLabSectionDays={this.updateLabSectionDays}
+                  createNewLabSection={this.createNewLabSection}
+
+                  deleteCourse={this.deleteCourse}
+                  deleteLectureSection={this.deleteLectureSection}
+                  deleteLabSection={this.deleteLabSection}
+                />
+              </Grid>))}
             <Grid item xs>
-              <Course
-                id={index}
-                key={index}
-                course={course}
-                name={this.state.courses[index].name}
-                courseID={this.state.courses[index].courseID}
-                subject={this.state.courses[index].subject}
-                credits={this.state.courses[index].credits}
-                selected={this.state.courses[index].rank}
-                isRequired={this.state.courses[index].isRequired}
-                lectureSections={this.state.courses[index].lectureSections}
-                labSections={this.state.courses[index].labSections}
+              <Button className="plusButton" onClick={this.createNewCourse} variant="contained">
+                <Typography variant="h3" gutterBottom>+</Typography>
+              </Button>
+            </Grid>
+          </Grid>
+        </div>
 
-                updateCourseName={this.updateCourseName}
-                updateCourseID={this.updateCourseID}
-                updateCourseSubject={this.updateCourseSubject}
-                updateCourseCredits={this.updateCourseCredits}
-                updateCourseIsRequired={this.updateCourseIsRequired}
-                updateCourseRank={this.updateCourseRank}
-
-                updateLectureSectionProfessor={this.updateLectureSectionProfessor}
-                updateLectureSectionStartTime={this.updateLectureSectionStartTime}
-                updateLectureSectionEndTime={this.updateLectureSectionEndTime}
-                updateLectureSectionDays={this.updateLectureSectionDays}
-                createNewLectureSection={this.createNewLectureSection}
-
-                updateLabSectionProfessor={this.updateLabSectionProfessor}
-                updateLabSectionStartTime={this.updateLabSectionStartTime}
-                updateLabSectionEndTime={this.updateLabSectionEndTime}
-                updateLabSectionDays={this.updateLabSectionDays}
-                createNewLabSection={this.createNewLabSection}
-
-                deleteCourse={this.deleteCourse}
-                deleteLectureSection={this.deleteLectureSection}
-                deleteLabSection={this.deleteLabSection}
+        <div className="gridRoot">
+          <Typography variant="h5" gutterBottom>
+            Other Information:
+          </Typography>
+          <Grid container spacing={3}>
+            <Grid item xs>
+              <Criterion
+                times={this.state.criterion.timePreferences}
+                subject={this.state.criterion.preferredSubject}
+                updateSubjectPreference={this.updateSubjectPreference}
+                updateTimeBeforePreference={this.updateTimeBeforePreference}
+                updateTimeAfterPreference={this.updateTimeAfterPreference}
               />
-            </Grid>))}
-          <Grid item xs>
-            <Button className="plusButton" onClick={this.createNewCourse} variant="contained">
-              <Typography variant="h3" gutterBottom>+</Typography>
-            </Button>
+            </Grid>
+            <Grid item xs>
+              <BasicInfo
+                minCredits={this.state.basicInfo.credits.minCredits}
+                maxCredits={this.state.basicInfo.credits.maxCredits}
+                startDate={this.state.basicInfo.termDates.startDate}
+                endDate={this.state.basicInfo.termDates.endDate}
+                updateMinCredits={this.updateMinCredits}
+                updateMaxCredits={this.updateMaxCredits}
+                updateTermStartDate={this.updateTermStartDate}
+                updateTermEndDate={this.updateTermEndDate}
+              />
+            </Grid>
           </Grid>
-        </Grid>
-        <Typography variant="h5" gutterBottom>
-          Other Information:
-        </Typography>
-        <Grid container spacing={3}>
-          <Grid item xs>
-            <Criterion
-              times={this.state.criterion.timePreferences}
-              subject={this.state.criterion.preferredSubject}
-              updateSubjectPreference={this.updateSubjectPreference}
-              updateTimeBeforePreference={this.updateTimeBeforePreference}
-              updateTimeAfterPreference={this.updateTimeAfterPreference}
-            />
-          </Grid>
-          <Grid item xs>
-            <BasicInfo
-              minCredits={this.state.basicInfo.credits.minCredits}
-              maxCredits={this.state.basicInfo.credits.maxCredits}
-              startDate={this.state.basicInfo.termDates.startDate}
-              endDate={this.state.basicInfo.termDates.endDate}
-              updateMinCredits={this.updateMinCredits}
-              updateMaxCredits={this.updateMaxCredits}
-              updateTermStartDate={this.updateTermStartDate}
-              updateTermEndDate={this.updateTermEndDate}
-            />
-          </Grid>
-        </Grid>
+        </div>
         <Button size="large" variant="contained" color="primary" onClick={this.submit}>Submit</Button>
       </div>);
   }
