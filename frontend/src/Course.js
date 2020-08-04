@@ -141,7 +141,7 @@ class Course extends React.Component {
           />
           <Input placeholder="Course ID" value={this.props.courseID} onChange={this.handleIDChange}
           />
-          
+
           <Input placeholder="Subject" value={this.props.subject} onChange={this.handleSubjectChange}
           />
           <TextField placeholder="Credits" value={this.props.credits} onChange={this.handleCreditsChange} type="number"
@@ -163,7 +163,7 @@ class Course extends React.Component {
             label="Required"
           />
           <Typography variant="subtitle1" gutterBottom>
-            Lecture Sections: 
+            Lecture Sections:
           </Typography>
           {this.props.lectureSections.map((lectureSection, index) => (
             <LectureSection
@@ -188,7 +188,7 @@ class Course extends React.Component {
             />))}
           <Button onClick={this.createNewLectureSection}>+ section</Button>
           <Typography variant="subtitle1" gutterBottom>
-            Lab / Recitation Sections (optional): 
+            Lab / Recitation Sections (optional):
           </Typography>
           {this.props.labSections.map((labSection, index) => (
             <LabSection

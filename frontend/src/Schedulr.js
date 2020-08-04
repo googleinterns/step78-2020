@@ -57,13 +57,13 @@ class Schedulr extends React.Component {
         exportToGoogleCalendar={this.exportToGoogleCalendar}/>);
     case 3:
       return (
-        <iframe 
-          title="google calendar" 
-          id="calendar" 
-          src={this.state.calId} 
-          width="800" 
-          height="600" 
-          frameBorder="0" 
+        <iframe
+          title="google calendar"
+          id="calendar"
+          src={this.state.calId}
+          width="800"
+          height="600"
+          frameBorder="0"
           scrolling="no">
         </iframe>);
     default:
@@ -180,18 +180,18 @@ class Schedulr extends React.Component {
     }));
   }
 
-  componentDidMount() {   
+  componentDidMount() {
     window.gapi.load('auth2', () => {
       this.auth2 = gapi.auth2.init({
         client_id: '119851197452-crnk45b5i6gsi5povitstfpd203n7j6b.apps.googleusercontent.com',
-      })
+      });
 
       this.auth2.then(() => {
         if (this.auth2.isSignedIn.get()) {
-          this.setState({...this.state, activeStep: 1})
+          this.setState({...this.state, activeStep: 1});
         }
       });
-    });    
+    });
   }
 
   render() {

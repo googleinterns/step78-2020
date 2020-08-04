@@ -608,8 +608,8 @@ class InputForm extends React.Component {
     });
     submitState.criterion['courseScores'] = inputtedCourseScores;
 
-    submitState.criterion.timePreferences.timeBefore = this.timeToTimeRange(0, "00:01", submitState.criterion.timePreferences.timeBefore);
-    submitState.criterion.timePreferences.timeAfter = this.timeToTimeRange(0, submitState.criterion.timePreferences.timeAfter, "23:59");
+    submitState.criterion.timePreferences.timeBefore = this.timeToTimeRange(0, '00:01', submitState.criterion.timePreferences.timeBefore);
+    submitState.criterion.timePreferences.timeAfter = this.timeToTimeRange(0, submitState.criterion.timePreferences.timeAfter, '23:59');
 
     fetch('/handleUserInput', {
       method: 'POST',
@@ -618,7 +618,7 @@ class InputForm extends React.Component {
     }).then((response) => response.json())
       .then((responseSchedules) => {
         this.props.setScheduleList(responseSchedules);
-        const { startDate, endDate } = this.state.basicInfo.termDates;
+        const {startDate, endDate} = this.state.basicInfo.termDates;
         this.props.setTermDates(startDate, endDate);
         this.props.handleNext();
       });
@@ -668,9 +668,9 @@ class InputForm extends React.Component {
     return (
       <div className="gridRoot">
         <Typography variant="h5" gutterBottom>
-          Courses: 
+          Courses:
         </Typography>
-        
+
         <Grid container direction="row" justify="flex-start" alignItems="flex-start">
           {this.state.courses.map((course, index) => (
             <Grid item xs>
@@ -714,7 +714,7 @@ class InputForm extends React.Component {
           <Button onClick={this.createNewCourse}>+ Course</Button>
         </Grid>
         <Typography variant="h5" gutterBottom>
-          Other Information: 
+          Other Information:
         </Typography>
         <Grid container spacing={3}>
           <Grid item xs>
