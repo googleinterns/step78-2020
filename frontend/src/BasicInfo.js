@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {Card} from '@material-ui/core';
+import {Card, CardHeader} from '@material-ui/core';
 import Credits from './Credits';
 import TermDates from './TermDates';
 
@@ -7,6 +7,7 @@ export default class BasicInfo extends PureComponent {
   render() {
     return (
       <Card>
+        <CardHeader title="Basic Info"/>
         <Credits
           minCredits={this.props.minCredits}
           maxCredits={this.props.maxCredits}
