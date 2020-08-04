@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {Card, CardContent} from '@material-ui/core';
+import {Card, CardContent, CardHeader} from '@material-ui/core';
 import SubjectPreference from './SubjectPreference';
 import TimePreference from './TimePreference';
 
@@ -7,6 +7,7 @@ export default class Criterion extends PureComponent {
   render() {
     return (
       <Card>
+        <CardHeader title="Preferences"/>
         <CardContent>
           <TimePreference
             timeBefore={this.props.times.timeBefore}
