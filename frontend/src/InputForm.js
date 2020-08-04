@@ -711,7 +711,7 @@ class InputForm extends React.Component {
                 deleteLabSection={this.deleteLabSection}
               />
             </Grid>))}
-          <Button onClick={this.createNewCourse}>+ Course</Button>
+          <button className="plusButton" onClick={this.createNewCourse}>+</button>
         </Grid>
         <Typography variant="h5" gutterBottom>
           Other Information:

@@ -10,3 +10,13 @@
 .cardHead {
   background-color: #92dbfa;
 }
+
+.plusButton {
+  margin-bottom: 20px;
+  width: 650px;
+  height: 510px;
+  color: gray;
+  border: none;
+  font-size: 50px;
+  margin-right: 6%;
+}
