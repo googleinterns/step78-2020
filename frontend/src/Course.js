@@ -13,7 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
 import LectureSection from './LectureSection';
 import LabSection from './LabSection';
-import './course.css';
+import './classes.css';
 
 class Course extends React.Component {
   constructor(props) {
