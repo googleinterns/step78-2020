@@ -1,9 +1,12 @@
 .courseCard {
-  margin-top: 20px;
-  margin-left: 20px;
+  margin-bottom: 20px;
   width: 650px;
 }
 
 .gridRoot {
   flexGrow: 1;
+}
+
+.cardHead {
+  background-color: #92dbfa;
 }
