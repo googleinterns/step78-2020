@@ -664,13 +664,13 @@ class InputForm extends React.Component {
     return {start: start, duration: duration};
   }
 
-  // TODO: Implement grid/flexbox etc. for horizontal stacking
   render() {
     return (
       <div className="gridRoot">
         <Typography variant="h5" gutterBottom>
           Courses: 
         </Typography>
+        
         <Grid container direction="row" justify="flex-start" alignItems="flex-start">
           {this.state.courses.map((course, index) => (
             <Grid item xs>
@@ -714,29 +714,32 @@ class InputForm extends React.Component {
           <Button onClick={this.createNewCourse}>+ Course</Button>
         </Grid>
         <Typography variant="h5" gutterBottom>
-          Preferences: 
+          Other Information: 
         </Typography>
-        <Criterion
-          times={this.state.criterion.timePreferences}
-          subject={this.state.criterion.preferredSubject}
-          updateSubjectPreference={this.updateSubjectPreference}
-          updateTimeBeforePreference={this.updateTimeBeforePreference}
-          updateTimeAfterPreference={this.updateTimeAfterPreference}
-        />
-        <Typography variant="h5" gutterBottom>
-          Other Info: 
-        </Typography>
-        <BasicInfo
-          minCredits={this.state.basicInfo.credits.minCredits}
-          maxCredits={this.state.basicInfo.credits.maxCredits}
-          startDate={this.state.basicInfo.termDates.startDate}
-          endDate={this.state.basicInfo.termDates.endDate}
-          updateMinCredits={this.updateMinCredits}
-          updateMaxCredits={this.updateMaxCredits}
-          updateTermStartDate={this.updateTermStartDate}
-          updateTermEndDate={this.updateTermEndDate}
-        />
-        <Button onClick={this.submit}>Submit</Button>
+        <Grid container spacing={3}>
+          <Grid item xs>
+            <Criterion
+              times={this.state.criterion.timePreferences}
+              subject={this.state.criterion.preferredSubject}
+              updateSubjectPreference={this.updateSubjectPreference}
+              updateTimeBeforePreference={this.updateTimeBeforePreference}
+              updateTimeAfterPreference={this.updateTimeAfterPreference}
+            />
+          </Grid>
+          <Grid item xs>
+            <BasicInfo
+              minCredits={this.state.basicInfo.credits.minCredits}
+              maxCredits={this.state.basicInfo.credits.maxCredits}
+              startDate={this.state.basicInfo.termDates.startDate}
+              endDate={this.state.basicInfo.termDates.endDate}
+              updateMinCredits={this.updateMinCredits}
+              updateMaxCredits={this.updateMaxCredits}
+              updateTermStartDate={this.updateTermStartDate}
+              updateTermEndDate={this.updateTermEndDate}
+            />
+          </Grid>
+        </Grid>
+        <Button size="large" variant="contained" color="primary" onClick={this.submit}>Submit</Button>
       </div>);
   }
 }
