@@ -13,6 +13,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import Typography from '@material-ui/core/Typography';
 import LectureSection from './LectureSection';
 import LabSection from './LabSection';
+import './course.css';
 
 class Course extends React.Component {
   constructor(props) {
@@ -126,7 +127,7 @@ class Course extends React.Component {
 
   render() {
     return (
-      <Card>
+      <Card className="courseCard">
         <CardContent>
           <Input placeholder="Course Name" value={this.props.name} onChange={this.handleNameChange}
           />
