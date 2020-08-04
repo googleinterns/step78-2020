@@ -662,6 +662,7 @@ class InputForm extends React.Component {
     return {start: start, duration: duration};
   }
 
+  // TODO: Implement grid/flexbox etc. for horizontal stacking
   render() {
     return (
       <div>
