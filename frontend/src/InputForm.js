@@ -712,7 +712,9 @@ class InputForm extends React.Component {
               />
             </Grid>))}
           <Grid item xs>
-            <button className="plusButton" onClick={this.createNewCourse}>+</button>
+            <Button className="plusButton" onClick={this.createNewCourse} variant="contained">
+              <Typography variant="h3" gutterBottom>+</Typography>
+            </Button>
           </Grid>
         </Grid>
         <Typography variant="h5" gutterBottom>
