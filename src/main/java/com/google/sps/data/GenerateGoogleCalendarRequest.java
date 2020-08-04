@@ -22,7 +22,3 @@ public class GenerateGoogleCalendarRequest {
   }
 }
 
-class TermDates {
-  String startDate;
-  String endDate;
-}
