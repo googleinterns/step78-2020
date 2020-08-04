@@ -47,11 +47,6 @@ class BasicInfo {
   TermDates termDates;
 }
 
-class TermDates {
-  String startDate;
-  String endDate;
-}
-
 class TimePreferences {
   TimeRange timeBefore;
   TimeRange timeAfter;
