@@ -1,9 +1,11 @@
 import React from 'react';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 import Course from './Course';
 import Criterion from './Criterion';
 import BasicInfo from './BasicInfo';
+import './classes.css';
 
 class InputForm extends React.Component {
   constructor(props) {
@@ -665,48 +667,52 @@ class InputForm extends React.Component {
   // TODO: Implement grid/flexbox etc. for horizontal stacking
   render() {
     return (
-      <div>
+      <div className="gridRoot">
         <Typography variant="h5" gutterBottom>
           Courses: 
         </Typography>
-        {this.state.courses.map((course, index) => (
-          <Course
-            id={index}
-            key={index}
-            course={course}
-            name={this.state.courses[index].name}
-            courseID={this.state.courses[index].courseID}
-            subject={this.state.courses[index].subject}
-            credits={this.state.courses[index].credits}
-            selected={this.state.courses[index].rank}
-            isRequired={this.state.courses[index].isRequired}
-            lectureSections={this.state.courses[index].lectureSections}
-            labSections={this.state.courses[index].labSections}
+        <Grid container direction="row" justify="flex-start" alignItems="flex-start">
+          {this.state.courses.map((course, index) => (
+            <Grid item xs>
+              <Course
+                id={index}
+                key={index}
+                course={course}
+                name={this.state.courses[index].name}
+                courseID={this.state.courses[index].courseID}
+                subject={this.state.courses[index].subject}
+                credits={this.state.courses[index].credits}
+                selected={this.state.courses[index].rank}
+                isRequired={this.state.courses[index].isRequired}
+                lectureSections={this.state.courses[index].lectureSections}
+                labSections={this.state.courses[index].labSections}
 
-            updateCourseName={this.updateCourseName}
-            updateCourseID={this.updateCourseID}
-            updateCourseSubject={this.updateCourseSubject}
-            updateCourseCredits={this.updateCourseCredits}
-            updateCourseIsRequired={this.updateCourseIsRequired}
-            updateCourseRank={this.updateCourseRank}
+                updateCourseName={this.updateCourseName}
+                updateCourseID={this.updateCourseID}
+                updateCourseSubject={this.updateCourseSubject}
+                updateCourseCredits={this.updateCourseCredits}
+                updateCourseIsRequired={this.updateCourseIsRequired}
+                updateCourseRank={this.updateCourseRank}
 
-            updateLectureSectionProfessor={this.updateLectureSectionProfessor}
-            updateLectureSectionStartTime={this.updateLectureSectionStartTime}
-            updateLectureSectionEndTime={this.updateLectureSectionEndTime}
-            updateLectureSectionDays={this.updateLectureSectionDays}
-            createNewLectureSection={this.createNewLectureSection}
+                updateLectureSectionProfessor={this.updateLectureSectionProfessor}
+                updateLectureSectionStartTime={this.updateLectureSectionStartTime}
+                updateLectureSectionEndTime={this.updateLectureSectionEndTime}
+                updateLectureSectionDays={this.updateLectureSectionDays}
+                createNewLectureSection={this.createNewLectureSection}
 
-            updateLabSectionProfessor={this.updateLabSectionProfessor}
-            updateLabSectionStartTime={this.updateLabSectionStartTime}
-            updateLabSectionEndTime={this.updateLabSectionEndTime}
-            updateLabSectionDays={this.updateLabSectionDays}
-            createNewLabSection={this.createNewLabSection}
+                updateLabSectionProfessor={this.updateLabSectionProfessor}
+                updateLabSectionStartTime={this.updateLabSectionStartTime}
+                updateLabSectionEndTime={this.updateLabSectionEndTime}
+                updateLabSectionDays={this.updateLabSectionDays}
+                createNewLabSection={this.createNewLabSection}
 
-            deleteCourse={this.deleteCourse}
-            deleteLectureSection={this.deleteLectureSection}
-            deleteLabSection={this.deleteLabSection}
-          />))}
-        <Button onClick={this.createNewCourse}>+ Course</Button>
+                deleteCourse={this.deleteCourse}
+                deleteLectureSection={this.deleteLectureSection}
+                deleteLabSection={this.deleteLabSection}
+              />
+            </Grid>))}
+          <Button onClick={this.createNewCourse}>+ Course</Button>
+        </Grid>
         <Typography variant="h5" gutterBottom>
           Preferences: 
         </Typography>
