@@ -19,6 +19,7 @@ class Schedulr extends React.Component {
       steps: ['Sign In', 'Input Courses and Preferences', 'View Schedules', 'Export to Google Calendar'],
       scheduleList: [],
       schedulesTimes: [],
+      selectedScheduleId: 0,
       calId: '',
       termDates: {
         startDate: '',
@@ -30,6 +31,8 @@ class Schedulr extends React.Component {
     this.handleBack = this.handleBack.bind(this);
     this.setScheduleList = this.setScheduleList.bind(this);
     this.generateScheduleMeetingTimes = this.generateScheduleMeetingTimes.bind(this);
+    this.selectPreviousSchedule = this.selectPreviousSchedule.bind(this);
+    this.selectNextSchedule = this.selectNextSchedule.bind(this);
     this.exportToGoogleCalendar = this.exportToGoogleCalendar.bind(this);
     this.setTermDates = this.setTermDates.bind(this);
   }
@@ -54,6 +57,9 @@ class Schedulr extends React.Component {
       return (<Calendar
         scheduleList={this.state.scheduleList}
         schedulesTimes={this.state.schedulesTimes}
+        selectedScheduleId={this.state.selectedScheduleId}
+        selectNextSchedule={this.selectNextSchedule}
+        selectPreviousSchedule={this.selectPreviousSchedule}
         exportToGoogleCalendar={this.exportToGoogleCalendar}/>);
     case 3:
       return (
@@ -61,8 +67,9 @@ class Schedulr extends React.Component {
           title="google calendar"
           id="calendar"
           src={this.state.calId}
-          width="800"
-          height="600"
+          height="750"
+          width="900"
+          margin="auto"
           frameBorder="0"
           scrolling="no">
         </iframe>);
@@ -149,8 +156,20 @@ class Schedulr extends React.Component {
     this.setState({...this.state, calId: url});
   }
 
-  exportToGoogleCalendar(scheduleId) {
-    const scheduleToExport = this.state.scheduleList[scheduleId];
+  selectNextSchedule() {
+    if (this.state.selectedScheduleId < this.state.schedulesTimes.length - 1) {
+      this.setState({selectedScheduleId: this.state.selectedScheduleId + 1});
+    }
+  }
+
+  selectPreviousSchedule() {
+    if (this.state.selectedScheduleId > 0) {
+      this.setState({selectedScheduleId: this.state.selectedScheduleId - 1});
+    }
+  }
+
+  exportToGoogleCalendar() {
+    const scheduleToExport = this.state.scheduleList[this.state.selectedScheduleId];
     const schedule = {
       'schedule': scheduleToExport,
       'termDates': {
@@ -208,16 +227,16 @@ class Schedulr extends React.Component {
         </Stepper>
         <div>
           {this.getStepContent()}
-          <div>
+          <div className="navButtons">
             {(this.state.activeStep === 2 || this.state.activeStep === 3) && (
-              <Button onClick={this.handleBack}>
+              <Button variant="outlined" onClick={this.handleBack}>
                 Back
               </Button>
             )}
             {(this.state.activeStep === 2) && (
-              <Button onClick={this.handleNext}>
-                Next
-              </Button>
+              <Button variant="contained" color="primary" onClick={
+                this.exportToGoogleCalendar
+              }>Export to Google Calendar</Button>
             )}
           </div>
         </div>
