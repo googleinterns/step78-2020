@@ -69,7 +69,6 @@ class Schedulr extends React.Component {
           src={this.state.calId}
           height="750"
           width="900"
-          margin="auto"
           frameBorder="0"
           scrolling="no">
         </iframe>);
