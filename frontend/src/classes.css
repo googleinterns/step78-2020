@@ -7,6 +7,16 @@
   flexGrow: 1;
 }
 
+.fullCalendar{
+  width: 50%;
+  height: 40%;
+  margin: auto;
+}
+
+.navButtons{
+  margin-left: 25%;
+}
+
 .cardHead {
   background-color: #92dbfa;
 }
